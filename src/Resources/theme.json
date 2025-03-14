@@ -13,7 +13,7 @@
   ],
   "script": [
     "@Storefront",
-    "app/storefront/dist/storefront/js/obstkisten-online-theme/obstkisten-online-theme.js"
+    "app/storefront/src/main.js"
   ],
   "asset": [
     "@Storefront",
