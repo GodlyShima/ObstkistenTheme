@@ -1,0 +1,8 @@
+{% sw_extends '@Storefront/storefront/layout/footer/footer.html.twig' %}
+
+{% block layout_footer_copyright %}
+	<div class="footer-copyright">
+		{% sw_icon 'heart' style {size:'xs'} %}
+		{{ 'made by shima'|sw_sanitize }}
+	</div>
+{% endblock %}

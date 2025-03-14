@@ -1,0 +1,93 @@
+/*
+Header
+==================================================
+Contains custom skin styles for the header at the top of the page.
+The header contains the shop logo, the search form and various actions like the offcanvas cart button.
+*/
+
+.header-search-btn,
+.header-close-btn {
+    --#{$prefix}btn-focus-box-shadow: 0 0 0 0.25rem rgba(255, 161, 136, 0.6);
+    --#{$prefix}btn-border-color: #eceaea;
+    --#{$prefix}btn-hover-color: #ffa188;
+    --#{$prefix}btn-hover-border-color: #eceaea;
+    --#{$prefix}btn-active-border-color: #eceaea;
+    --#{$prefix}btn-disabled-bg: #ffffff;
+    --#{$prefix}btn-disabled-border-color: #eceaea;
+    border-left: 0 none;
+    background: #f6f5f5;
+    border: #f6f5f5;
+    border-radius: 0px 13px 13px 0px !important;
+
+    &:hover {
+        background: #f6f5f5;
+        border: #f6f5f5;
+        
+        .icon {
+            color: $primary;
+        }
+    }
+
+    &.btn:disabled {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.header-search-col .header-search-input {
+    transition: all 0.3s ease;
+    color: #323238;
+    border-color: #f6f5f5;
+    background: #f6f5f5;
+    box-shadow: none !important;
+    border-radius: 13px 0px 0px 13px;
+
+    &:focus {
+        color: #323238;
+        border-color: #eceaea;
+        background: #eceaea;
+        box-shadow: none !important;
+    }
+}
+
+.header-search-input {
+    border-right: 0;
+    box-shadow: none !important;
+
+    &:focus {
+        box-shadow: none !important;
+
+        &,
+        ~ .header-search-btn,
+        ~ .header-close-btn {
+            border-color: $primary;
+        }
+    }
+}
+
+.header-actions-btn {
+    --#{$prefix}btn-focus-box-shadow:  #{$input-btn-focus-box-shadow};
+    --#{$prefix}btn-active-border-color: transparent;
+    --#{$prefix}btn-active-bg: transparent;
+    --#{$prefix}btn-hover-color: transparent;
+    --#{$prefix}btn-hover-border-color: transparent;
+    --#{$prefix}btn-hover-bg: transparent;
+
+    &:hover {
+        &,
+        .icon {
+            color: $primary;
+        }
+    }
+}
+
+.header-cart-total {
+    color: $primary;
+    font-size: $font-size-lg;
+}
+
+@include media-breakpoint-up(sm) {
+    .header-cart-badge {
+        display: none;
+    }
+}

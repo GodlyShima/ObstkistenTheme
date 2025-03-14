@@ -1,0 +1,13 @@
+@import 'layout/header';
+@import 'layout/scroll-up';
+
+@import 'component/icon';
+
+@import 'skin/shopware/component/button';
+@import 'skin/shopware/component/form';
+
+@import 'skin/shopware/layout/header';
+
+input.form-control.header-search-input {
+    box-shadow: none !important;
+}

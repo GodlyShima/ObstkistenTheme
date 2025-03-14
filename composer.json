@@ -1,0 +1,28 @@
+{
+  "name": "obstkistenonline/theme",
+  "description": "Obstkisten Online Theme",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "version": "0.0.1",
+  "authors": [
+    {
+      "name": "Len Knutzen"
+    }
+  ],
+  "require": {
+    "shopware/core": "6.*.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "ObstkistenOnlineTheme\\": "src/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "ObstkistenOnlineTheme\\ObstkistenOnlineTheme",
+    "label": {
+      "de-DE": "Obstkisten-Online Theme",
+      "en-GB": "Obstkisten-Online Theme"
+    },
+    "copyright": "(c) 2025 Len Knutzen"
+  }
+}
