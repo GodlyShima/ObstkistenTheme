@@ -12,7 +12,7 @@ Contains styles for the sticky header functionality.
     z-index: 1000;
     
     &.is-sticky {
-        position: fixed;
+        position: fixed !important; /* Wichtig, um andere Positionierungen zu überschreiben */
         top: 0;
         left: 0;
         right: 0;

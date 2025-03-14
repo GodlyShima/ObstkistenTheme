@@ -3,17 +3,19 @@ import Plugin from 'src/plugin-system/plugin.class';
 export default class StickyHeaderPlugin extends Plugin {
     static options = {
         stickyHeaderSelector: '.header-main',
-        scrollThreshold: 50, // Reduziert für ein früheres Sticky-Verhalten
-        visibilityThreshold: 100
+        scrollThreshold: 10, // Reduziert für ein früheres Sticky-Verhalten
+        visibilityThreshold: 50
     };
 
     init() {
         // Debugging: Prüfen, ob das Plugin geladen wird
         console.log('StickyHeader Plugin initialized');
         
-        this.headerEl = document.querySelector(this.options.stickyHeaderSelector);
+        // Direkt auf das Element zugreifen, in dem das Plugin initialisiert wurde
+        this.headerEl = this.el;
+        
         if (!this.headerEl) {
-            console.error('Header element not found with selector:', this.options.stickyHeaderSelector);
+            console.error('Header element not found!');
             return;
         }
 
@@ -33,26 +35,42 @@ export default class StickyHeaderPlugin extends Plugin {
         
         // Initialer Check, ob wir schon gescrollt sind (falls Seite neu geladen wurde)
         this._checkInitialScroll();
+        
+        // Forcierter Test, ob Sticky funktioniert
+        setTimeout(() => {
+            this.makeHeaderSticky();
+            console.log('Header sollte jetzt sticky sein');
+            
+            // Nach 2 Sekunden zurücksetzen, wenn wir nicht gescrollt haben
+            setTimeout(() => {
+                if (window.pageYOffset < this.options.scrollThreshold) {
+                    this.makeHeaderNormal();
+                    console.log('Header wieder normal');
+                }
+            }, 2000);
+        }, 1000);
     }
 
     _setHeaderHeight() {
-        // Wir müssen ein wenig warten, bis alle DOM-Elemente geladen sind
+        // Warte bis alles geladen ist
         setTimeout(() => {
             this.headerHeight = this.headerEl.offsetHeight;
-            document.documentElement.style.setProperty('--header-height', `${this.headerHeight}px`);
             console.log('Header height set to:', this.headerHeight);
-        }, 100);
+            document.documentElement.style.setProperty('--header-height', `${this.headerHeight}px`);
+        }, 300);
     }
 
     _checkInitialScroll() {
         // Prüfen, ob wir beim Laden der Seite bereits gescrollt haben
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        console.log('Initial scroll position:', scrollTop);
         if (scrollTop > this.options.scrollThreshold) {
             this.makeHeaderSticky();
         }
     }
 
     onScroll() {
+        console.log('Scroll event detected');
         if (!this.ticking) {
             window.requestAnimationFrame(() => {
                 this.handleScrollBehavior();
@@ -69,6 +87,7 @@ export default class StickyHeaderPlugin extends Plugin {
 
     handleScrollBehavior() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        console.log('Handling scroll, position:', scrollTop);
         
         // Make header sticky after scrolling past threshold
         if (scrollTop > this.options.scrollThreshold && !this.isSticky) {
@@ -82,9 +101,11 @@ export default class StickyHeaderPlugin extends Plugin {
             if (scrollTop > this.lastScrollTop && scrollTop > this.options.visibilityThreshold) {
                 // Scrolling down - hide header
                 this.headerEl.classList.add('is-hidden');
+                console.log('Header hidden');
             } else {
                 // Scrolling up - show header
                 this.headerEl.classList.remove('is-hidden');
+                console.log('Header visible');
             }
         }
 
