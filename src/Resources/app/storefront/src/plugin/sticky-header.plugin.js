@@ -3,7 +3,7 @@ import Plugin from 'src/plugin-system/plugin.class';
 export default class StickyHeaderPlugin extends Plugin {
     static options = {
         stickyHeaderSelector: '.header-main',
-        scrollThreshold: 100, // Reduziert für ein früheres Sticky-Verhalten
+        scrollThreshold: 50, // Reduziert für ein früheres Sticky-Verhalten
         visibilityThreshold: 100
     };
 
@@ -20,11 +20,8 @@ export default class StickyHeaderPlugin extends Plugin {
         console.log('Header element found:', this.headerEl);
 
         // Save the header height for body padding compensation
-        this.headerHeight = this.headerEl.offsetHeight;
-        document.documentElement.style.setProperty('--header-height', `${this.headerHeight}px`);
+        this._setHeaderHeight();
         
-        console.log('Header height set to:', this.headerHeight);
-
         // Initialize variables for scroll tracking
         this.lastScrollTop = 0;
         this.isSticky = false;
@@ -34,8 +31,25 @@ export default class StickyHeaderPlugin extends Plugin {
         window.addEventListener('scroll', this.onScroll.bind(this));
         window.addEventListener('resize', this.onResize.bind(this));
         
-        // Prüfen, ob wir bereits gescrollt haben, falls die Seite neu geladen wurde
-        this.onScroll();
+        // Initialer Check, ob wir schon gescrollt sind (falls Seite neu geladen wurde)
+        this._checkInitialScroll();
+    }
+
+    _setHeaderHeight() {
+        // Wir müssen ein wenig warten, bis alle DOM-Elemente geladen sind
+        setTimeout(() => {
+            this.headerHeight = this.headerEl.offsetHeight;
+            document.documentElement.style.setProperty('--header-height', `${this.headerHeight}px`);
+            console.log('Header height set to:', this.headerHeight);
+        }, 100);
+    }
+
+    _checkInitialScroll() {
+        // Prüfen, ob wir beim Laden der Seite bereits gescrollt haben
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > this.options.scrollThreshold) {
+            this.makeHeaderSticky();
+        }
     }
 
     onScroll() {
@@ -50,9 +64,7 @@ export default class StickyHeaderPlugin extends Plugin {
 
     onResize() {
         // Update header height on resize
-        this.headerHeight = this.headerEl.offsetHeight;
-        document.documentElement.style.setProperty('--header-height', `${this.headerHeight}px`);
-        console.log('Header height updated on resize:', this.headerHeight);
+        this._setHeaderHeight();
     }
 
     handleScrollBehavior() {

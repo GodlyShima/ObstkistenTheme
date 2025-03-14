@@ -5,17 +5,27 @@ Contains styles for the sticky header functionality.
 */
 
 .header-main {
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    background-color: #fff;
+    position: relative;
+    z-index: 1000;
     
     &.is-sticky {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        z-index: 1000;
-        background-color: #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         transform: translateY(0);
+        
+        // Für eine bessere mobile Darstellung
+        @media (max-width: 767px) {
+            .header-row {
+                padding: $spacer-xs 0;
+            }
+        }
     }
     
     &.is-hidden {
@@ -23,7 +33,21 @@ Contains styles for the sticky header functionality.
     }
 }
 
-// Add padding to the body when header becomes sticky
+// Fügt Padding zum Body hinzu, wenn der Header sticky ist
 body.has-sticky-header {
-    padding-top: var(--header-height, 100px);
+    padding-top: var(--header-height, 150px);
+    
+    // Responsive Anpassungen
+    @media (max-width: 767px) {
+        padding-top: var(--header-height, 100px);
+    }
+}
+
+// Optimierungen für eine bessere mobile Darstellung
+@media (max-width: 767px) {
+    .is-sticky {
+        .header-logo-picture {
+            max-width: 200px;
+        }
+    }
 }
