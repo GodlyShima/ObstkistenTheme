@@ -1,0 +1,29 @@
+/*
+Sticky header
+==================================================
+Contains styles for the sticky header functionality.
+*/
+
+.header-main {
+    transition: transform 0.3s ease;
+    
+    &.is-sticky {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transform: translateY(0);
+    }
+    
+    &.is-hidden {
+        transform: translateY(-100%);
+    }
+}
+
+// Add padding to the body when header becomes sticky
+body.has-sticky-header {
+    padding-top: var(--header-height, 100px);
+}
