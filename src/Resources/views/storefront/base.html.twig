@@ -14,11 +14,7 @@
 
     {# Anstatt Header über ESI zu rendern, inkludieren wir unser Template direkt #}
     {% block base_header %}
-        <header class="header-main" data-sticky-header>
-            <div class="container">
-                {% sw_include '@ObstkistenOnlineTheme/storefront/layout/header/header.html.twig' %}
-            </div>
-        </header>
+        {% sw_include '@Storefront/storefront/layout/header/header.html.twig' %}
     {% endblock %}
 
     {% block base_navigation_styling %}
@@ -27,7 +23,7 @@
 
     {% block base_main %}
         <div class="container py-3">
-            test22
+            test2221
         </div>
         <main class="content-main" id="content-main">
             {% block base_flashbags %}

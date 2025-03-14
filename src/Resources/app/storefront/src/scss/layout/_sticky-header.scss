@@ -5,49 +5,21 @@ Contains styles for the sticky header functionality.
 */
 
 .header-main {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 100%;
-    background-color: #fff;
-    position: relative;
-    z-index: 1000;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     
     &.is-sticky {
-        position: fixed !important; /* Wichtig, um andere Positionierungen zu überschreiben */
+        position: fixed !important;
         top: 0;
         left: 0;
         right: 0;
-        width: 100%;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        transform: translateY(0);
-        
-        // Für eine bessere mobile Darstellung
-        @media (max-width: 767px) {
-            .header-row {
-                padding: $spacer-xs 0;
-            }
-        }
-    }
-    
-    &.is-hidden {
-        transform: translateY(-100%);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 }
 
-// Fügt Padding zum Body hinzu, wenn der Header sticky ist
 body.has-sticky-header {
     padding-top: var(--header-height, 150px);
-    
-    // Responsive Anpassungen
-    @media (max-width: 767px) {
-        padding-top: var(--header-height, 100px);
-    }
-}
-
-// Optimierungen für eine bessere mobile Darstellung
-@media (max-width: 767px) {
-    .is-sticky {
-        .header-logo-picture {
-            max-width: 200px;
-        }
-    }
 }
