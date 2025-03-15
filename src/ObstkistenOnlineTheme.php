@@ -7,7 +7,7 @@ use Shopware\Storefront\Framework\ThemeInterface;
 
 class ObstkistenOnlineTheme extends Plugin implements ThemeInterface
 {
-	    public function getThemeConfigPath(): string
+	public function getThemeConfigPath(): string
     {
         return 'theme.json';
     }

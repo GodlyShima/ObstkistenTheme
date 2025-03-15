@@ -1,12 +1,12 @@
 {% block layout_header %}
     {# Hinzufügen eines HTML-Kommentars für Debugging #}
     <!-- OBSTKISTEN-THEME-HEADER-START -->
-    <header class="header-main" data-sticky-header id="my-custom-header">
+    <header class="header-main" data-sticky-header>
         <div class="container">
             {% block layout_header_navigation %}
                 <div class="row align-items-center header-row">
                     {% block layout_header_search %}
-                        <div class="col-12 col-sm-4 order-1 header-search-col">
+                        <div class="header-search-col col-12 col-sm-3 col-lg-auto col-lg-3 order-4 order-sm-2 order-md-3 order-xl-1  ms-xl-0">
                             <div class="row">
                                 <div class="col-sm-auto d-none d-sm-block d-lg-none">
                                     {% block layout_header_navigation_toggle_tablet %}
@@ -34,7 +34,7 @@
                     {% endblock %}
 
                     {% block layout_header_logo %}
-                        <div class="col-12 col-sm-4 order-2 header-logo-col d-flex justify-content-center align-items-center">
+                        <div class="header-logo-col col-auto col-xl-4 pos-center order-1 order-lg-2">
                             <div class="header-logo-main">
                                 {% sw_include '@Storefront/storefront/layout/header/logo.html.twig' %}
                             </div>
@@ -42,7 +42,7 @@
                     {% endblock %}
 
                     {% block layout_header_actions %}
-                        <div class="col-12 col-sm-4 order-1 order-sm-3 header-actions-col">
+                        <div class="header-actions-col col col-lg-auto order-3 order-md-4 ms-auto ms-xl-auto">
                             <div class="row g-0 justify-content-end">
                                 {% block layout_header_navigation_toggle %}
                                     <div class="col d-sm-none">

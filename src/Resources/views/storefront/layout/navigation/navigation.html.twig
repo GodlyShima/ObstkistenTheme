@@ -1,0 +1,92 @@
+{% sw_extends '@Storefront/storefront/layout/navigation/navigation.html.twig' %}
+
+{% block layout_main_navigation_menu_home %}
+    {% block layout_main_navigation_menu_home_before %}{% endblock %}
+
+    {% if config('SschreierStickyMenu.config.showNavigationMenuItemHome') %}
+        {% if config('SschreierStickyMenu.config.replaceNavigationMenuItemHomeWithIcon') %}
+            {% block layout_main_navigation_menu_home_custom %}
+                <a class="nav-link main-navigation-link nav-item-{{ context.salesChannel.navigationCategoryId }} {% if controllerAction is same as('home') %} active{% endif %} home-link"
+                   href="{{ path('frontend.home.page') }}"
+                   itemprop="url"
+                   title="{{ homeLabel|striptags }}">
+                    <div class="main-navigation-link-text">
+                        <span class="icon-home-container">{% sw_icon 'home' %}</span>
+                        <span class="d-none" itemprop="name">{{ homeLabel|sw_sanitize }}</span>
+                    </div>
+                </a>
+            {% endblock %}
+        {% else %}
+            {% block layout_main_navigation_menu_home_default_before %}{% endblock %}
+
+            {{ parent() }}
+
+            {% block layout_main_navigation_menu_home_default_after %}{% endblock %}
+        {% endif %}
+    {% endif %}
+
+    {% block layout_main_navigation_menu_home_after %}{% endblock %}
+{% endblock %}
+
+{% block layout_main_navigation %}
+    {% block layout_main_navigation_before %}{% endblock %}
+
+    {% if config('SschreierStickyMenu.config.stickyMenuIsActive') %}
+        {% set activeViewportsStickyMenuString = "" %}
+
+        {% for activeViewportStickyMenu in config('SschreierStickyMenu.config.activeViewportsStickyMenu') %}
+            {% set activeViewportsStickyMenuString = activeViewportsStickyMenuString ~ activeViewportStickyMenu %}
+        {% endfor %}
+
+        {% if activeViewportsStickyMenuString == "lgxlxxl" or activeViewportsStickyMenuString == "lgxxlxl" or activeViewportsStickyMenuString == "xxllgxl" or activeViewportsStickyMenuString == "xllgxxl" or activeViewportsStickyMenuString == "xxlxllg" or activeViewportsStickyMenuString == "xlxxllg" %}
+            {% set notActiveViewportsStickyMenuString = "'XS', 'SM', 'MD'" %}
+        {% elseif activeViewportsStickyMenuString == "xxlxl" or activeViewportsStickyMenuString == "xlxxl" %}
+            {% set notActiveViewportsStickyMenuString = "'XS', 'SM', 'MD', 'LG'" %}
+        {% elseif activeViewportsStickyMenuString == "lgxxl" or activeViewportsStickyMenuString == "xxllg" %}
+            {% set notActiveViewportsStickyMenuString = "'XS', 'SM', 'MD', 'XL'" %}
+        {% elseif activeViewportsStickyMenuString == "lgxl" or activeViewportsStickyMenuString == "xllg" %}
+            {% set notActiveViewportsStickyMenuString = "'XS', 'SM', 'MD', 'XXL'" %}
+        {% elseif activeViewportsStickyMenuString == "lg" %}
+            {% set notActiveViewportsStickyMenuString = "'XS', 'SM', 'MD', 'XL', 'XXL'" %}
+        {% elseif activeViewportsStickyMenuString == "xl" %}
+            {% set notActiveViewportsStickyMenuString = "'XS', 'SM', 'MD', 'LG', 'XXL'" %}
+        {% elseif activeViewportsStickyMenuString == "xxl" %}
+            {% set notActiveViewportsStickyMenuString = "'XS', 'SM', 'MD', 'LG', 'XL'" %}
+        {% elseif activeViewportsStickyMenuString == "" %}
+            {% set notActiveViewportsStickyMenuString = "'XS', 'SM', 'MD', 'LG', 'XL', 'XXL'" %}
+        {% endif %}
+
+        {% block layout_main_navigation_inner_before %}{% endblock %}
+
+        <div class="main-navigation-wrapper centered-navigation"
+             data-sticky-menu="true"
+             data-sticky-menu-plugin-options='{
+                "positionStickyMenuIsActive": "{{ config('SschreierStickyMenu.config.positionStickyMenuIsActive') }}",
+                "notActiveViewportsStickyMenu": "{{ notActiveViewportsStickyMenuString }}"
+             }'>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        {{ parent() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% block layout_main_navigation_inner_after %}{% endblock %}
+    {% else %}
+        {% block layout_main_navigation_default_before %}{% endblock %}
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    {{ parent() }}
+                </div>
+            </div>
+        </div>
+
+        {% block layout_main_navigation_default_after %}{% endblock %}
+    {% endif %}
+
+    {% block layout_main_navigation_after %}{% endblock %}
+{% endblock %}

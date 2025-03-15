@@ -1,0 +1,76 @@
+/*
+Centered Navigation
+==================================================
+Custom styles to center the main navigation items in Shopware with SschreierStickyMenu
+*/
+
+/* Hauptcontainer der Navigation vollständig zentrieren */
+.main-navigation-wrapper.centered-navigation {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Der Container soll keine feste Breite haben */
+.main-navigation-wrapper.centered-navigation .container {
+    width: auto;
+    max-width: 100%;
+    padding: 0;
+}
+
+/* Menüpunkte in der Hauptnavigation zentrieren */
+.nav-main {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 5px;
+    width: 100%;
+}
+
+/* Hauptnavigationscontainer anpassen */
+.nav-main .main-navigation {
+    width: auto;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+/* Sicherstellen, dass die Navigationspunkte zentriert sind */
+.nav-main .nav {
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Abstand zwischen den Menüpunkten für bessere Lesbarkeit */
+.nav-main .nav-item {
+    margin: 0 10px;
+}
+
+/* Home-Icon korrekt positionieren, falls vorhanden */
+.nav-main .nav-item .home-link {
+    display: flex;
+    align-items: center;
+}
+
+/* Spezielle Anpassungen für den Sticky-Zustand */
+.header-main.is-sticky .main-navigation-wrapper.centered-navigation {
+    width: 100%;
+}
+
+/* Stellen Sie sicher, dass alle Navigationsitems gleich hoch sind */
+.nav-main .main-navigation-link {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Optional: Anpassungen für mobile Ansicht */
+@media (max-width: 991px) {
+    .nav-main {
+        padding-bottom: 0;
+    }
+    
+    .nav-main .nav-item {
+        margin: 0 5px;
+    }
+}
