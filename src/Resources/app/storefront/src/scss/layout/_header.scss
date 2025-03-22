@@ -1,76 +1,327 @@
-/*
-Header
-==================================================
-Contains custom styles for the header at the top of the page.
-The header contains the shop logo, the search form and various actions like the offcanvas cart button.
-*/
+// Header variables
+$header-bg-hover: #f6f5f5;
+$header-text-color: #323238;
+$header-badge-color: #ffa188;
+$header-badge-text: #000;
+
+@media (min-width: 992px) {
+  .header-pos-absolute {
+    .header-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 1020;
+    }
+  }
+}
+
+.main-header  {
+  border-bottom: 1px solid #eceaea;
+}
+
+.header-main {
+  position: relative;
+
+  .header-inner {
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    @media (min-width: 992px) {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+    &:not(.js-header-sticky-hide .header-inner) {
+      transition: margin-top 0.3s, background-color 0.3s;
+    }
+
+    .nav-header {
+      transition: background-color 0.3s;
+    }
+  }
+
+  .header-actions-btn {
+    display: flex;
+    justify-content: center;
+    background: transparent;
+    color: $header-text-color;
+    padding: 0;
+    overflow: visible;
+    height: 40px;
+    min-width: 40px;
+
+    @media (min-width: 576px) {
+      height: calc(var(--bs-border-width) + 10px + 1.3125rem + 10px + var(--bs-border-width));
+      min-width: calc(var(--bs-border-width) + 10px + 1.3125rem + 10px + var(--bs-border-width));
+    }
+
+    &:not(.header-cart-btn) {
+      box-shadow: 0 0 0 0 transparent;
+    }
+
+    .icon {
+      color: $header-text-color;
+
+      > svg {
+        top: 0;
+      }
+    }
+
+    .badge {
+      --bs-badge-color: $header-badge-text;
+
+      .icon {
+        color: var(--bs-badge-color);
+      }
+    }
+
+    &:hover,
+    &:active,
+    &:focus-visible {
+      background: $header-bg-hover;
+      color: $header-text-color;
+
+      &:not(.header-cart-btn) {
+        box-shadow: 0 0 0 0.2rem $header-bg-hover;
+      }
+
+      .icon {
+        color: $header-text-color;
+      }
+
+      .badge .icon {
+        color: var(--bs-badge-color);
+      }
+    }
+
+    &:focus-visible:not(.header-cart-btn) {
+      box-shadow: var(--bs-btn-focus-box-shadow);
+    }
+  }
+
+  .header-wishlist-btn {
+    .header-wishlist-icon {
+      display: flex;
+      justify-content: center;
+    }
+
+    .header-wishlist-badge {
+      background-color: $header-badge-color;
+      color: $header-badge-text;
+
+      @media (min-width: 992px) {
+        transition: all 0.2s ease-in-out;
+
+        @media (prefers-reduced-motion: reduce) {
+          transition: none;
+        }
+      }
+    }
+
+    @media (min-width: 992px) {
+      &:not(:hover) .header-wishlist-badge {
+        font-size: 0;
+        transform: scale(0.5);
+      }
+    }
+  }
+
+  .account-menu-btn {
+    .header-account-badge {
+      position: absolute;
+      right: -0.25rem;
+      padding: 0;
+      background-color: $header-badge-color;
+      color: $header-badge-text;
+
+      .icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      @media (min-width: 992px) {
+        &,
+        .icon {
+          transition: all 0.2s ease-in-out;
+
+          @media (prefers-reduced-motion: reduce) {
+            transition: none;
+          }
+        }
+      }
+    }
+
+    @media (min-width: 992px) {
+      &:not(:hover) {
+        .header-account-badge {
+          transform: scale(0.5);
+          padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
+
+          .icon {
+            width: 0;
+            height: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .header-cart-btn {
+    background: transparent;
+    box-shadow: 0 0 0 0 transparent;
+
+    .header-cart-icon {
+      display: flex;
+      justify-content: center;
+      width: 40px;
+    }
+
+    .icon {
+      color: $header-text-color;
+    }
+
+    .header-cart-total {
+      display: none;
+      align-items: center;
+      transition: all 0.3s ease;
+      margin-right: 0.5rem;
+      margin-left: 0;
+      color: $header-text-color;
+      font-size: 0.875rem;
+      font-weight: 600;
+
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
+
+      @media (min-width: 1360px) {
+        display: flex;
+      }
+    }
+
+    &:hover,
+    &:active,
+    &:focus-visible {
+      background: $header-bg-hover;
+      box-shadow: 0 0 0 0.2rem $header-bg-hover;
+
+      .icon,
+      .header-cart-total {
+        color: $header-text-color;
+      }
+    }
+
+    &:focus-visible {
+      box-shadow: var(--bs-btn-focus-box-shadow);
+    }
+  }
+
+  .header-cart {
+    .header-cart-badge {
+      z-index: 9;
+      background-color: $header-badge-color;
+      color: $header-badge-text;
+      transition: all 0.2s ease-in-out;
+
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
+
+      @media (min-width: 576px) {
+        display: block;
+        right: auto;
+        left: 20px;
+      }
+    }
+
+    @media (min-width: 992px) {
+      &:not(:hover) .header-cart-badge {
+        font-size: 0;
+        transform: scale(0.5);
+      }
+    }
+  }
+}
+
+.nav-header > .container,
+.cms-section .nav-header > .boxed {
+  position: relative;
+
+  @media (max-width: 575.98px) {
+    .header-single-line-mobile & {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+}
 
 .header-row {
-    padding: $spacer-sm 0;
+  padding: 0;
+  min-height: 64px;
+  transition: all 0.2s ease-in-out;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  @media (min-width: 992px) {
+    min-height: 75px;
+  }
+
+  &::after {
+    content: "";
+    min-height: 64px;
+
+    @media (min-width: 992px) {
+      min-height: 75px;
+    }
+  }
+
+  .header-menu-button,
+  .header-actions-col {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 }
-
-.header-logo-picture {
-    max-width: 300px;
-    min-width: 200px;
-}
-
-.header-search-form {
-    position: relative;
-
-    &:has(.search-suggest) {
-        .header-search-btn {
-            display: none;
+        /* Animation Definitionen */
+        @keyframes enterFromTop {
+            0% {
+                transform: translateY(-100%);
+            }
+            33% {
+                transform: translateY(-60%);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes exitToTop {
+            0% {
+                transform: translateY(0);
+            }
+            67% {
+                transform: translateY(-60%);
+            }
+            100% {
+                transform: translateY(-100%);
+            }
         }
 
-        .header-close-btn {
-            display: block;
-        }
-    }
+.header-sticky {
+  position: fixed !important;
+  top: 0;
+  z-index: 10000;
+  background: #fff;
+  width: 100%;
+  transform: translateX(0);
+  animation: enterFromTop 0.4s ease-out forwards;
 }
 
-.header-search-btn {
-    .loader {
-        ~ .header-search-icon,
-        ~ .header-close-btn {
-            display: none;
-            background: #f6f5f5;
-            border: #f6f5f5;
-        }
-    }
-}
 
-.header-cart .header-cart-badge,
-.header-wishlist .header-wishlist-badge {
-    position: absolute;
-    right: -0.25rem;
-}
-
-.header-actions-btn {
-    position: relative;
-}
-
-@include media-breakpoint-up(sm) {
-    .header-row {
-        padding-bottom: $spacer;
-    }
-
-    .header-search-col {
-        .collapse:not(.show) {
-            display: block;
-        }
-    }
-
-    .header-search {
-        max-width: 400px;
-    }
-}
-
-.storefront-staging-info {
-    .icon {
-        color: $white;
-
-        svg {
-            top: 0;
-        }
-    }
+.header-hidden {
+  transform: translateX(-100%);
+  animation: exitToTop 0.4s ease-out forwards;
 }

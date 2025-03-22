@@ -6,3 +6,41 @@ This file is used to override default SCSS variables from the Shopware Storefron
 Because of the !default flags, theme variable overrides have to be declared beforehand.
 https://getbootstrap.com/docs/5.3/customize/sass/#variable-defaults
 */
+
+$sw-font-family: 'Rubik', sans-serif;
+
+
+:root {
+    --font-family-base: #{$sw-font-family};
+}
+
+body {
+    font-family: var(--font-family-base);
+}
+
+.product-image {
+    .is-standard {
+        object-fit: contain;
+    }
+}
+
+.btn {
+    border-radius: 13px;
+}
+
+.btn-buy {
+    box-shadow: 0 0 0 0 #323238;
+    
+    &.disabled,
+    &:disabled {
+      color: #d6d1d1;
+    }
+    
+    &:hover {
+      box-shadow: 0 0 0 0.2rem #323238;
+    }
+}
+
+.product-price.with-list-price {
+    color: #d62828 !important;
+}

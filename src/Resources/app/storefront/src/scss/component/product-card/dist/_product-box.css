@@ -1,0 +1,209 @@
+.product-box {
+  background-color: transparent !important;
+  border: none !important;
+  transition: transform 500ms cubic-bezier(0.34, 2, 0.6, 1), box-shadow 200ms ease;
+}
+.product-box:hover {
+  transform: translateY(-5px);
+}
+.product-box .card-body {
+  --bs-card-spacer-x: 0rem !important;
+}
+.product-box .product-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+.product-box .product-price-info .product-price {
+  margin-top: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #323238;
+  text-transform: none;
+}
+.product-box .product-rating {
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+  height: 16px;
+  text-rendering: auto;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.product-box .product-name {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #323238;
+  text-align: left;
+  margin-bottom: 0;
+  height: 2.5rem;
+  line-height: 1.25;
+  text-transform: none;
+  transition: color 0.3s ease-in;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  font-family: "Rubik", sans-serif;
+}
+.product-box .product-name:first-child {
+  margin-top: 1rem;
+}
+.product-box .product-image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 0;
+  position: relative;
+  border-radius: 13px;
+  flex-basis: auto;
+  flex-grow: 0;
+  height: auto;
+  aspect-ratio: 1/1;
+  background-color: #ffffff;
+}
+.product-box .product-image-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 13px;
+  pointer-events: none;
+}
+.product-box .product-image-wrapper .is-standard {
+  position: absolute;
+  top: 0;
+}
+.product-box .product-image-wrapper .product-image-link {
+  background-color: #ffffff;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.product-box .product-image-wrapper .product-image-link:focus-visible::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 0.25rem rgba(81, 81, 86, 0.5);
+}
+
+.product-image {
+  max-height: 100% !important;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.product-image.is-standard {
+  object-fit: cover !important;
+}
+
+.product-rating {
+  position: absolute;
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: center;
+  top: 1rem;
+  right: 0rem;
+}
+
+@media (min-width: 1200px) {
+  .product-image-wrapper .product-action-container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+    padding: 1rem;
+    z-index: 2;
+    width: 100%;
+  }
+}
+@media (min-width: 992px) {
+  .product-image-wrapper .product-action-container {
+    opacity: 0;
+    margin-bottom: -80px;
+    visibility: hidden;
+    pointer-events: none;
+    width: 100%;
+  }
+
+  .product-image-wrapper:hover .product-action-container {
+    opacity: 1;
+    margin-bottom: 0;
+    visibility: visible;
+    pointer-events: all;
+  }
+}
+.product-action-container {
+  width: 100%;
+}
+.product-action-container .product-action .buy-widget {
+  flex-grow: 2;
+  width: 100%;
+}
+.product-action-container .product-action .buy-widget .row {
+  justify-content: center;
+}
+.product-action-container .product-action .buy-widget .col {
+  max-width: 240px;
+}
+.product-action-container .product-action .buy-widget .input-group {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+}
+.product-action-container .product-action .buy-widget .btn-icon-only {
+  font-size: 0.9rem;
+  background-color: #367d65 !important;
+  border-color: #367d65 !important;
+  height: calc(1.5em + 1.25rem + calc(var(--bs-border-width) * 2));
+  width: calc(1.5em + 1.25rem + calc(var(--bs-border-width) * 2));
+  padding: 0;
+  border-radius: 13px;
+}
+
+.btn {
+  border-radius: 13px;
+}
+
+.product-price .with-list-price {
+  color: #c20017 !important;
+}
+
+.product-price-wrapper {
+  font-size: 0rem !important;
+}
+
+.product-badges {
+  pointer-events: none;
+  top: 2rem !important;
+  left: 1rem !important;
+}
+.product-badges .badge {
+  display: flex;
+  border-radius: 13px !important;
+  pointer-events: initial;
+  float: left;
+  clear: both;
+  line-height: 1.375rem !important;
+  height: 1.375rem !important;
+  font-size: 0.75rem !important;
+  padding: 0px 10px !important;
+  margin-left: 0px !important;
+}
+.product-badges .badge .icon {
+  width: 14px !important;
+  height: 14px !important;
+  color: #fff;
+  margin-right: 5px;
+}
+.product-badges .badge .icon > svg {
+  top: 0;
+}
+
+.bg-danger {
+  background-color: #c24646;
+}
+
+.bg-success {
+  background-color: #367d65;
+}

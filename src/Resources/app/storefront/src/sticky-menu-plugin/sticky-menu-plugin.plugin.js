@@ -1,167 +1,280 @@
 import Plugin from 'src/plugin-system/plugin.class';
+import DomAccess from 'src/helper/dom-access.helper';
+import ViewportDetection from 'src/helper/viewport-detection.helper';
 
-export default class StickyHeaderPlugin extends Plugin {
+/**
+ * ModernHeader Plugin
+ * Erweiterte Funktionalitäten für den modernen Header
+ */
+export default class ModernHeader extends Plugin {
     static options = {
-        scrollThreshold: 50,
-        animationDuration: 400 // ms
+        stickyHeaderEnabled: true,
+        megaMenuEnabled: true,
+        searchResultsSelector: '.search-results',
+        searchInputSelector: '[data-search-input]',
+        headerSelector: '.header-main',
+        categoryMenuSelector: '#categoriesMenu',
+        categoryToggleSelector: '.nav-main-category-btn',
+        mobileBreakpoint: 'lg'
     };
 
     init() {
-        console.log('Sticky Header Plugin initialisiert');
-        
-        // Get the header element
-        this.headerEl = this.el;
-        
-        // State tracking
-        this.isInitialLoad = true;
-        this.lastScrollTop = 0;
-        
-        // Add loading class to body immediately to prevent FOUC
-        document.body.classList.add('header-loading');
-        
-        // Save header height for body padding
-        this._saveHeaderHeight();
-        
-        // Add event listeners
-        window.addEventListener('scroll', this._onScroll.bind(this));
-        window.addEventListener('resize', this._onResize.bind(this));
-        
-        // Initial setup when page loads
-        window.addEventListener('load', () => {
-            // Remove loading class
-            document.body.classList.remove('header-loading');
-            
-            // Check initial scroll position and animate after a short delay
-            this._checkInitialScrollPosition();
-            
-            // Set a timeout to change the initial load state and trigger animation
-            setTimeout(() => {
-                this.isInitialLoad = false;
-                console.log('Initial load phase completed');
-                
-                // Trigger animation if we're already sticky
-                if (this.headerEl.classList.contains('is-sticky')) {
-                    this._triggerStickyAnimation();
-                }
-            }, 500); // Give time for any initial rendering
-        });
-        
-        // Fallback if load event already fired
-        if (document.readyState === 'complete') {
-            document.body.classList.remove('header-loading');
-            this._checkInitialScrollPosition();
-            setTimeout(() => {
-                this.isInitialLoad = false;
-                
-                // Trigger animation if we're already sticky
-                if (this.headerEl.classList.contains('is-sticky')) {
-                    this._triggerStickyAnimation();
-                }
-            }, 500);
+        // DOM-Elemente speichern
+        this.header = DomAccess.querySelector(document, this.options.headerSelector);
+        this.searchInput = DomAccess.querySelector(this.el, this.options.searchInputSelector, false);
+        this.searchResults = DomAccess.querySelector(this.el, this.options.searchResultsSelector, false);
+        this.categoryMenu = DomAccess.querySelector(document, this.options.categoryMenuSelector, false);
+        this.categoryToggle = DomAccess.querySelector(document, this.options.categoryToggleSelector, false);
+
+        // Event-Listener registrieren
+        this._registerEvents();
+
+        // Sticky Header Handling
+        if (this.options.stickyHeaderEnabled) {
+            this._initStickyHeader();
+        }
+
+        // MegaMenu für Desktop-Geräte
+        if (this.options.megaMenuEnabled && this.categoryMenu && this.categoryToggle) {
+            this._initMegaMenu();
         }
     }
-    
-    _saveHeaderHeight() {
-        this.headerHeight = this.headerEl.offsetHeight;
-        document.documentElement.style.setProperty('--header-height', `${this.headerHeight}px`);
-        console.log('Header-Höhe gesetzt:', this.headerHeight);
-    }
-    
-    _onResize() {
-        this._saveHeaderHeight();
-    }
-    
-    _onScroll() {
-        requestAnimationFrame(() => {
-            this._checkScrollPosition();
+
+    /**
+     * Event-Listener für Header-Funktionalitäten registrieren
+     * @private
+     */
+    _registerEvents() {
+        // Live-Suche-Ergebnisse
+        if (this.searchInput && this.searchResults) {
+            this.searchInput.addEventListener('focus', this._onSearchFocus.bind(this));
+            this.searchInput.addEventListener('input', this._debounce(this._onSearchInput.bind(this), 300));
+            document.addEventListener('click', this._onClickOutside.bind(this));
+        }
+
+        // Warenkorb-Dropdown auf Desktop
+        const cartLink = DomAccess.querySelector(this.el, '.header-cart-btn', false);
+        if (cartLink) {
+            cartLink.addEventListener('mouseenter', this._onCartHover.bind(this));
+        }
+
+        // Account-Dropdown auf Desktop
+        const accountLink = DomAccess.querySelector(this.el, '.header-account .header-action-link', false);
+        if (accountLink) {
+            accountLink.addEventListener('mouseenter', this._onAccountHover.bind(this));
+        }
+
+        // Falls ein Mini-Cart deiner Seite hinzugefügt wurde
+        window.addEventListener('cart-widget-refresh', () => {
+            this._refreshCartCounter();
         });
     }
-    
-    _checkInitialScrollPosition() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    /**
+     * Initialisierung des Sticky Headers
+     * @private
+     */
+    _initStickyHeader() {
+        const headerHeight = this.header.offsetHeight;
+        const headerOffset = this._getHeaderOffset();
+        let lastScrollTop = 0;
+
+        window.addEventListener('scroll', this._debounce(() => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Header-Verhalten beim Scrollen
+            if (scrollTop > headerOffset) {
+                // Nach unten scrollen - Header verstecken
+                if (scrollTop > lastScrollTop && scrollTop > headerHeight) {
+                    this.header.classList.add('header-hidden');
+                } 
+                // Nach oben scrollen - Header anzeigen
+                else if (scrollTop < lastScrollTop) {
+                    this.header.classList.remove('header-hidden');
+                    this.header.classList.add('header-sticky');
+                }
+            } else {
+                // Am Anfang der Seite - normal anzeigen
+                this.header.classList.remove('header-sticky', 'header-hidden');
+            }
+            
+            lastScrollTop = scrollTop;
+        }, 10));
+    }
+
+    /**
+     * Mega-Menu Funktionalität
+     * @private
+     */
+    _initMegaMenu() {
+        if (ViewportDetection.isXS() || ViewportDetection.isSM() || ViewportDetection.isMD()) {
+            return;
+        }
         
-        if (scrollTop > this.options.scrollThreshold) {
-            // If already scrolled on page load, make sticky WITHOUT animation initially
-            this.headerEl.classList.add('no-transition');
-            document.body.classList.add('has-sticky-header');
-            this.headerEl.classList.add('is-sticky');
-            
-            // Start position for later animation
-            this.headerEl.classList.add('prepare-animation');
-            
-            // Force a reflow to make sure the class is applied
-            void this.headerEl.offsetWidth;
-            
-            // Remove the no-transition class after a brief delay
-            setTimeout(() => {
-                this.headerEl.classList.remove('no-transition');
-            }, 50);
+        // Klick auf Kategorie-Button
+        this.categoryToggle.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.categoryMenu.classList.toggle('show');
+        });
+    }
+
+    /**
+     * Event-Handler für Suche-Fokus
+     * @private
+     */
+    _onSearchFocus() {
+        if (this.searchInput.value.length > 2) {
+            this._showSearchResults();
         }
     }
-    
-    _triggerStickyAnimation() {
-        if (this.headerEl.classList.contains('is-sticky') && this.headerEl.classList.contains('prepare-animation')) {
-            console.log('Triggering sticky animation after load');
-            
-            // First, position it offscreen (outside viewport)
-            this.headerEl.classList.add('position-for-animation');
-            
-            // Force a reflow
-            void this.headerEl.offsetWidth;
-            
-            // Then trigger animation
-            setTimeout(() => {
-                this.headerEl.classList.remove('prepare-animation');
-                this.headerEl.classList.remove('position-for-animation');
-                this.headerEl.classList.add('slide-from-top');
-            }, 50);
-        }
-    }
-    
-    _checkScrollPosition() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const wasScrollingDown = scrollTop > this.lastScrollTop;
-        this.lastScrollTop = scrollTop;
+
+    /**
+     * Event-Handler für Suche-Eingabe
+     * @private
+     */
+    _onSearchInput(event) {
+        const value = event.target.value;
         
-        if (scrollTop > this.options.scrollThreshold) {
-            this._makeSticky(wasScrollingDown);
+        if (value.length > 2) {
+            this._fetchSearchResults(value);
         } else {
-            this._makeNormal();
+            this._hideSearchResults();
         }
     }
-    
-    _makeSticky(wasScrollingDown) {
-        if (!this.headerEl.classList.contains('is-sticky')) {
-            console.log('Header wird sticky');
-            
-            // If it's the initial page load, don't animate
-            if (this.isInitialLoad) {
-                this.headerEl.classList.add('no-transition');
-            }
-            
-            // If scrolling down, start the animation from the top (slide down)
-            if (!this.isInitialLoad && wasScrollingDown) {
-                this.headerEl.classList.add('slide-from-top');
-            }
-            
-            document.body.classList.add('has-sticky-header');
-            this.headerEl.classList.add('is-sticky');
-            
-            // Remove the no-transition class after the header is in place
-            if (this.isInitialLoad) {
-                setTimeout(() => {
-                    this.headerEl.classList.remove('no-transition');
-                }, 50);
+
+    /**
+     * Suchergebnisse über AJAX laden
+     * @param {string} term - Suchbegriff
+     * @private
+     */
+    _fetchSearchResults(term) {
+        // AJAX-Request für Shopware Suche
+        const url = `${window.router['frontend.search.suggest']}?search=${term}`;
+        
+        fetch(url, {
+            method: 'GET',
+            credentials: 'same-origin'
+        })
+        .then(response => response.text())
+        .then(html => {
+            this.searchResults.innerHTML = html;
+            this._showSearchResults();
+        })
+        .catch(error => {
+            console.error('Error loading search results:', error);
+        });
+    }
+
+    /**
+     * Suchergebnisse anzeigen
+     * @private
+     */
+    _showSearchResults() {
+        this.searchResults.classList.add('show');
+    }
+
+    /**
+     * Suchergebnisse ausblenden
+     * @private
+     */
+    _hideSearchResults() {
+        this.searchResults.classList.remove('show');
+    }
+
+    /**
+     * Event-Handler für Klick außerhalb der Suche
+     * @param {Event} event
+     * @private
+     */
+    _onClickOutside(event) {
+        if (this.searchResults && this.searchResults.classList.contains('show')) {
+            if (!this.searchResults.contains(event.target) && !this.searchInput.contains(event.target)) {
+                this._hideSearchResults();
             }
         }
     }
-    
-    _makeNormal() {
-        if (this.headerEl.classList.contains('is-sticky')) {
-            console.log('Header wird normal');
-            this.headerEl.classList.remove('slide-from-top');
-            document.body.classList.remove('has-sticky-header');
-            this.headerEl.classList.remove('is-sticky');
+
+    /**
+     * Event-Handler für Hover über Warenkorb
+     * @private
+     */
+    _onCartHover() {
+        if (ViewportDetection.isXS() || ViewportDetection.isSM() || ViewportDetection.isMD()) {
+            return;
         }
+
+        // Optional: Mini-Cart per AJAX aktualisieren
+        // this._fetchCartContent();
+    }
+
+    /**
+     * Event-Handler für Hover über Account
+     * @private
+     */
+    _onAccountHover() {
+        if (ViewportDetection.isXS() || ViewportDetection.isSM() || ViewportDetection.isMD()) {
+            return;
+        }
+        
+        // Optional: Account-Dropdown-Inhalte per AJAX aktualisieren
+    }
+
+    /**
+     * Warenkorb-Zähler aktualisieren
+     * @private
+     */
+    _refreshCartCounter() {
+        const cartCounter = DomAccess.querySelector(document, '.cart-badge', false);
+        if (!cartCounter) return;
+
+        // Beispiel: Wenn der Mini-Cart eine Anzahl der Artikel im Template bereitstellt
+        const miniCart = DomAccess.querySelector(document, '.header-cart', false);
+        if (miniCart && miniCart.dataset.cartCount) {
+            const count = parseInt(miniCart.dataset.cartCount, 10);
+            cartCounter.textContent = count > 0 ? count : '';
+            cartCounter.style.display = count > 0 ? 'flex' : 'none';
+        }
+    }
+
+    /**
+     * Offset des Headers berechnen
+     * @returns {number}
+     * @private
+     */
+    _getHeaderOffset() {
+        // Berücksichtigen der Top-Bar und Notifications
+        let offset = 0;
+        const topBar = DomAccess.querySelector(document, '.top-bar', false);
+        if (topBar) {
+            offset += topBar.offsetHeight;
+        }
+        
+        const notificationBar = DomAccess.querySelector(document, '.notification-bar', false);
+        if (notificationBar) {
+            offset += notificationBar.offsetHeight;
+        }
+        
+        return offset;
+    }
+
+    /**
+     * Debounce-Funktion für Event-Handler
+     * @param {Function} func - Auszuführende Funktion 
+     * @param {number} wait - Wartezeit in ms
+     * @returns {Function}
+     * @private
+     */
+    _debounce(func, wait) {
+        let timeout;
+        
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
     }
 }

@@ -1,98 +1,120 @@
 {% block layout_header %}
-    {# Hinzufügen eines HTML-Kommentars für Debugging #}
-    <!-- OBSTKISTEN-THEME-HEADER-START -->
-    <header class="header-main" data-sticky-header>
-        <div class="container">
-            {% block layout_header_navigation %}
-                <div class="row align-items-center header-row">
-                    {% block layout_header_search %}
-                        <div class="header-search-col col-12 col-sm-3 col-lg-auto col-lg-3 order-4 order-sm-2 order-md-3 order-xl-1  ms-xl-0">
-                            <div class="row">
-                                <div class="col-sm-auto d-none d-sm-block d-lg-none">
-                                    {% block layout_header_navigation_toggle_tablet %}
-                                        <div class="nav-main-toggle">
-                                            {% block layout_header_navigation_toggle_tablet_button %}
-                                                <button
-                                                    class="btn nav-main-toggle-btn header-actions-btn"
-                                                    type="button"
-                                                    data-off-canvas-menu="true"
-                                                    aria-label="{{ 'general.menuLink'|trans|striptags }}"
-                                                >
-                                                    {% block layout_header_navigation_toggle_tablet_button_icon %}
-                                                        {% sw_icon 'stack' %}
-                                                    {% endblock %}
-                                                </button>
-                                            {% endblock %}
-                                        </div>
-                                    {% endblock %}
-                                </div>
-                                <div class="col">
-                                    {% sw_include '@Storefront/storefront/layout/header/search.html.twig' %}
-                                </div>
-                            </div>
-                        </div>
-                    {% endblock %}
+    <header class="header-main" data-modern-header>
 
+        {# Hauptheader mit Logo, Suche, Account, Wishlist und Warenkorb #}
+        <div class="main-header py-3">
+            <div class="container">
+                <div class="row align-items-center">
+                    {# Logo - auf Mobile zentriert #}
                     {% block layout_header_logo %}
-                        <div class="header-logo-col col-auto col-xl-4 pos-center order-1 order-lg-2">
+                        <div class="col-6 col-lg-2 order-1">
                             <div class="header-logo-main">
                                 {% sw_include '@Storefront/storefront/layout/header/logo.html.twig' %}
                             </div>
                         </div>
                     {% endblock %}
 
-                    {% block layout_header_actions %}
-                        <div class="header-actions-col col col-lg-auto order-3 order-md-4 ms-auto ms-xl-auto">
-                            <div class="row g-0 justify-content-end">
-                                {% block layout_header_navigation_toggle %}
-                                    <div class="col d-sm-none">
-                                        <div class="menu-button">
-                                            {% block layout_header_navigation_toggle_button %}
-                                                <button
-                                                    class="btn nav-main-toggle-btn header-actions-btn"
-                                                    type="button"
-                                                    data-off-canvas-menu="true"
-                                                    aria-label="{{ 'general.menuLink'|trans|striptags }}"
-                                                >
-                                                    {% block layout_header_navigation_toggle_button_icon %}
-                                                        {% sw_icon 'stack' %}
-                                                    {% endblock %}
+                    {# Mobile Navigation Toggle #}
+                    {% block layout_header_navigation_toggle %}
+                        <div class="col-3 d-lg-none header-nav-toggle order-0">
+                            <button class="btn nav-main-toggle-btn"
+                                    type="button"
+                                    data-off-canvas-menu="true"
+                                    aria-label="{{ 'general.menuLink'|trans|striptags }}">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                        </div>
+                    {% endblock %}
+
+                    {# Mobile Actions #}
+                    <div class="col-3 d-lg-none header-actions-mobile order-2">
+                        <div class="d-flex justify-content-end">
+                            {% block layout_header_search_toggle %}
+                                <div class="search-toggle me-2">
+                                    <button class="btn header-action-btn"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#searchCollapse"
+                                            aria-expanded="false"
+                                            aria-controls="searchCollapse"
+                                            aria-label="{{ 'header.searchButton'|trans|striptags }}">
+                                        <span class="icon" style="background-color: #367d65;border:none;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 20px !important;" class="size-6">
+                                                <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </div>
+                            {% endblock %}
+                            
+                            {% block layout_header_actions_cart_mobile %}
+                                <div class="header-cart"
+                                     data-off-canvas-cart="true">
+                                    <a class="header-action-btn"
+                                       href="{{ path('frontend.checkout.cart.page') }}"
+                                       data-cart-widget="true"
+                                       title="{{ 'checkout.cartTitle'|trans|striptags }}"
+                                       aria-label="{{ 'checkout.cartTitle'|trans|striptags }}">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        <span class="badge bg-primary rounded-circle cart-badge">{% if page.cart.lineItems|length > 0 %}{{ page.cart.lineItems|length }}{% endif %}</span>
+                                    </a>
+                                </div>
+                            {% endblock %}
+                        </div>
+                    </div>
+
+                    {# Suchfeld #}
+                    {% block layout_header_search %}
+                        <div class="col-12 col-lg-6 mt-3 mt-lg-0 order-4 order-lg-2">
+                            <div class="header-search">
+                                <form action="{{ path('frontend.search.page') }}" 
+                                      method="get"
+                                      data-search-form="true"
+                                      class="search-form">
+                                    {% block layout_header_search_input_group %}
+                                        <div class="input-group">
+                                            {% block layout_header_search_input %}
+                                                <input type="search"
+                                                       name="search"
+                                                       class="form-control search-input"
+                                                       autocomplete="off"
+                                                       autocapitalize="off"
+                                                       placeholder="{{ "header.searchPlaceholder"|trans|striptags }}"
+                                                       aria-label="{{ "header.searchPlaceholder"|trans|striptags }}"
+                                                       value="{{ page.searchTerm }}"
+                                                       data-search-input="true">
+                                            {% endblock %}
+
+                                            {% block layout_header_search_button %}
+                                                <button type="submit"
+                                                        style="background-color: #367d65;border:none;"
+                                                        class="btn btn-primary search-submit"
+                                                        aria-label="{{ "header.searchButton"|trans|striptags }}">
+                                                    <span class="icon">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 20px !important;" class="size-6">
+                                                            <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </span>
                                                 </button>
                                             {% endblock %}
                                         </div>
-                                    </div>
-                                {% endblock %}
-
-                                {% block layout_header_search_toggle %}
-                                    <div class="col-auto d-sm-none">
-                                        <div class="search-toggle">
-                                            <button class="btn header-actions-btn search-toggle-btn js-search-toggle-btn collapsed"
-                                                    type="button"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target="#searchCollapse"
-                                                    aria-expanded="false"
-                                                    aria-controls="searchCollapse"
-                                                    aria-label="{{ 'header.searchButton'|trans|striptags }}">
-                                                {% sw_icon 'search' %}
-                                            </button>
-                                        </div>
-                                    </div>
-                                {% endblock %}
-
-                                {% if config('core.cart.wishlistEnabled') %}
-                                    {% block layout_header_actions_wishlist %}
-                                        <div class="col-auto">
-                                            <div class="header-wishlist">
-                                                <a class="btn header-wishlist-btn header-actions-btn"
-                                                   href="{{ path('frontend.wishlist.page') }}"
-                                                   title="{{ 'header.wishlist'|trans|striptags }}"
-                                                   aria-label="{{ 'header.wishlist'|trans|striptags }}">
-                                                    {% sw_include '@Storefront/storefront/layout/header/actions/wishlist-widget.html.twig' %}
-                                                </a>
-                                            </div>
-                                        </div>
                                     {% endblock %}
-                                {% endif %}
+                                </form>
+                                {% block layout_header_search_results %}
+                                    <div class="search-results js-search-results">
+                                        {# populated with the search results via ajax #}
+                                    </div>
+                                {% endblock %}
+                            </div>
+                        </div>
+                    {% endblock %}
+
+                    {# Header Actions Desktop #}
+                    {% block layout_header_actions %}
+                        <div class="col-12 col-lg-4 header-actions-col order-3 order-lg-3">
+                            <div class="header-actions d-flex justify-content-end align-items-center">
+
+
 
                                 {% block layout_header_actions_account %}
                                     <div class="col-auto">
@@ -109,10 +131,10 @@
                                             data-off-canvas-cart="true"
                                         >
                                             <a class="btn header-cart-btn header-actions-btn"
-                                               href="{{ path('frontend.checkout.cart.page') }}"
-                                               data-cart-widget="true"
-                                               title="{{ 'checkout.cartTitle'|trans|striptags }}"
-                                               aria-label="{{ 'checkout.cartTitle'|trans|striptags }}">
+                                            href="{{ path('frontend.checkout.cart.page') }}"
+                                            data-cart-widget="true"
+                                            title="{{ 'checkout.cartTitle'|trans|striptags }}"
+                                            aria-label="{{ 'checkout.cartTitle'|trans|striptags }}">
                                                 {% sw_include '@Storefront/storefront/layout/header/actions/cart-widget.html.twig' %}
                                             </a>
                                         </div>
@@ -122,14 +144,134 @@
                         </div>
                     {% endblock %}
                 </div>
-            {% endblock %}
+            </div>
         </div>
+
+        {# Mobile Search - nur für mobile Ansicht #}
+        {% block layout_header_search_mobile %}
+            <div class="collapse d-lg-none" id="searchCollapse">
+                <div class="container py-2">
+                    <form action="{{ path('frontend.search.page') }}" 
+                          method="get"
+                          data-search-form="true"
+                          class="search-form">
+                        <div class="input-group">
+                            <input type="search"
+                                   name="search"
+                                   class="form-control search-input"
+                                   autocomplete="off"
+                                   autocapitalize="off"
+                                   placeholder="{{ "header.searchPlaceholder"|trans|striptags }}"
+                                   aria-label="{{ "header.searchPlaceholder"|trans|striptags }}"
+                                   value="{{ page.searchTerm }}"
+                                   data-search-input="true">
+                            <button type="submit"
+                                    class="btn btn-primary search-submit"
+                                    aria-label="{{ "header.searchButton"|trans|striptags }}">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endblock %}
+
+        {# Hauptnavigation #}
+        {% block layout_main_navigation %}
+            <div class="nav-main d-none d-lg-block">
+                <div class="container">
+                    <nav class="nav main-navigation">
+                        <div class="nav-categories d-flex w-100">
+                            <ul class="nav-main-list d-flex">
+                                {% for category in page.header.navigation.tree %}
+                                    {% if category.children|length > 0 %}
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle text-black py-2" 
+                                               href="{{ category.translated.externalLink ?? seoUrl('frontend.navigation.page', { navigationId: category.id }) }}"
+                                               data-bs-toggle="dropdown"
+                                               aria-expanded="false"
+                                               id="navDropdown-{{ category.id }}">
+                                                {{ category.category.translated.name }}
+                                            </a>
+                                            <div class="dropdown-menu" aria-labelledby="navDropdown-{{ category.id }}">
+                                                {% for subCategory in category.children %}
+                                                    <a class="dropdown-item" href="{{ subCategory.translated.externalLink ?? seoUrl('frontend.navigation.page', { navigationId: subCategory.id }) }}">
+                                                        {{ subCategory.category.translated.name }}
+                                                    </a>
+                                                {% endfor %}
+                                            </div>
+                                        </li>
+                                    {% else %}
+                                        <li class="nav-item">
+                                            <a class="nav-link text-black py-2" 
+                                               href="{{ category.translated.externalLink ?? seoUrl('frontend.navigation.page', { navigationId: category.id }) }}">
+                                                {{ category.category.translated.name }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+            
+            
+            {# Mega-Menu für Kategorien - ausklappbar #}
+            <div class="collapse" id="categoriesMenu">
+                <div class="container py-4">
+                    <div class="row">
+                        {% for category in page.header.navigation.tree %}
+                            <div class="col-md-3 mb-4">
+                                <h5 class="mega-menu-title">
+                                    <a href="{{ category.translated.externalLink ?? seoUrl('frontend.navigation.page', { navigationId: category.id }) }}">
+                                        {{ category.translated.name }}
+                                    </a>
+                                </h5>
+                                {% if category.children|length > 0 %}
+                                    <ul class="mega-menu-list">
+                                        {% for subCategory in category.children %}
+                                            <li>
+                                                <a href="{{ subCategory.translated.externalLink ?? seoUrl('frontend.navigation.page', { navigationId: subCategory.id }) }}">
+                                                    {{ subCategory.translated.name }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            {% if loop.index % 4 == 0 and not loop.last %}
+                                </div><div class="row">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    
+                    {# Featured Categories or Promotions #}
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="featured-category">
+                                <img src="{{ asset('bundles/storefront/assets/img/placeholder.png') }}" class="img-fluid" alt="Featured category">
+                                <div class="featured-category-content">
+                                    <h3>Neuheiten entdecken</h3>
+                                    <a href="#" class="btn btn-outline-light btn-sm">Jetzt shoppen</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="featured-category">
+                                <img src="{{ asset('bundles/storefront/assets/img/placeholder.png') }}" class="img-fluid" alt="Featured promotion">
+                                <div class="featured-category-content">
+                                    <h3>Sale bis zu 50%</h3>
+                                    <a href="#" class="btn btn-outline-light btn-sm">Zu den Angeboten</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
         
-        <div class="nav-main">
-            {% block layout_main_navigation %}
-                {% sw_include '@Storefront/storefront/layout/navigation/navigation.html.twig' %}
-            {% endblock %}
-        </div>
     </header>
-    <!-- OBSTKISTEN-THEME-HEADER-END -->
 {% endblock %}

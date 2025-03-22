@@ -1,22 +1,23 @@
+// font loading
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+// font end
+
+@import 'component/product-card/product-box';
+@import 'component/product-card/buy-button';
+
+@import 'component/quantity-selector';
+@import 'component/sorting';
+@import 'component/gallery-slider';
+@import 'component/badges';
+@import 'component/form';
+@import 'component/gallery';
+@import 'component/nav';
+
 @import 'layout/header';
-@import 'layout/scroll-up';
-@import 'layout/sticky-header'; /* Import the new sticky header styles */
-@import 'layout/centered-navigation'; /* Import the new centered navigation styles */
 
-@import 'component/icon';
-@import 'component/product-box';
+@import 'page/product-detail/product-detail';
 
-@import 'skin/shopware/component/button';
-@import 'skin/shopware/component/form';
-@import 'skin/shopware/component/product-box';
-
-
-@import 'skin/shopware/layout/header';
-
-input.form-control.header-search-input {
-    box-shadow: none !important;
-}
-
-.header-logo-col {
-    margin: auto;
+.modal-content {
+    border-radius: 13px !important;
+    background: #ffffff;
 }

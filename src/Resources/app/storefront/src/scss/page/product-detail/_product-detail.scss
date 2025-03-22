@@ -1,0 +1,151 @@
+// Variables
+$border-color: #eceaea;
+$text-color: #323238;
+$background-color: #ffffff;
+$background-light: #fbfafa;
+$border-radius: 13px;
+$font-family-heading: "Rubik", sans-serif;
+
+// Product Detail Main Components
+.product-detail {
+  &-buy {
+    margin-bottom: 1rem !important;
+  }
+
+  &-short-description {
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &-headline {
+    margin-bottom: 1rem !important;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &-name {
+    margin-bottom: 0;
+    color: $text-color;
+    font-size: 2.25rem;
+    font-weight: 600;
+    text-transform: none;
+    line-height: 1.2;
+    font-family: $font-family-heading;
+  }
+
+  // Tabs
+  &-tabs {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    background: $background-color;
+    color: $text-color;
+
+    .card {
+      padding: 36px 20px;
+    }
+
+    .tab-pane {
+      background: $background-color;
+      color: $text-color;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  // Configurator
+  &-configurator-option {
+    &-input + &-label {
+      border-radius: $border-radius !important;
+      border: 1px solid $border-color !important;
+    }
+  }
+
+  // Container styling
+  &-container {
+    border-top: 1px solid $border-color;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    
+    &~.product-detail-container {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+  }
+
+  // Form elements
+  &-form-container {
+    .product-detail-quantity {
+      &-group {
+        .btn-icon-only {
+          font-size: 0.999999875rem;
+          line-height: calc(1.5em + 1.375rem + calc(var(--bs-border-width) * 2));
+          height: calc(1.5em + 1.375rem + calc(var(--bs-border-width) * 2));
+        }
+
+        @media (min-width: 576px) {
+          min-width: 240px;
+          max-width: 360px;
+        }
+      }
+      
+      &-select.form-select {
+        padding: 0.6875rem 0 0.6875rem 1rem;
+        font-size: 0.999999875rem;
+      }
+    }
+    
+    // Column layouts
+    .col-8[class*="buy-button-container"],
+    .col-4:has(> .product-detail-quantity-group) {
+      width: 100%;
+      
+      @media (min-width: 576px) {
+        width: auto;
+      }
+    }
+    
+    // Buttons
+    .btn-buy {
+      @media (min-width: 576px) {
+        min-width: 260px;
+        max-width: 360px;
+      }
+    }
+    
+    // PayPal elements
+    [data-swag-paypal-express-button]:has(.paypal-buttons) {
+      width: 100%;
+      
+      @media (min-width: 576px) {
+        display: flex;
+        padding: 1rem;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+      }
+    }
+  }
+  
+  // Label
+  &-label {
+    font-weight: 700;
+  }
+}
+
+// Gallery and buybox container
+.has-el-gallery-buybox {
+  background: $background-light;
+  margin-bottom: 0;
+  color: $text-color;
+}
+
+.product-detail-ordernumber-container {
+    margin-bottom: 0.5rem;
+    
+    &:first-child {
+      border-top: 1px solid #eceaea;
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+  }

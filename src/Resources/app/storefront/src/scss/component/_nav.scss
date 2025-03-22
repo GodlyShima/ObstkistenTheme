@@ -1,0 +1,57 @@
+.nav-main {
+    background-color: #fff;
+    border-bottom: 1px solid #eceaea;
+}
+
+.nav-main-category-btn {
+    transition: all 0.2s ease-in-out !important;
+    border: 1px solid #367d65 !important;
+    color: #fff !important;
+    background: #367d65 !important;
+
+    .icon {
+        color: #fff !important;
+    }
+
+    &:hover
+     :focus
+     :active {
+        
+     }
+}
+
+.nav-link {
+    padding: 2px !important;
+    margin: auto !important;
+    color: black !important;
+    font-size: .875rem !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+    cursor: pointer !important;
+}
+
+.main-navigation {
+    padding-left: 8px !important;
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
+}
+
+.nav-main-list {
+    list-style: none !important;
+    color: black !important;
+    margin-bottom: 0px !important;
+    padding-left: 0px !important;
+
+    gap: 10px !important;
+}
+
+.nav-category-toggle {
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+}
+
+.nav-categories {
+    align-items: center;
+    flex-direction: row;
+    justify-content: left;
+}

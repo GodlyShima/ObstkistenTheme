@@ -1,0 +1,49 @@
+.btn-buy {
+    box-shadow: 0 0 0 0 #367d65;
+    border-radius: 13px !important;
+    background-color: #367d65 !important;
+    border: 1px solid #367d65 !important;
+    
+    &.disabled,
+    &:disabled {
+      color: #d6d1d1;
+    }
+    
+    &:hover {
+      box-shadow: 0 0 0 0.2rem #367d65;
+    }
+  }
+
+  .btn {
+    &-link {
+      &:hover,
+      &:focus-visible {
+        text-decoration: underline;
+      }
+  
+      &:focus-visible {
+        color: var(--bs-btn-color);
+      }
+  
+      &:hover {
+        color: var(--bs-btn-hover-color);
+      }
+    }
+  
+    &-lg,
+    &-group-lg > .btn,
+    &-buy {
+      --bs-btn-padding-y: 0.6875rem;
+      --bs-btn-padding-x: 2.25rem;
+      --bs-btn-font-size: 0.999999875rem;
+      --bs-btn-border-radius: 13px !important;
+    }
+  
+    &-sm,
+    &-group-sm > .btn {
+      --bs-btn-padding-y: 0.375rem;
+      --bs-btn-padding-x: 0.75rem;
+      --bs-btn-font-size: 0.765625rem;
+      --bs-btn-border-radius: 13px !important;
+    }
+  }

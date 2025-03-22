@@ -1,0 +1,74 @@
+.delivery-information {
+    --bs-badge-padding-x: 12px;
+    --bs-badge-padding-y: 8px;
+    --bs-badge-font-size: 0.75rem;
+    --bs-badge-font-weight: 700;
+    --bs-badge-color: #333333;
+    --bs-badge-border-radius: 13px;
+    position: relative;
+    display: inline-block;
+    padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x) var(--bs-badge-padding-y) calc(var(--bs-badge-padding-x) + 5px + var(--bs-badge-padding-x)* .5);
+    font-size: var(--bs-badge-font-size);
+    font-weight: var(--bs-badge-font-weight);
+    line-height: 1;
+    color: var(--bs-badge-color);
+    vertical-align: baseline;
+    border-radius: var(--bs-badge-border-radius);
+    background: #ffffff;
+    overflow: hidden;
+
+    .delivery-status-indicator {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        --bs-bg-opacity: .2;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: auto;
+            left: var(--bs-badge-padding-x);
+            bottom: 0;
+            margin: auto;
+            display: inline-block;
+            height: 5px;
+            width: 5px;
+            background-clip: padding-box;
+            border-radius: 100%
+        }
+    }
+
+    .bg-info {
+        &::before {
+            --bs-bg-opacity: 1;
+            background-color: rgba(71, 124, 133, var(--bs-bg-opacity)) !important;
+        }
+    }
+    
+    .bg-danger {
+        &::before {
+            --bs-bg-opacity: 1;
+            background-color: rgba(194, 70, 70, var(--bs-bg-opacity)) !important;
+        }
+    }
+    
+    .bg-warning {
+        &::before {
+            --bs-bg-opacity: 1;
+            background-color: rgba(155, 106, 8, var(--bs-bg-opacity)) !important;
+        }
+    }
+    
+    .bg-success {
+        &::before {
+            --bs-bg-opacity: 1;
+            background-color: rgba(54, 125, 101, var(--bs-bg-opacity)) !important;
+        }
+    }
+}
