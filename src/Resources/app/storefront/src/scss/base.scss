@@ -49,6 +49,30 @@
 
 @import 'page/product-detail/product-detail';
 
+.container-main {
+    background: #F5F7FA;
+}
+
+.header-action-text {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: .2px;
+    line-height: 14px;
+}
+
+.header-action-icon {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+}
+
+.header-actions {
+    gap: 10px;
+}
+
 .modal-content {
     border-radius: 13px !important;
     background: #ffffff;
