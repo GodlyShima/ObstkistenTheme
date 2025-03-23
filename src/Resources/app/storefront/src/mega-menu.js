@@ -1,9 +1,13 @@
+/**
+ * Standalone mega menu functionality
+ * This can be used when ModernHeader plugin is not active
+ */
 document.addEventListener('DOMContentLoaded', function() {
-    // Mega-Menü Funktionalität
+    // Mega menu functionality
     const megaMenuItems = document.querySelectorAll('.nav-main-item-with-children');
     const megaMenuOverlay = document.querySelector('.mega-menu-overlay');
     
-    // Funktion zum Schließen aller Mega-Menüs
+    // Function to close all mega menus
     function closeAllMegaMenus() {
         document.querySelectorAll('.mega-menu').forEach(menu => {
             menu.style.visibility = 'hidden';
@@ -17,18 +21,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Event-Listener für jedes Menü-Element mit Untermenü
+    // Event listeners for menu items with submenus
     megaMenuItems.forEach(item => {
         const link = item.querySelector('.nav-main-link');
         const megaMenu = item.querySelector('.mega-menu');
         
-        // Desktop: Hover-Effekt und Klick-Effekt
+        // Desktop: Hover and click effects
         if (window.innerWidth >= 992) {
-            // Anzeigen bei Hover
+            // Show on hover
             item.addEventListener('mouseenter', function() {
                 closeAllMegaMenus();
                 
-                // Kurze Verzögerung, damit das Menü nicht sofort erscheint
+                // Short delay for smoother appearance
                 setTimeout(() => {
                     if (megaMenu) {
                         megaMenu.style.visibility = 'visible';
@@ -43,10 +47,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 50);
             });
             
-            // Link-Klick abfangen
+            // Intercept link click
             if (link) {
                 link.addEventListener('click', function(e) {
-                    // Auf Desktop das Standard-Verhalten verhindern, falls es sich um einen Dropdown-Trigger handelt
+                    // On desktop, prevent default behavior for dropdown triggers
                     if (link.classList.contains('has-children') && window.innerWidth >= 992) {
                         e.preventDefault();
                         if (megaMenu && megaMenu.style.visibility !== 'visible') {
@@ -66,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         } else {
-            // Mobile: Klick-Effekt
+            // Mobile: Click effect
             if (link && link.classList.contains('has-children')) {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -85,15 +89,15 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Menü schließen, wenn die Maus das Menü-Element verlässt
+        // Close menu when mouse leaves the menu item
         item.addEventListener('mouseleave', function() {
             closeAllMegaMenus();
         });
     });
     
-    // Schließen beim Klicken außerhalb
+    // Close when clicking outside
     document.addEventListener('click', function(e) {
-        // Prüfen, ob der Klick innerhalb eines Mega-Menüs oder auf einem Menüpunkt war
+        // Check if click is inside a mega menu or on a menu item
         const isInMegaMenu = e.target.closest('.mega-menu') || e.target.closest('.nav-main-item-with-children');
         
         if (!isInMegaMenu) {
@@ -101,19 +105,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Schließen mit der Escape-Taste
+    // Close with Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closeAllMegaMenus();
         }
     });
     
-    // Schließen durch Klick auf den Overlay
+    // Close by clicking on the overlay
     if (megaMenuOverlay) {
         megaMenuOverlay.addEventListener('click', closeAllMegaMenus);
     }
     
-    // Menü-Status bei Fenstergröße anpassen
+    // Adjust menu status on window resize
     window.addEventListener('resize', function() {
         if (window.innerWidth < 992) {
             closeAllMegaMenus();

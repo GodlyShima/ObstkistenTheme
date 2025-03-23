@@ -1,327 +1,239 @@
 // Header variables
+$header-bg: #fff;
 $header-bg-hover: #f6f5f5;
 $header-text-color: #323238;
 $header-badge-color: #ffa188;
 $header-badge-text: #000;
+$header-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$header-border-color: rgba(0, 0, 0, 0.05);
+$header-primary-color: #367d65;
+$border-radius: 13px;
 
-@media (min-width: 992px) {
-  .header-pos-absolute {
-    .header-inner {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      z-index: 1020;
-    }
-  }
-}
-
-.main-header  {
-  border-bottom: 1px solid #eceaea;
-}
-
+// Main header structure
 .header-main {
   position: relative;
-
-  .header-inner {
-    margin-top: 0px;
-    margin-bottom: 0px;
-
-    @media (min-width: 992px) {
-      margin-top: 0px;
-      margin-bottom: 0px;
-    }
-
-    &:not(.js-header-sticky-hide .header-inner) {
-      transition: margin-top 0.3s, background-color 0.3s;
-    }
-
-    .nav-header {
-      transition: background-color 0.3s;
-    }
+  background-color: $header-bg;
+  
+  // Sticky header behavior
+  &.header-sticky {
+    position: fixed !important;
+    top: 0;
+    z-index: 1050;
+    width: 100%;
+    box-shadow: $header-shadow;
+    animation: enterFromTop 0.4s ease-out forwards;
   }
-
-  .header-actions-btn {
-    display: flex;
-    justify-content: center;
-    background: transparent;
-    color: $header-text-color;
-    padding: 0;
-    overflow: visible;
-    height: 40px;
-    min-width: 40px;
-
-    @media (min-width: 576px) {
-      height: calc(var(--bs-border-width) + 10px + 1.3125rem + 10px + var(--bs-border-width));
-      min-width: calc(var(--bs-border-width) + 10px + 1.3125rem + 10px + var(--bs-border-width));
-    }
-
-    &:not(.header-cart-btn) {
-      box-shadow: 0 0 0 0 transparent;
-    }
-
-    .icon {
-      color: $header-text-color;
-
-      > svg {
-        top: 0;
-      }
-    }
-
-    .badge {
-      --bs-badge-color: $header-badge-text;
-
-      .icon {
-        color: var(--bs-badge-color);
-      }
-    }
-
-    &:hover,
-    &:active,
-    &:focus-visible {
-      background: $header-bg-hover;
-      color: $header-text-color;
-
-      &:not(.header-cart-btn) {
-        box-shadow: 0 0 0 0.2rem $header-bg-hover;
-      }
-
-      .icon {
-        color: $header-text-color;
-      }
-
-      .badge .icon {
-        color: var(--bs-badge-color);
-      }
-    }
-
-    &:focus-visible:not(.header-cart-btn) {
-      box-shadow: var(--bs-btn-focus-box-shadow);
-    }
+  
+  &.header-hidden {
+    transform: translateX(-100%);
+    animation: exitToTop 0.4s ease-out forwards;
   }
+}
 
-  .header-wishlist-btn {
-    .header-wishlist-icon {
-      display: flex;
-      justify-content: center;
+// Top bar styling
+.top-bar {
+  border-bottom: 1px solid $header-border-color;
+  
+  @media (max-width: 767.98px) {
+    .row > div {
+      justify-content: center !important;
+      text-align: center;
+      padding: 0.25rem 0;
     }
-
-    .header-wishlist-badge {
-      background-color: $header-badge-color;
-      color: $header-badge-text;
-
-      @media (min-width: 992px) {
-        transition: all 0.2s ease-in-out;
-
-        @media (prefers-reduced-motion: reduce) {
-          transition: none;
-        }
-      }
-    }
-
-    @media (min-width: 992px) {
-      &:not(:hover) .header-wishlist-badge {
-        font-size: 0;
-        transform: scale(0.5);
-      }
-    }
-  }
-
-  .account-menu-btn {
-    .header-account-badge {
-      position: absolute;
-      right: -0.25rem;
-      padding: 0;
-      background-color: $header-badge-color;
-      color: $header-badge-text;
-
-      .icon {
-        width: 20px;
-        height: 20px;
-      }
-
-      @media (min-width: 992px) {
-        &,
-        .icon {
-          transition: all 0.2s ease-in-out;
-
-          @media (prefers-reduced-motion: reduce) {
-            transition: none;
-          }
-        }
-      }
-    }
-
-    @media (min-width: 992px) {
-      &:not(:hover) {
-        .header-account-badge {
-          transform: scale(0.5);
-          padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
-
-          .icon {
-            width: 0;
-            height: 0;
-          }
-        }
-      }
-    }
-  }
-
-  .header-cart-btn {
-    background: transparent;
-    box-shadow: 0 0 0 0 transparent;
-
-    .header-cart-icon {
-      display: flex;
-      justify-content: center;
-      width: 40px;
-    }
-
-    .icon {
-      color: $header-text-color;
-    }
-
-    .header-cart-total {
-      display: none;
-      align-items: center;
-      transition: all 0.3s ease;
-      margin-right: 0.5rem;
-      margin-left: 0;
-      color: $header-text-color;
-      font-size: 0.875rem;
-      font-weight: 600;
-
-      @media (prefers-reduced-motion: reduce) {
-        transition: none;
-      }
-
-      @media (min-width: 1360px) {
-        display: flex;
-      }
-    }
-
-    &:hover,
-    &:active,
-    &:focus-visible {
-      background: $header-bg-hover;
-      box-shadow: 0 0 0 0.2rem $header-bg-hover;
-
-      .icon,
-      .header-cart-total {
-        color: $header-text-color;
-      }
-    }
-
-    &:focus-visible {
-      box-shadow: var(--bs-btn-focus-box-shadow);
-    }
-  }
-
-  .header-cart {
-    .header-cart-badge {
-      z-index: 9;
-      background-color: $header-badge-color;
-      color: $header-badge-text;
-      transition: all 0.2s ease-in-out;
-
-      @media (prefers-reduced-motion: reduce) {
-        transition: none;
-      }
-
-      @media (min-width: 576px) {
-        display: block;
-        right: auto;
-        left: 20px;
-      }
-    }
-
-    @media (min-width: 992px) {
-      &:not(:hover) .header-cart-badge {
-        font-size: 0;
-        transform: scale(0.5);
-      }
+    
+    .top-bar-contact, .top-bar-email {
+      margin-right: 1rem !important;
     }
   }
 }
 
-.nav-header > .container,
-.cms-section .nav-header > .boxed {
-  position: relative;
-
-  @media (max-width: 575.98px) {
-    .header-single-line-mobile & {
-      padding-left: 5px;
-      padding-right: 5px;
-    }
-  }
+// Main header section
+.main-header {
+  border-bottom: 1px solid $header-border-color;
+  padding: 0.5rem 0;
 }
 
+// Header row layout
 .header-row {
   padding: 0;
   min-height: 64px;
   transition: all 0.2s ease-in-out;
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-
+  
   @media (min-width: 992px) {
     min-height: 75px;
   }
-
+  
   &::after {
     content: "";
     min-height: 64px;
-
+    
     @media (min-width: 992px) {
       min-height: 75px;
     }
   }
-
+  
   .header-menu-button,
   .header-actions-col {
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
   }
 }
-        /* Animation Definitionen */
-        @keyframes enterFromTop {
-            0% {
-                transform: translateY(-100%);
-            }
-            33% {
-                transform: translateY(-60%);
-            }
-            100% {
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes exitToTop {
-            0% {
-                transform: translateY(0);
-            }
-            67% {
-                transform: translateY(-60%);
-            }
-            100% {
-                transform: translateY(-100%);
-            }
-        }
 
-.header-sticky {
-  position: fixed !important;
-  top: 0;
-  z-index: 10000;
-  background: #fff;
-  width: 100%;
-  transform: translateX(0);
-  animation: enterFromTop 0.4s ease-out forwards;
+// Header actions
+.header-actions {
+  @media (max-width: 991.98px) {
+    justify-content: center;
+    margin-top: 1rem;
+  }
 }
 
+.header-action-item {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    color: $header-primary-color;
+  }
+}
 
-.header-hidden {
-  transform: translateX(-100%);
-  animation: exitToTop 0.4s ease-out forwards;
+.header-action-link {
+  width: 73px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: $header-text-color;
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: $border-radius;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    color: $header-primary-color;
+    background-color: rgba($header-primary-color, 0.05) !important;
+  }
+}
+
+.header-action-icon {
+  margin-bottom: 0.25rem;
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.header-action-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+// Cart badge
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -7px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $header-primary-color !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  
+  &:empty {
+    display: none;
+  }
+}
+
+// Search form styling
+.search-form {
+  position: relative;
+  
+  .input-group {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: $border-radius;
+    overflow: hidden;
+  }
+  
+  .search-input {
+    border-top-left-radius: $border-radius !important;
+    border-bottom-left-radius: $border-radius !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-right: 0 !important;
+    padding-left: 1rem;
+    height: 42px;
+    
+    &:focus {
+      box-shadow: none;
+      border-color: $header-primary-color !important;
+    }
+  }
+  
+  .search-submit {
+    border-top-right-radius: $border-radius !important;
+    border-bottom-right-radius: $border-radius !important;
+    background-color: $header-primary-color !important;
+    border-color: $header-primary-color !important;
+    color: white;
+    width: 48px;
+    
+    &:hover {
+      background-color: darken($header-primary-color, 5%) !important;
+    }
+  }
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  background: white;
+  border-radius: 0 0 $border-radius $border-radius;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  display: none;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  
+  &.show {
+    display: block;
+    animation: fadeInDown 0.3s ease;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Animation definitions
+@keyframes enterFromTop {
+  0% {
+    transform: translateY(-100%);
+  }
+  33% {
+    transform: translateY(-60%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes exitToTop {
+  0% {
+    transform: translateY(0);
+  }
+  67% {
+    transform: translateY(-60%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
 }

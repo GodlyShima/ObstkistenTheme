@@ -4,7 +4,7 @@ import Plugin from 'src/plugin-system/plugin.class';
 
 /**
  * ModernHeader Plugin
- * Erweiterte Funktionalitäten für den modernen Header
+ * Enhanced functionality for the modern header
  */
 export default class ModernHeader extends Plugin {
     static options = {
@@ -21,7 +21,7 @@ export default class ModernHeader extends Plugin {
     };
 
     init() {
-        // DOM-Elemente speichern
+        // Store DOM elements
         this.header = DomAccess.querySelector(document, this.options.headerSelector);
         this.navMain = DomAccess.querySelector(document, this.options.navMainSelector, false);
         this.searchInput = DomAccess.querySelector(document, this.options.searchInputSelector, false);
@@ -29,62 +29,60 @@ export default class ModernHeader extends Plugin {
         this.megaMenuItems = document.querySelectorAll('.nav-main-item-with-children');
         this.megaMenuOverlay = DomAccess.querySelector(document, this.options.megaMenuOverlaySelector, false);
 
-        // Event-Listener registrieren
+        // Register event listeners
         this._registerEvents();
 
-        // Sticky Header Handling
+        // Initialize sticky header if enabled
         if (this.options.stickyHeaderEnabled) {
             this._initStickyHeader();
         }
 
-        // MegaMenu für Desktop-Geräte
+        // Initialize mega menu if enabled
         if (this.options.megaMenuEnabled) {
             this._initMegaMenu();
         }
     }
 
     /**
-     * Event-Listener für Header-Funktionalitäten registrieren
+     * Register event listeners for header functionality
      * @private
      */
     _registerEvents() {
-        // Live-Suche-Ergebnisse
+        // Live search results
         if (this.searchInput && this.searchResults) {
             this.searchInput.addEventListener('focus', this._onSearchFocus.bind(this));
             this.searchInput.addEventListener('input', this._debounce(this._onSearchInput.bind(this), 300));
             document.addEventListener('click', this._onClickOutside.bind(this));
         }
 
-        // Falls ein Mini-Cart deiner Seite hinzugefügt wurde
+        // Listen for cart changes
         window.addEventListener('cart-widget-refresh', () => {
             this._refreshCartCounter();
         });
 
-        // Resize-Event für responsive Anpassung
+        // Resize event for responsive adjustments
         window.addEventListener('resize', this._debounce(this._onResize.bind(this), 200));
     }
 
     /**
-     * Event-Handler für Fenster-Resize
+     * Event handler for window resize
      * @private
      */
     _onResize() {
         if (ViewportDetection.isXS() || ViewportDetection.isSM() || ViewportDetection.isMD()) {
-            // In Mobile-Ansicht Mega-Menüs schließen
+            // Close mega menus on mobile view
             this._closeMegaMenus();
         }
     }
 
     /**
-     * Initialisierung des Sticky Headers
+     * Initialize sticky header functionality
      * @private
      */
     _initStickyHeader() {
-        const headerHeight = this.header.offsetHeight;
-        const headerOffset = this._getHeaderOffset();
         let lastScrollTop = 0;
         
-        // Initialer Aufruf, um den Header-Status zu setzen
+        // Initial call to set header status
         this._handleHeaderSticky();
 
         window.addEventListener('scroll', this._debounce(() => {
@@ -94,8 +92,8 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Sticky Header Logik
-     * @param {number} lastScrollTop - Letzte Scroll-Position
+     * Handle sticky header logic
+     * @param {number} lastScrollTop - Last scroll position
      * @private
      */
     _handleHeaderSticky(lastScrollTop = 0) {
@@ -103,26 +101,26 @@ export default class ModernHeader extends Plugin {
         const headerHeight = this.header.offsetHeight;
         const headerOffset = this._getHeaderOffset();
         
-        // Header-Verhalten beim Scrollen
+        // Header behavior on scroll
         if (scrollTop > headerOffset) {
-            // Nach unten scrollen - Header verstecken
+            // Scrolling down - hide header
             if (scrollTop > lastScrollTop && scrollTop > headerHeight) {
                 this.header.classList.remove('header-sticky');
                 this.header.classList.add('header-hidden');
             } 
-            // Nach oben scrollen - Header anzeigen
+            // Scrolling up - show header
             else if (scrollTop < lastScrollTop) {
                 this.header.classList.remove('header-hidden');
                 this.header.classList.add('header-sticky');
             }
         } else {
-            // Am Anfang der Seite - normal anzeigen
+            // At the top of the page - show normal
             this.header.classList.remove('header-sticky', 'header-hidden');
         }
     }
 
     /**
-     * Mega-Menu Funktionalität
+     * Initialize mega menu functionality
      * @private
      */
     _initMegaMenu() {
@@ -130,13 +128,13 @@ export default class ModernHeader extends Plugin {
             return;
         }
         
-        // Mega-Menü Events
+        // Mega menu events
         this.megaMenuItems.forEach(item => {
             const trigger = item.querySelector(this.options.megaMenuTriggerSelector);
             const megaMenu = item.querySelector(this.options.megaMenuSelector);
             
             if (trigger && megaMenu) {
-                // Hover Events für Desktop
+                // Hover events for desktop
                 item.addEventListener('mouseenter', () => {
                     this._showMegaMenu(item);
                 });
@@ -145,7 +143,7 @@ export default class ModernHeader extends Plugin {
                     this._closeMegaMenus();
                 });
                 
-                // Touch Events für Mobile/Tablet
+                // Click events for touch devices
                 trigger.addEventListener('click', (event) => {
                     if (ViewportDetection.isLG() || ViewportDetection.isXL() || ViewportDetection.isXXL()) {
                         event.preventDefault();
@@ -155,7 +153,7 @@ export default class ModernHeader extends Plugin {
             }
         });
         
-        // Schließen beim Klicken außerhalb
+        // Close when clicking outside
         document.addEventListener('click', (event) => {
             const isInMegaMenu = event.target.closest(this.options.megaMenuSelector) || 
                                  event.target.closest('.nav-main-item-with-children');
@@ -165,14 +163,14 @@ export default class ModernHeader extends Plugin {
             }
         });
         
-        // Escape-Taste zum Schließen
+        // Close with Escape key
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
                 this._closeMegaMenus();
             }
         });
         
-        // Overlay-Klick zum Schließen
+        // Close with overlay click
         if (this.megaMenuOverlay) {
             this.megaMenuOverlay.addEventListener('click', () => {
                 this._closeMegaMenus();
@@ -181,19 +179,19 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Mega-Menü anzeigen
-     * @param {HTMLElement} menuItem - Das Menü-Element
+     * Show mega menu
+     * @param {HTMLElement} menuItem - The menu item element
      * @private
      */
     _showMegaMenu(menuItem) {
-        // Zuerst alle schließen
+        // First close all menus
         this._closeMegaMenus();
         
-        // Das ausgewählte öffnen
+        // Open the selected menu
         const megaMenu = menuItem.querySelector(this.options.megaMenuSelector);
         
         if (megaMenu) {
-            // Timeout für flüssigere Animation
+            // Timeout for smoother animation
             setTimeout(() => {
                 megaMenu.style.transform = 'translateY(0)';
                 megaMenu.style.visibility = 'visible';
@@ -207,8 +205,8 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Mega-Menü umschalten (für Touchgeräte)
-     * @param {HTMLElement} menuItem - Das Menü-Element
+     * Toggle mega menu (for touch devices)
+     * @param {HTMLElement} menuItem - The menu item element
      * @private
      */
     _toggleMegaMenu(menuItem) {
@@ -223,7 +221,7 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Alle Mega-Menüs schließen
+     * Close all mega menus
      * @private
      */
     _closeMegaMenus() {
@@ -239,7 +237,7 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Event-Handler für Suche-Fokus
+     * Event handler for search focus
      * @private
      */
     _onSearchFocus() {
@@ -249,7 +247,7 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Event-Handler für Suche-Eingabe
+     * Event handler for search input
      * @private
      */
     _onSearchInput(event) {
@@ -263,12 +261,12 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Suchergebnisse über AJAX laden
-     * @param {string} term - Suchbegriff
+     * Load search results via AJAX
+     * @param {string} term - Search term
      * @private
      */
     _fetchSearchResults(term) {
-        // AJAX-Request für Shopware Suche
+        // AJAX request for Shopware search
         const url = `${window.router['frontend.search.suggest']}?search=${term}`;
         
         fetch(url, {
@@ -288,7 +286,7 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Suchergebnisse anzeigen
+     * Show search results
      * @private
      */
     _showSearchResults() {
@@ -298,7 +296,7 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Suchergebnisse ausblenden
+     * Hide search results
      * @private
      */
     _hideSearchResults() {
@@ -308,7 +306,7 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Event-Handler für Klick außerhalb der Suche
+     * Event handler for click outside of search
      * @param {Event} event
      * @private
      */
@@ -321,14 +319,14 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Warenkorb-Zähler aktualisieren
+     * Update cart counter
      * @private
      */
     _refreshCartCounter() {
         const cartCounters = document.querySelectorAll('.cart-badge');
         if (!cartCounters.length) return;
 
-        // Anzahl der Artikel aus dem Warenkorb abrufen
+        // Get item count from cart widget
         const cartWidget = document.querySelector('[data-cart-widget="true"]');
         if (cartWidget && cartWidget.dataset.cartCount) {
             const count = parseInt(cartWidget.dataset.cartCount, 10);
@@ -341,12 +339,12 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Offset des Headers berechnen
+     * Calculate header offset
      * @returns {number}
      * @private
      */
     _getHeaderOffset() {
-        // Berücksichtigen der Top-Bar und Notifications
+        // Consider top bar and notifications
         let offset = 0;
         const topBar = DomAccess.querySelector(document, '.top-bar', false);
         if (topBar) {
@@ -362,16 +360,16 @@ export default class ModernHeader extends Plugin {
     }
 
     /**
-     * Debounce-Funktion für Event-Handler
-     * @param {Function} func - Auszuführende Funktion 
-     * @param {number} wait - Wartezeit in ms
+     * Debounce function for event handlers
+     * @param {Function} func - Function to execute
+     * @param {number} wait - Wait time in ms
      * @returns {Function}
      * @private
      */
     _debounce(func, wait) {
         let timeout;
         
-        return function executedFunction(...args) {
+        return function(...args) {
             const later = () => {
                 clearTimeout(timeout);
                 func(...args);
