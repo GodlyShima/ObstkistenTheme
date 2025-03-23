@@ -1,8 +1,30 @@
 {% block layout_header %}
     {# Overlay für das Mega-Menü #}
-    <div class="mega-menu-overlay"></div>
 
     <header class="header-main" data-modern-header>
+        {# Top-Bar Hinzugefügt #}
+        <div class="top-bar bg-light">
+            <div class="container">
+                <div class="row py-2">
+                    <div class="col-md-6 d-flex align-items-center">
+                        <div class="top-bar-contact me-4">
+                            <small><i class="bi bi-telephone me-1"></i> +49 123 456789</small>
+                        </div>
+                        <div class="top-bar-email">
+                            <small><i class="bi bi-envelope me-1"></i> info@obstkistenonline.de</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-end align-items-center">
+                        <div class="top-bar-links">
+                            <a href="#" class="text-decoration-none me-3"><small>Versand & Rückgabe</small></a>
+                            <a href="#" class="text-decoration-none me-3"><small>Über uns</small></a>
+                            <a href="#" class="text-decoration-none"><small>Kontakt</small></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {# Hauptheader mit Logo, Suche, Account und Warenkorb #}
         <div class="main-header" style="">
             <div class="container">
@@ -116,6 +138,25 @@
                     {% block layout_header_actions %}
                         <div class="col-12 col-lg-5 header-actions-col order-3 order-lg-3" style="flex:auto;">
                             <div class="header-actions d-flex justify-content-end align-items-center">
+                                {% block layout_header_shipping %}
+                                    <div class="header-action-item d-none d-lg-block me-3">
+                                        <div class="d-flex align-items-center">
+                                            <div class="shipping-icon me-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <rect x="1" y="3" width="15" height="13"></rect>
+                                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                                </svg>
+                                            </div>
+                                            <div class="shipping-info">
+                                                <span class="d-block fw-bold" style="font-size: 12px;">Kostenloser Versand</span>
+                                                <span class="d-block" style="font-size: 12px;">ab 50€ Bestellwert</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endblock %}
+
                                 {% block layout_header_actions_account %}
                                     <div class="header-action-item">
                                         <div class="account-menu">

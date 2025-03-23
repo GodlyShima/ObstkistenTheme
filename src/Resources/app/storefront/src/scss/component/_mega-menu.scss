@@ -1,303 +1,145 @@
-/* Mega-Menü Styles */
-.nav-main {
-    background-color: #fff;
-    border-bottom: 1px solid #eceaea;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.navbar {
-	padding-top: 10px !important;
-  padding-bottom: 10px !important;
-	padding-left: 0px !important;
-	padding-right: 0px !important;
-}
-
-.navbar-nav {
-	gap: 10px;
-}
-
-.nav-main-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 10px;
-}
-
-.nav-main-item {
-    position: relative;
-}
-
-.nav-main-link {
-    display: block;
-    padding: 10px 15px;
-    color: #323238;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.9rem;
-    border-radius: 13px;
-    transition: all 0.2s ease;
-}
-
-.nav-main-link:hover {
-    background-color: #f0f7f4;
-    color: #367d65;
-}
-
-.nav-main-link.active {
-    background-color: #367d65;
-    color: white;
-}
-
-/* Pfeil-Symbol für Kategorien mit Unterkategorien */
-.nav-main-link.has-children {
-    position: relative;
-    padding-right: 30px;
-}
-
-.nav-main-link.has-children::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid currentColor;
-    transition: transform 0.3s ease;
-}
-
-.nav-main-item-with-children:hover .nav-main-link.has-children::after {
-    transform: translateY(-50%) rotate(180deg);
-}
-
-/* Mega-Menü Container */
+// Ensure mega menu is properly visible
 .mega-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: #ffffff;
-    z-index: 1030;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    padding: 30px 0;
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(-20px);
-    transition: all 0.3s ease;
-    border-radius: 0 0 13px 13px;
-    border-top: 3px solid #367d65;
-    pointer-events: none;
+  display: block !important; // Override Bootstrap's default display: none
+  visibility: hidden; // Use visibility instead for transitions
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  
+  // Added !important to make sure these properties are applied
+  &.show {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+  }
 }
 
-.nav-main-item-with-children:hover .mega-menu {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
+// Fix navbar toggler on mobile
+.navbar-toggler {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .main-navigation-menu .navbar-collapse {
+    display: block !important;
+    height: auto !important;
+  }
+}
+
+// Fix dropdown behavior
+.dropdown-menu {
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  margin-top: 0 !important;
+  
+  &.show {
     pointer-events: auto;
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
-/* Overlay für Mega-Menü */
-.mega-menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1020;
-    display: none;
+// Remove Bootstrap's default arrow from dropdowns
+.dropdown-toggle::after {
+  display: none !important;
 }
 
-.mega-menu-overlay.show {
-    display: block;
+// Ensure mega menu has proper stack order
+.nav-main {
+  position: relative;
+  z-index: 1030;
 }
 
-/* Mega-Menü Spalten */
-.mega-menu-column {
-    margin-bottom: 20px;
+// Fix position of cart badge
+.header-action-icon {
+  position: relative;
+  
+  .cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+  }
 }
 
-.mega-menu-title {
-    font-size: 1rem;
-    color: #323238;
-    font-weight: 600;
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #eceaea;
-    font-family: "Rubik", sans-serif;
+// Add nice animations to buttons and links
+.header-action-link, .mega-menu-promo-button, .btn {
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
 }
 
-.mega-menu-title a {
-    color: #323238;
-    text-decoration: none;
-    transition: color 0.2s ease;
+// Add nice hover effect to product cards
+.product-box {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    
+    .product-image-wrapper {
+      transform: scale(1.03);
+    }
+  }
+  
+  .product-image-wrapper {
+    transition: transform 0.3s ease;
+  }
 }
 
-.mega-menu-title a:hover {
-    color: #367d65;
-}
-
-/* Mega-Menü Listen */
-.mega-menu-list {
-    list-style: none;
+// Improvements for navigation on mobile
+@media (max-width: 991.98px) {
+  .mega-menu {
+    position: static;
+    background-color: #f8f9fa;
+    box-shadow: none;
+    border-top: none;
     padding: 0;
     margin: 0;
+    
+    .container {
+      padding: 0;
+    }
+    
+    .row {
+      margin: 0;
+    }
+    
+    .col-md-8, .col-md-4 {
+      padding: 0;
+      flex-basis: 100%;
+      max-width: 100%;
+    }
+    
+    .mega-menu-column {
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .mega-menu-promo {
+      display: none;
+    }
+  }
+  
+  .nav-main-link.has-children::after {
+    right: 1rem;
+  }
 }
 
-.mega-menu-list li {
-    margin-bottom: 8px;
-}
-
-.mega-menu-list a {
-    color: #666;
-    text-decoration: none;
-    font-size: 0.875rem;
-    transition: all 0.2s ease;
-    display: inline-block;
-}
-
-.mega-menu-list a:hover {
-    color: #367d65;
-    transform: translateX(5px);
-}
-
-/* Promotion-Bereich */
-.mega-menu-promo {
-    position: relative;
-    border-radius: 13px;
-    overflow: hidden;
-    height: 100%;
-    min-height: 200px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.mega-menu-promo:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-}
-
-.mega-menu-promo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 13px;
-}
-
-.mega-menu-promo-content {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 20px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
-    color: white;
-    border-radius: 0 0 13px 13px;
-}
-
-.mega-menu-promo-content h3 {
-    font-size: 1.25rem;
-    margin-bottom: 10px;
-    font-weight: 600;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.mega-menu-promo-button {
-    display: inline-block;
-    padding: 8px 16px;
-    background: #367d65;
-    color: white;
-    text-decoration: none;
-    border-radius: 13px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: background 0.2s ease;
-}
-
-.mega-menu-promo-button:hover {
-    background: #2a5f4c;
-    color: white;
-}
-
-/* Feature-Bereich */
-.mega-menu-featured {
-    display: flex;
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.mega-menu-featured-item {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    border: 1px solid #eceaea;
-    padding: 10px;
-    border-radius: 13px;
-    transition: all 0.2s ease;
-}
-
-.mega-menu-featured-item:hover {
-    background: #f9f9f9;
-    border-color: #d9d9d9;
-    transform: translateY(-3px);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-}
-
-.mega-menu-featured-icon {
-    width: 40px;
-    height: 40px;
-    background: #f0f7f4;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    color: #367d65;
-    transition: transform 0.3s ease;
-}
-
-.mega-menu-featured-item:hover .mega-menu-featured-icon {
-    transform: scale(1.1);
-}
-
-.mega-menu-featured-content h4 {
-    font-size: 0.875rem;
-    margin: 0 0 2px;
-}
-
-.mega-menu-featured-content p {
-    font-size: 0.75rem;
-    margin: 0;
-    color: #666;
-}
-
-/* Marken-Bereich */
-.mega-menu-brands {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid #eceaea;
-}
-
-.mega-menu-brand {
-    flex: 1;
-    padding: 10px;
-    text-align: center;
-    filter: grayscale(100%);
-    opacity: 0.6;
-    transition: all 0.2s ease;
-}
-
-.mega-menu-brand:hover {
-    filter: grayscale(0);
-    opacity: 1;
-}
-
-.mega-menu-brand img {
-    max-width: 80px;
-    max-height: 30px;
+// Fix for top-bar on mobile
+@media (max-width: 767.98px) {
+  .top-bar {
+    .row > div {
+      justify-content: center !important;
+      text-align: center;
+      padding: 0.25rem 0;
+    }
+    
+    .top-bar-contact, .top-bar-email {
+      margin-right: 1rem !important;
+    }
+  }
 }

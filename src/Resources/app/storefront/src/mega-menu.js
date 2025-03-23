@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const link = item.querySelector('.nav-main-link');
         const megaMenu = item.querySelector('.mega-menu');
         
-        // Desktop: Hover-Effekt
+        // Desktop: Hover-Effekt und Klick-Effekt
         if (window.innerWidth >= 992) {
             // Anzeigen bei Hover
             item.addEventListener('mouseenter', function() {
@@ -30,13 +30,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Kurze Verzögerung, damit das Menü nicht sofort erscheint
                 setTimeout(() => {
-                    megaMenu.style.visibility = 'visible';
-                    megaMenu.style.opacity = '1';
-                    megaMenu.style.transform = 'translateY(0)';
-                    megaMenu.style.pointerEvents = 'auto';
-                    
-                    if (megaMenuOverlay) {
-                        megaMenuOverlay.classList.add('show');
+                    if (megaMenu) {
+                        megaMenu.style.visibility = 'visible';
+                        megaMenu.style.opacity = '1';
+                        megaMenu.style.transform = 'translateY(0)';
+                        megaMenu.style.pointerEvents = 'auto';
+                        
+                        if (megaMenuOverlay) {
+                            megaMenuOverlay.classList.add('show');
+                        }
                     }
                 }, 50);
             });
@@ -44,8 +46,41 @@ document.addEventListener('DOMContentLoaded', function() {
             // Link-Klick abfangen
             if (link) {
                 link.addEventListener('click', function(e) {
-                    // Auf Desktop das Standard-Verhalten nicht verhindern,
-                    // damit der Link zur Kategorie-Seite führt
+                    // Auf Desktop das Standard-Verhalten verhindern, falls es sich um einen Dropdown-Trigger handelt
+                    if (link.classList.contains('has-children') && window.innerWidth >= 992) {
+                        e.preventDefault();
+                        if (megaMenu && megaMenu.style.visibility !== 'visible') {
+                            closeAllMegaMenus();
+                            megaMenu.style.visibility = 'visible';
+                            megaMenu.style.opacity = '1';
+                            megaMenu.style.transform = 'translateY(0)';
+                            megaMenu.style.pointerEvents = 'auto';
+                            
+                            if (megaMenuOverlay) {
+                                megaMenuOverlay.classList.add('show');
+                            }
+                        } else {
+                            closeAllMegaMenus();
+                        }
+                    }
+                });
+            }
+        } else {
+            // Mobile: Klick-Effekt
+            if (link && link.classList.contains('has-children')) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (megaMenu) {
+                        if (megaMenu.style.visibility !== 'visible') {
+                            closeAllMegaMenus();
+                            megaMenu.style.visibility = 'visible';
+                            megaMenu.style.opacity = '1';
+                            megaMenu.style.transform = 'translateY(0)';
+                            megaMenu.style.pointerEvents = 'auto';
+                        } else {
+                            closeAllMegaMenus();
+                        }
+                    }
                 });
             }
         }
