@@ -2,33 +2,51 @@
 Override variable defaults
 ==================================================
 This file is used to override default SCSS variables from the Shopware Storefront or Bootstrap.
-
 Because of the !default flags, theme variable overrides have to be declared beforehand.
-https://getbootstrap.com/docs/5.3/customize/sass/#variable-defaults
 */
 
+// Font family overrides
 $sw-font-family: 'GTEestiPro', Arial, sans-serif;
 
+// Theme colors
+$primary: #367d65;
+$secondary: #6c757d;
+$success: #198754;
+$info: #0dcaf0;
+$warning: #ffc107;
+$danger: #dc3545;
+$light: #f8f9fa;
+$dark: #212529;
+
+// Border radius
+$border-radius: 13px;
+$border-radius-sm: 8px;
+$border-radius-lg: 16px;
+
+// Set CSS custom properties for theme
 :root {
     --font-family-base: #{$sw-font-family};
+    --bs-border-radius: #{$border-radius};
+    --bs-border-radius-sm: #{$border-radius-sm};
+    --bs-border-radius-lg: #{$border-radius-lg};
+    --bs-primary: #{$primary};
+    --bs-primary-rgb: 54, 125, 101;
 }
 
+// Base styling
 body {
     font-family: var(--font-family-base);
 }
 
-.product-image {
-    .is-standard {
-        object-fit: contain;
-    }
-}
-
+// Button styling
 .btn {
-    border-radius: 13px;
+    border-radius: $border-radius;
 }
 
 .btn-buy {
-    box-shadow: 0 0 0 0 #323238;
+    box-shadow: 0 0 0 0 $primary;
+    background-color: $primary !important;
+    border-color: $primary !important;
     
     &.disabled,
     &:disabled {
@@ -36,10 +54,18 @@ body {
     }
     
     &:hover {
-      box-shadow: 0 0 0 0.2rem #323238;
+      box-shadow: 0 0 0 0.2rem $primary;
     }
 }
 
+// Product styling
+.product-image {
+    .is-standard {
+        object-fit: contain;
+    }
+}
+
+// Price styling
 .product-price.with-list-price {
     color: #d62828 !important;
 }
