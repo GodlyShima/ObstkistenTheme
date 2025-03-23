@@ -7,8 +7,7 @@ Because of the !default flags, theme variable overrides have to be declared befo
 https://getbootstrap.com/docs/5.3/customize/sass/#variable-defaults
 */
 
-$sw-font-family: 'Rubik', sans-serif;
-
+$sw-font-family: 'GTEestiPro', Arial, sans-serif;
 
 :root {
     --font-family-base: #{$sw-font-family};

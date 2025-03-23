@@ -1,0 +1,44 @@
+{% block layout_navbar_categories %}
+    <div class="categories-wrapper">
+        {% if navigationTree|length > 0 %}
+            <div class="row">
+                {% for treeItem in navigationTree %}
+                    {% set category = treeItem.category %}
+                    {% set id = category.id %}
+                    {% set hasChildren = treeItem.children|length > 0 %}
+                    {% set itemCount = category.productCount|default(0) %}
+
+                    {% if category.type != 'folder' %}
+                        <div class="col-md-3 mb-4">
+                            <div class="category-column">
+                                <div class="category-main-link mb-2">
+                                    <a href="{{ category_url(category) }}" 
+                                       {% if category_linknewtab(category) %}target="_blank"{% endif %}
+                                       class="category-main-title fw-bold">
+                                        {{ category.translated.name }}
+                                    </a>
+                                </div>
+                                
+                                {% if hasChildren %}
+                                    <ul class="subcategory-list list-unstyled">
+                                        {% for childItem in treeItem.children %}
+                                            {% set childCategory = childItem.category %}
+                                            {% set childItemCount = childCategory.productCount|default(0) %}
+                                            <li class="subcategory-item">
+                                                <a href="{{ category_url(childCategory) }}"
+                                                   {% if category_linknewtab(childCategory) %}target="_blank"{% endif %}
+                                                   class="subcategory-link">
+                                                    {{ childCategory.translated.name }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

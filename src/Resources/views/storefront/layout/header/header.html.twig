@@ -1,7 +1,9 @@
 {% block layout_header %}
-    <header class="header-main" data-modern-header>
+    {# Overlay für das Mega-Menü #}
+    <div class="mega-menu-overlay"></div>
 
-        {# Hauptheader mit Logo, Suche, Account, Wishlist und Warenkorb #}
+    <header class="header-main" data-modern-header>
+        {# Hauptheader mit Logo, Suche, Account und Warenkorb #}
         <div class="main-header py-3">
             <div class="container">
                 <div class="row align-items-center">
@@ -100,11 +102,6 @@
                                         </div>
                                     {% endblock %}
                                 </form>
-                                {% block layout_header_search_results %}
-                                    <div class="search-results js-search-results">
-                                        {# populated with the search results via ajax #}
-                                    </div>
-                                {% endblock %}
                             </div>
                         </div>
                     {% endblock %}
@@ -113,9 +110,6 @@
                     {% block layout_header_actions %}
                         <div class="col-12 col-lg-4 header-actions-col order-3 order-lg-3">
                             <div class="header-actions d-flex justify-content-end align-items-center">
-
-
-
                                 {% block layout_header_actions_account %}
                                     <div class="col-auto">
                                         <div class="account-menu">
@@ -175,103 +169,5 @@
                 </div>
             </div>
         {% endblock %}
-
-        {# Hauptnavigation #}
-        {% block layout_main_navigation %}
-            <div class="nav-main d-none d-lg-block">
-                <div class="container">
-                    <nav class="nav main-navigation">
-                        <div class="nav-categories d-flex w-100">
-                            <ul class="nav-main-list d-flex">
-                                {% for category in page.header.navigation.tree %}
-                                    {% if category.children|length > 0 %}
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle text-black py-2" 
-                                               href="{{ category.translated.externalLink ?? seoUrl('frontend.navigation.page', { navigationId: category.id }) }}"
-                                               data-bs-toggle="dropdown"
-                                               aria-expanded="false"
-                                               id="navDropdown-{{ category.id }}">
-                                                {{ category.category.translated.name }}
-                                            </a>
-                                            <div class="dropdown-menu" aria-labelledby="navDropdown-{{ category.id }}">
-                                                {% for subCategory in category.children %}
-                                                    <a class="dropdown-item" href="{{ subCategory.translated.externalLink ?? seoUrl('frontend.navigation.page', { navigationId: subCategory.id }) }}">
-                                                        {{ subCategory.category.translated.name }}
-                                                    </a>
-                                                {% endfor %}
-                                            </div>
-                                        </li>
-                                    {% else %}
-                                        <li class="nav-item">
-                                            <a class="nav-link text-black py-2" 
-                                               href="{{ category.translated.externalLink ?? seoUrl('frontend.navigation.page', { navigationId: category.id }) }}">
-                                                {{ category.category.translated.name }}
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-
-                        </div>
-                    </nav>
-                </div>
-            </div>
-
-            
-            
-            {# Mega-Menu für Kategorien - ausklappbar #}
-            <div class="collapse" id="categoriesMenu">
-                <div class="container py-4">
-                    <div class="row">
-                        {% for category in page.header.navigation.tree %}
-                            <div class="col-md-3 mb-4">
-                                <h5 class="mega-menu-title">
-                                    <a href="{{ category.translated.externalLink ?? seoUrl('frontend.navigation.page', { navigationId: category.id }) }}">
-                                        {{ category.translated.name }}
-                                    </a>
-                                </h5>
-                                {% if category.children|length > 0 %}
-                                    <ul class="mega-menu-list">
-                                        {% for subCategory in category.children %}
-                                            <li>
-                                                <a href="{{ subCategory.translated.externalLink ?? seoUrl('frontend.navigation.page', { navigationId: subCategory.id }) }}">
-                                                    {{ subCategory.translated.name }}
-                                                </a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            </div>
-                            {% if loop.index % 4 == 0 and not loop.last %}
-                                </div><div class="row">
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    
-                    {# Featured Categories or Promotions #}
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <div class="featured-category">
-                                <img src="{{ asset('bundles/storefront/assets/img/placeholder.png') }}" class="img-fluid" alt="Featured category">
-                                <div class="featured-category-content">
-                                    <h3>Neuheiten entdecken</h3>
-                                    <a href="#" class="btn btn-outline-light btn-sm">Jetzt shoppen</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="featured-category">
-                                <img src="{{ asset('bundles/storefront/assets/img/placeholder.png') }}" class="img-fluid" alt="Featured promotion">
-                                <div class="featured-category-content">
-                                    <h3>Sale bis zu 50%</h3>
-                                    <a href="#" class="btn btn-outline-light btn-sm">Zu den Angeboten</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endblock %}
-        
     </header>
 {% endblock %}

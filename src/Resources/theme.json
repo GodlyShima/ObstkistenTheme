@@ -7,9 +7,9 @@
      "@Plugins"
   ],
   "style": [
+    "@Storefront",
     "app/storefront/src/scss/overrides.scss",
-    "app/storefront/src/scss/base.scss",
-    "@Storefront"
+    "app/storefront/src/scss/base.scss"
   ],
   "script": [
     "@Storefront",

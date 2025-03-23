@@ -1,3 +1,4 @@
+import './mega-menu'; // Importiere das Mega-Menu JavaScript
 import ModernHeader from './sticky-menu-plugin/sticky-menu-plugin.plugin';
 
 // Debug-Ausgabe hinzufügen

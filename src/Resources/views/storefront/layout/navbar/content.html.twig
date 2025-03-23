@@ -1,0 +1,51 @@
+{% block layout_navbar_content %}
+    {% set category = navigationTree.category %}
+    {% set name = category.translated.name %}
+
+    <div class="megamenu-container">
+        {% block layout_navbar_content_row_content %}
+            <div class="container">
+                <div class="row">
+                    {% block layout_navbar_content_row_content_categories %}
+                        <div class="col-8">
+                            {% block layout_navbar_content_row_content_categories_recoursion %}
+                                {% sw_include '@Storefront/storefront/layout/navbar/categories.html.twig' with {
+                                    navigationTree: navigationTree.children,
+                                    navigationMedia: category.media,
+                                    page: page
+                                } only %}
+                            {% endblock %}
+                        </div>
+                    {% endblock %}
+
+                    {% block layout_navbar_content_row_content_teaser %}
+                        {% if category.media %}
+                            <div class="col-4">
+                                <div class="megamenu-teaser">
+                                    <div class="teaser-image-container">
+                                        {% sw_thumbnails 'navigation-flyout-teaser-image-thumbnails' with {
+                                            media: category.media,
+                                            sizes: {
+                                                default: '100%'
+                                            },
+                                            attributes: {
+                                                class: 'teaser-image img-fluid',
+                                                alt: (category.media.translated.alt ?: ''),
+                                                title: (category.media.translated.title ?: ''),
+                                                loading: 'lazy'
+                                            }
+                                        } %}
+                                    </div>
+                                    <div class="teaser-text-container">
+                                        <h3 class="teaser-title">{{ name }}</h3>
+                                        <div class="teaser-price">${{ random(10, 100) }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}
