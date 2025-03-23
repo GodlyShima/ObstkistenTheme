@@ -4,7 +4,7 @@
 
     <header class="header-main" data-modern-header>
         {# Hauptheader mit Logo, Suche, Account und Warenkorb #}
-        <div class="main-header" style="padding-top:0.7rem;padding-bottom:0.7rem;">
+        <div class="main-header" style="">
             <div class="container">
                 <div class="row align-items-center">
                     {# Logo - auf Mobile zentriert #}
@@ -19,11 +19,15 @@
                     {# Mobile Navigation Toggle #}
                     {% block layout_header_navigation_toggle %}
                         <div class="col-3 d-lg-none header-nav-toggle order-0">
-                            <button class="btn nav-main-toggle-btn"
+                            <button class="btn nav-main-toggle-btn header-action-btn"
                                     type="button"
                                     data-off-canvas-menu="true"
                                     aria-label="{{ 'general.menuLink'|trans|striptags }}">
-                                <i class="fas fa-bars"></i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                                </svg>
                             </button>
                         </div>
                     {% endblock %}
@@ -40,11 +44,10 @@
                                             aria-expanded="false"
                                             aria-controls="searchCollapse"
                                             aria-label="{{ 'header.searchButton'|trans|striptags }}">
-                                        <span class="icon" style="background-color: #367d65;border:none;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 20px !important;" class="size-6">
-                                                <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
-                                            </svg>
-                                        </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        </svg>
                                     </button>
                                 </div>
                             {% endblock %}
@@ -57,7 +60,11 @@
                                        data-cart-widget="true"
                                        title="{{ 'checkout.cartTitle'|trans|striptags }}"
                                        aria-label="{{ 'checkout.cartTitle'|trans|striptags }}">
-                                        <i class="fas fa-shopping-cart"></i>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                                            <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                        </svg>
                                         <span class="badge bg-primary rounded-circle cart-badge">{% if page.cart.lineItems|length > 0 %}{{ page.cart.lineItems|length }}{% endif %}</span>
                                     </a>
                                 </div>
@@ -67,7 +74,7 @@
 
                     {# Suchfeld #}
                     {% block layout_header_search %}
-                        <div class="col-12 col-lg-6 mt-3 mt-lg-0 order-4 order-lg-2">
+                        <div class="col-12 col-lg-5 mt-3 mt-lg-0 order-4 order-lg-2">
                             <div class="header-search">
                                 <form action="{{ path('frontend.search.page') }}" 
                                       method="get"
@@ -89,50 +96,96 @@
 
                                             {% block layout_header_search_button %}
                                                 <button type="submit"
-                                                        style="background-color: #367d65;border:none;"
                                                         class="btn btn-primary search-submit"
                                                         aria-label="{{ "header.searchButton"|trans|striptags }}">
-                                                    <span class="icon">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 20px !important;" class="size-6">
-                                                            <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
-                                                        </svg>
-                                                    </span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <circle cx="11" cy="11" r="8"></circle>
+                                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                                    </svg>
                                                 </button>
                                             {% endblock %}
                                         </div>
                                     {% endblock %}
                                 </form>
+                                <div class="search-results" data-search-results="true"></div>
                             </div>
                         </div>
                     {% endblock %}
 
                     {# Header Actions Desktop #}
                     {% block layout_header_actions %}
-                        <div class="col-12 col-lg-4 header-actions-col order-3 order-lg-3" style="flex:auto;">
+                        <div class="col-12 col-lg-5 header-actions-col order-3 order-lg-3" style="flex:auto;">
                             <div class="header-actions d-flex justify-content-end align-items-center">
                                 {% block layout_header_actions_account %}
-                                    <div class="col-auto">
+                                    <div class="header-action-item">
                                         <div class="account-menu">
-                                            {% sw_include '@Storefront/storefront/layout/header/actions/account-widget.html.twig' %}
+                                            <button class="header-action-link"
+                                                    type="button"
+                                                    id="accountWidget"
+                                                    data-account-menu="true"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-haspopup="true"
+                                                    aria-expanded="false"
+                                                    aria-label="{{ 'account.myAccount'|trans|striptags }}"
+                                                    title="{{ 'account.myAccount'|trans|striptags }}"
+                                                    style="background:transparent;border:none;">
+                                                <div class="header-action-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                        <circle cx="12" cy="7" r="4"></circle>
+                                                    </svg>
+                                                </div>
+                                                <div class="header-action-text d-none d-lg-block">
+                                                    <span>Account</span>
+                                                </div>
+                                            </button>
+                                            
+                                            <div class="dropdown-menu dropdown-menu-end account-menu-dropdown js-account-menu-dropdown"
+                                                 aria-labelledby="accountWidget">
+                                                {% sw_include '@Storefront/storefront/layout/header/account-menu.html.twig' %}
+                                            </div>
                                         </div>
                                     </div>
                                 {% endblock %}
                                 
+                                {% if config('core.cart.wishlistEnabled') %}
+                                    <div class="header-action-item">
+                                        <a class="header-action-link"
+                                           style="text-decoration:none!important;"
+                                           href="{{ path('frontend.wishlist.page') }}"
+                                           title="{{ 'header.wishlist'|trans|striptags }}"
+                                           aria-label="{{ 'header.wishlist'|trans|striptags }}">
+                                            <div class="header-action-icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="header-action-text d-none d-lg-block">
+                                                <span>Favoriten</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endif %}
 
                                 {% block layout_header_actions_cart %}
-                                    <div class="col-auto">
-                                        <div
-                                            class="header-cart"
-                                            data-off-canvas-cart="true"
-                                        >
-                                            <a class=""
-                                            href="{{ path('frontend.checkout.cart.page') }}"
-                                            data-cart-widget="true"
-                                            title="{{ 'checkout.cartTitle'|trans|striptags }}"
-                                            aria-label="{{ 'checkout.cartTitle'|trans|striptags }}">
-                                                {% sw_include '@Storefront/storefront/layout/header/actions/cart-widget.html.twig' %}
-                                            </a>
-                                        </div>
+                                    <div class="header-action-item">
+                                        <a class="header-action-link"
+                                           style="text-decoration:none!important;"
+                                           href="{{ path('frontend.checkout.cart.page') }}"
+                                           data-cart-widget="true"
+                                           title="{{ 'checkout.cartTitle'|trans|striptags }}"
+                                           aria-label="{{ 'checkout.cartTitle'|trans|striptags }}">
+                                            <div class="header-action-icon position-relative">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="header-action-text d-none d-lg-block">
+                                                <span>Warenkorb</span>
+                                            </div>
+                                        </a>
                                     </div>
                                 {% endblock %}
                             </div>
@@ -163,10 +216,14 @@
                             <button type="submit"
                                     class="btn btn-primary search-submit"
                                     aria-label="{{ "header.searchButton"|trans|striptags }}">
-                                <i class="fas fa-search"></i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
                             </button>
                         </div>
                     </form>
+                    <div class="search-results-mobile mt-2" data-search-results="true"></div>
                 </div>
             </div>
         {% endblock %}

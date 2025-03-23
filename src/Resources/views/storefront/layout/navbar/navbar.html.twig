@@ -1,13 +1,4 @@
 {% block layout_navbar %}
-
-{% if header.navigation is defined and header.navigation.tree is defined %}
-    {# Navigation data exists #}
-    <div class="debug-info d-none">Navigation tree has {{ header.navigation.tree|length }} items</div>
-{% else %}
-    {# Navigation data is missing #}
-    <div class="debug-info d-none">Navigation tree is missing</div>
-{% endif %}
-
     <div class="container">
         <nav class="navbar navbar-expand-lg main-navigation-menu"
              id="main-navigation-menu"
@@ -15,6 +6,7 @@
              itemtype="https://schema.org/SiteNavigationElement"
              data-navbar="true"
              aria-label="{{ 'header.navigationAriaLabel'|trans|striptags }}">
+            
             <div class="collapse navbar-collapse" id="main_nav">
                 <ul class="navbar-nav main-navigation-menu-list flex-wrap">
                     {% set homeLabel = context.salesChannel.translated.homeName|default('general.homeLink'|trans) %}
@@ -40,47 +32,117 @@
                             {% set hasChildren = treeItem.children|length > 0 %}
 
                             {% block layout_navbar_menu_item %}
-                                {% if category.type == 'folder' %}
-                                    <li class="nav-item main-navigation-link nav-item-{{ id }} nav-link root nav-item-{{ id }}-link{% if hasChildren %} dropdown-toggle{% endif %}"
-                                        {% if hasChildren %}
-                                            data-bs-toggle="dropdown"
-                                            data-flyout-menu-trigger="{{ id }}"
-                                        {% endif %}
-                                        title="{{ name }}">
+                                <li class="nav-item nav-main-item-with-children {% if hasChildren %}dropdown position-static{% endif %}">
+                                    <a class="nav-link nav-main-link {% if hasChildren %}has-children{% endif %}"
+                                       href="{{ category_url(category) }}"
+                                       {% if hasChildren %}data-bs-toggle="dropdown" aria-expanded="false"{% endif %}
+                                       {% if category_linknewtab(category) %}target="_blank"{% endif %}
+                                       itemprop="url"
+                                       title="{{ name }}">
                                         <span itemprop="name" class="main-navigation-link-text">{{ name }}</span>
-                                        {% if hasChildren %}
-                                            <div class="dropdown-menu w-100 p-4">
-                                                {% sw_include '@Storefront/storefront/layout/navbar/content.html.twig' with {
-                                                    themeIconConfig: themeIconConfig,
-                                                    navigationTree: treeItem,
-                                                    level: level+1,
-                                                    page: page
-                                                } only %}
+                                    </a>
+                                    
+                                    {% if hasChildren %}
+                                        <div class="dropdown-menu mega-menu container-fluid p-0">
+                                            <div class="container py-4">
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <div class="row">
+                                                            {% for childItem in treeItem.children %}
+                                                                {% if loop.index <= 8 %}
+                                                                    {% set childCategory = childItem.category %}
+                                                                    {% if childCategory.type != 'folder' %}
+                                                                        <div class="col-md-3 mb-4">
+                                                                            <div class="mega-menu-column">
+                                                                                <h6 class="mega-menu-title">
+                                                                                    <a href="{{ category_url(childCategory) }}">
+                                                                                        {{ childCategory.translated.name }}
+                                                                                    </a>
+                                                                                </h6>
+                                                                                
+                                                                                {% if childItem.children|length > 0 %}
+                                                                                    <ul class="mega-menu-list">
+                                                                                        {% for grandChildItem in childItem.children %}
+                                                                                            {% if loop.index <= 6 %}
+                                                                                                {% set grandChildCategory = grandChildItem.category %}
+                                                                                                <li>
+                                                                                                    <a href="{{ category_url(grandChildCategory) }}">
+                                                                                                        {{ grandChildCategory.translated.name }}
+                                                                                                    </a>
+                                                                                                </li>
+                                                                                            {% endif %}
+                                                                                        {% endfor %}
+                                                                                        
+                                                                                        {% if childItem.children|length > 6 %}
+                                                                                            <li class="more-link">
+                                                                                                <a href="{{ category_url(childCategory) }}">
+                                                                                                    {{ "Alle anzeigen" }}
+                                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                                                                                    </svg>
+                                                                                                </a>
+                                                                                            </li>
+                                                                                        {% endif %}
+                                                                                    </ul>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-4">
+                                                        <div class="mega-menu-promo">
+                                                            {% if category.media %}
+                                                                <div class="position-relative h-100">
+                                                                    {% sw_thumbnails 'mega-menu-promo-image' with {
+                                                                        media: category.media,
+                                                                        sizes: {
+                                                                            default: '100%'
+                                                                        },
+                                                                        attributes: {
+                                                                            class: 'img-fluid',
+                                                                            alt: (category.media.translated.alt ?: category.translated.name),
+                                                                            title: (category.media.translated.title ?: category.translated.name)
+                                                                        }
+                                                                    } %}
+                                                                    
+                                                                    <div class="mega-menu-promo-content">
+                                                                        <h3>{{ category.translated.name }}</h3>
+                                                                        <a href="{{ category_url(category) }}" class="mega-menu-promo-button">
+                                                                            {{ "Jetzt entdecken" }}
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            {% else %}
+                                                                <div class="mega-menu-featured">
+                                                                    {% for featuredItem in treeItem.children %}
+                                                                        {% if loop.index <= 3 %}
+                                                                            {% set featuredCategory = featuredItem.category %}
+                                                                            <div class="mega-menu-featured-item">
+                                                                                <div class="mega-menu-featured-icon">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                                                    </svg>
+                                                                                </div>
+                                                                                <div class="mega-menu-featured-content">
+                                                                                    <h4>{{ featuredCategory.translated.name }}</h4>
+                                                                                    <p>{{ "Entdecken Sie unsere Auswahl" }}</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        {% endif %}
-                                    </li>
-                                {% else %}
-                                    <li class="nav-item nav-item-{{ id }} {% if hasChildren %}dropdown position-static{% endif %}">
-                                        <a class="nav-link nav-item-{{ id }}-link root main-navigation-link p-2{% if hasChildren %} dropdown-toggle{% endif %}"
-                                           href="{{ category_url(category) }}"
-                                           {% if hasChildren %}data-bs-toggle="dropdown"{% endif %}
-                                           {% if category_linknewtab(category) %}target="_blank"{% endif %}
-                                           itemprop="url"
-                                           title="{{ name }}">
-                                            <span itemprop="name" class="main-navigation-link-text">{{ name }}</span>
-                                        </a>
-                                        {% if hasChildren %}
-                                            <div class="dropdown-menu w-100 p-4">
-                                                {% sw_include '@Storefront/storefront/layout/navbar/content.html.twig' with {
-                                                    themeIconConfig: themeIconConfig,
-                                                    navigationTree: treeItem,
-                                                    level: level+1,
-                                                    page: page
-                                                } only %}
-                                            </div>
-                                        {% endif %}
-                                    </li>
-                                {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </li>
                             {% endblock %}
                         {% endfor %}
                     {% endblock %}
