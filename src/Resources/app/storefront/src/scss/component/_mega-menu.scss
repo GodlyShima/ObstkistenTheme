@@ -146,19 +146,6 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   &.has-children {
     position: relative;
     padding-right: 1.5rem !important;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: 0.75rem;
-      width: 8px;
-      height: 8px;
-      border-right: 2px solid $menu-text;
-      border-bottom: 2px solid $menu-text;
-      transform: translateY(-50%) rotate(45deg);
-      transition: transform 0.3s ease;
-    }
   }
   
   // Active state

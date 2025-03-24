@@ -16,12 +16,17 @@
     width: 0;
     height: 3px;
     background-color: #367d65;
-    transition: width 0.3s ease;
+    transition: width 0.3s ease-out;
     z-index: 2;
 }
 
 /* Active state for menu items - this activates the underline animation */
 .nav-main-item-with-children.nav-item-active .menu-underline {
+    width: 100%;
+}
+
+/* Hover state for menu items - animate underline on hover */
+.nav-main-item-with-children:hover .menu-underline {
     width: 100%;
 }
 
@@ -38,6 +43,11 @@
     color: #323238 !important;
 }
 
+/* Special styling for links with mega menus */
+.nav-main-link.has-mega-menu {
+    cursor: pointer;
+}
+
 /* Mega menu overlay - this darkens the page when a menu is open */
 .mega-menu-overlay {
     position: fixed;
@@ -48,9 +58,12 @@
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
     visibility: hidden;
-    z-index: 1030;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1040;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
     pointer-events: none;
+    
+    /* Only cover the content below the header and navbar */
+    top: calc(var(--header-height, 150px) + var(--navbar-height, 60px));
 }
 
 .mega-menu-overlay.show {
@@ -59,9 +72,17 @@
     pointer-events: auto;
 }
 
-/* Body class when mega menu is open */
+/* Body class when mega menu is open - fix position and prevent jump */
 body.mega-menu-open {
+    position: relative;
     overflow: hidden;
+}
+
+/* Ensure the header and navbar remain visible */
+body.mega-menu-open .header-main,
+body.mega-menu-open .nav-main {
+    position: relative;
+    z-index: 1050;
 }
 
 /* Mega Menu styling with border-top connecting to the underline */
@@ -70,11 +91,14 @@ body.mega-menu-open {
     visibility: hidden;
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-    z-index: 1035; /* Just below the nav-main but above the overlay */
+    transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+                visibility 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+                transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 1041; /* Just below the nav-main but above the overlay */
     pointer-events: none;
     border-top: none !important;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Ensure content doesn't overflow during animations */
 }
 
 /* Active mega menu with connection to the underline */
@@ -85,6 +109,10 @@ body.mega-menu-open {
     pointer-events: auto;
     border-top: 3px solid #367d65;
     margin-top: -3px !important;
+    
+    /* Position the mega menu right below the nav bar */
+    position: absolute;
+    top: 100%;
 }
 
 /* Style adjustments for the mega menu dropdown */
@@ -99,6 +127,51 @@ body.mega-menu-open {
 /* Add hover effect for nav links */
 .nav-main-link:hover {
     color: #367d65 !important;
+}
+
+/* Animation for mega menu columns */
+.mega-menu-column {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.mega-menu-column-animated {
+    will-change: opacity, transform;
+}
+
+/* Enhanced styling for mega menu content */
+.mega-menu-title {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.mega-menu-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: #367d65;
+    transition: width 0.3s ease;
+}
+
+.mega-menu-column:hover .mega-menu-title::after {
+    width: 100%;
+}
+
+.mega-menu-list li a {
+    transition: transform 0.2s ease, color 0.2s ease;
+    display: inline-block;
+    padding-left: 0;
+}
+
+.mega-menu-list li a:hover {
+    transform: translateX(5px);
+    color: #367d65;
 }
 
 /* Responsive Adjustments */
@@ -120,5 +193,10 @@ body.mega-menu-open {
     
     .nav-main-item-with-children.nav-item-active .mega-menu {
         margin-top: 0 !important;
+    }
+    
+    .mega-menu-column {
+        opacity: 1;
+        transform: none;
     }
 }
