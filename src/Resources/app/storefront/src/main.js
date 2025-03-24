@@ -1,5 +1,6 @@
 // Import dependencies
 import ModernHeader from './sticky-menu-plugin/sticky-menu-plugin.plugin';
+import './mega-menu'; // Import our enhanced mega menu script
 
 /**
  * Main entry point for theme JavaScript

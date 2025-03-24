@@ -1,126 +1,179 @@
 /**
- * Enhanced mega menu functionality with animated underlines and focus effect overlay
+ * Fixed mega menu functionality with simplified hover handling
  */
 document.addEventListener('DOMContentLoaded', function() {
-    // Mega menu selectors
+    // Cache DOM elements
     const megaMenuItems = document.querySelectorAll('.nav-main-item-with-children');
-    const megaMenuOverlay = document.querySelector('.mega-menu-overlay') || createMegaMenuOverlay();
-    const navMain = document.querySelector('.nav-main');
+    const body = document.body;
     
-    // Create the underline elements for each menu item
+    // Create overlay for darken effect if it doesn't exist
+    let overlay = document.querySelector('.mega-menu-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'mega-menu-overlay';
+        body.appendChild(overlay);
+    }
+    
+    // Add underlines to each menu item
     megaMenuItems.forEach(item => {
-        // Create and append the animated underline element
-        const underline = document.createElement('span');
-        underline.classList.add('menu-underline');
-        item.querySelector('.nav-main-link').appendChild(underline);
-        
-        const megaMenu = item.querySelector('.mega-menu');
         const link = item.querySelector('.nav-main-link');
+        if (link && !link.querySelector('.menu-underline')) {
+            const underline = document.createElement('span');
+            underline.className = 'menu-underline';
+            link.appendChild(underline);
+        }
+    });
+    
+    // Delay constants
+    const HOVER_DELAY = 100; // ms delay before showing menu
+    const CLOSE_DELAY = 300; // ms delay before hiding menu
+    
+    // Timeout variables
+    let openTimeout = null;
+    let closeTimeout = null;
+    let activeItem = null;
+    
+    // Function to open a mega menu
+    function openMegaMenu(item) {
+        // Clear any pending close timer
+        if (closeTimeout) {
+            clearTimeout(closeTimeout);
+            closeTimeout = null;
+        }
         
-        // Mouse enter event - show mega menu and animate underline
-        item.addEventListener('mouseenter', function() {
-            closeAllMegaMenus();
+        // If there's a pending open timer, clear it
+        if (openTimeout) {
+            clearTimeout(openTimeout);
+        }
+        
+        // Set a new open timer
+        openTimeout = setTimeout(() => {
+            // If there's an active item that isn't this one, close it first
+            if (activeItem && activeItem !== item) {
+                closeMegaMenu(activeItem, true); // immediate close
+            }
             
-            // Short delay for smoother appearance
-            setTimeout(() => {
-                if (megaMenu) {
-                    // Show mega menu
-                    megaMenu.style.visibility = 'visible';
-                    megaMenu.style.opacity = '1';
-                    megaMenu.style.transform = 'translateY(0)';
-                    megaMenu.style.pointerEvents = 'auto';
-                    
-                    // Show underline
-                    item.classList.add('nav-item-active');
-                    
-                    // Show overlay
-                    megaMenuOverlay.classList.add('show');
-                    document.body.classList.add('mega-menu-open');
-                }
-            }, 50);
+            const megaMenu = item.querySelector('.mega-menu');
+            if (megaMenu) {
+                // Show the menu
+                megaMenu.style.visibility = 'visible';
+                megaMenu.style.opacity = '1';
+                megaMenu.style.transform = 'translateY(0)';
+                
+                // Activate the item
+                item.classList.add('nav-item-active');
+                
+                // Show the overlay
+                overlay.classList.add('show');
+                body.classList.add('mega-menu-open');
+                
+                // Set this as the active item
+                activeItem = item;
+            }
+        }, HOVER_DELAY);
+    }
+    
+    // Function to close a mega menu
+    function closeMegaMenu(item, immediate = false) {
+        // Clear any pending open timer
+        if (openTimeout) {
+            clearTimeout(openTimeout);
+            openTimeout = null;
+        }
+        
+        // If there's a pending close timer, clear it
+        if (closeTimeout) {
+            clearTimeout(closeTimeout);
+        }
+        
+        // Close function
+        const close = () => {
+            const megaMenu = item.querySelector('.mega-menu');
+            if (megaMenu) {
+                megaMenu.style.visibility = 'hidden';
+                megaMenu.style.opacity = '0';
+                megaMenu.style.transform = 'translateY(10px)';
+            }
+            
+            item.classList.remove('nav-item-active');
+            
+            // If this was the active item, clear the reference
+            if (activeItem === item) {
+                activeItem = null;
+                
+                // Only remove overlay and body class if we're closing the active item
+                overlay.classList.remove('show');
+                body.classList.remove('mega-menu-open');
+            }
+        };
+        
+        // If immediate, close now; otherwise set a timer
+        if (immediate) {
+            close();
+        } else {
+            closeTimeout = setTimeout(close, CLOSE_DELAY);
+        }
+    }
+    
+    // Close all mega menus
+    function closeAllMegaMenus(immediate = false) {
+        megaMenuItems.forEach(item => {
+            closeMegaMenu(item, immediate);
+        });
+    }
+    
+    // Add event listeners to each menu item
+    megaMenuItems.forEach(item => {
+        // Mouse enter - open the menu
+        item.addEventListener('mouseenter', () => {
+            openMegaMenu(item);
         });
         
-        // Mouse leave event - hide mega menu and underline
-        item.addEventListener('mouseleave', function() {
-            closeAllMegaMenus();
+        // Mouse leave - start the close timer
+        item.addEventListener('mouseleave', () => {
+            closeMegaMenu(item);
         });
         
-        // Click event for mobile/touch devices
+        // Click on menu item link
+        const link = item.querySelector('.nav-main-link');
         if (link) {
-            link.addEventListener('click', function(e) {
-                // Only prevent default on larger screens where we're using hover effects
+            link.addEventListener('click', (e) => {
                 if (window.innerWidth >= 992 && link.classList.contains('has-children')) {
                     e.preventDefault();
                     
-                    if (megaMenu && megaMenu.style.visibility !== 'visible') {
-                        closeAllMegaMenus();
-                        megaMenu.style.visibility = 'visible';
-                        megaMenu.style.opacity = '1';
-                        megaMenu.style.transform = 'translateY(0)';
-                        megaMenu.style.pointerEvents = 'auto';
-                        item.classList.add('nav-item-active');
-                        megaMenuOverlay.classList.add('show');
-                        document.body.classList.add('mega-menu-open');
+                    if (item.classList.contains('nav-item-active')) {
+                        closeMegaMenu(item, true);
                     } else {
-                        closeAllMegaMenus();
+                        openMegaMenu(item);
                     }
                 }
             });
         }
     });
     
-    // Function to close all mega menus
-    function closeAllMegaMenus() {
-        document.querySelectorAll('.mega-menu').forEach(menu => {
-            menu.style.transform = 'translateY(10px)';
-            menu.style.visibility = 'hidden';
-            menu.style.opacity = '0';
-            menu.style.pointerEvents = 'none';
-        });
-        
-        // Remove active states from all menu items
-        document.querySelectorAll('.nav-main-item-with-children').forEach(item => {
-            item.classList.remove('nav-item-active');
-        });
-        
-        // Hide overlay
-        megaMenuOverlay.classList.remove('show');
-        document.body.classList.remove('mega-menu-open');
-    }
+    // Handle clicks outside the menu
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.nav-main-item-with-children') && !e.target.closest('.mega-menu')) {
+            closeAllMegaMenus(true);
+        }
+    });
     
-    // Function to create overlay if it doesn't exist
-    function createMegaMenuOverlay() {
-        const overlay = document.createElement('div');
-        overlay.className = 'mega-menu-overlay';
-        document.body.appendChild(overlay);
-        
-        // Close menus when clicking on overlay
-        overlay.addEventListener('click', closeAllMegaMenus);
-        
-        return overlay;
-    }
+    // Close with overlay click
+    overlay.addEventListener('click', () => {
+        closeAllMegaMenus(true);
+    });
     
     // Close with Escape key
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            closeAllMegaMenus();
+            closeAllMegaMenus(true);
         }
     });
     
-    // Close when clicking outside
-    document.addEventListener('click', function(e) {
-        const isInMegaMenu = e.target.closest('.mega-menu') || 
-                             e.target.closest('.nav-main-item-with-children');
-        
-        if (!isInMegaMenu) {
-            closeAllMegaMenus();
-        }
-    });
-    
-    // Adjust menu status on window resize
-    window.addEventListener('resize', function() {
+    // Handle resize
+    window.addEventListener('resize', () => {
         if (window.innerWidth < 992) {
-            closeAllMegaMenus();
+            closeAllMegaMenus(true);
         }
     });
 });

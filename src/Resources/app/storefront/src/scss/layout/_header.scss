@@ -11,6 +11,7 @@ $border-radius: 13px;
 
 // Main header structure
 .header-main {
+  z-index: 1040;
   position: relative;
   background-color: $header-bg;
   

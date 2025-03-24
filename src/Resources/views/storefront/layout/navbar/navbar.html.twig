@@ -1,5 +1,5 @@
 {% block layout_navbar %}
-    <div class="mega-menu-overlay"></div>
+    {# Note: We DON'T add the overlay here anymore, it will be added by JavaScript AFTER the navbar #}
     <div class="container">
         <nav class="navbar navbar-expand-lg main-navigation-menu"
              id="main-navigation-menu"
@@ -18,13 +18,14 @@
                             {% set hasChildren = treeItem.children|length > 0 %}
 
                             {% block layout_navbar_menu_item %}
-                                <li class="nav-item nav-main-item-with-children {% if hasChildren %}dropdown position-static{% endif %}">
-                                    <a class="nav-link nav-main-link {% if hasChildren %}has-children{% endif %}"
+                                <li class="nav-item nav-main-item-with-children{% if hasChildren %} dropdown position-static{% endif %}">
+                                    <a class="nav-link nav-main-link{% if hasChildren %} has-children{% endif %}"
                                        href="{{ category_url(category) }}"
                                        {% if category_linknewtab(category) %}target="_blank"{% endif %}
                                        itemprop="url"
                                        title="{{ name }}">
                                         <span itemprop="name" class="main-navigation-link-text">{{ name }}</span>
+                                        {# The underline will be added by JavaScript #}
                                     </a>
                                     
                                     {% if hasChildren %}
