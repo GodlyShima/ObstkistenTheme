@@ -132,32 +132,6 @@
   }
 }
 
-// Hover animations for cards and buttons
-.product-box {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    
-    .product-image-wrapper {
-      transform: scale(1.03);
-    }
-  }
-  
-  .product-image-wrapper {
-    transition: transform 0.3s ease;
-  }
-}
-
-// Header actions styling
-.header-action-link, .mega-menu-promo-button, .btn {
-  transition: all 0.2s ease-in-out;
-  
-  &:hover {
-    transform: translateY(-2px);
-  }
-}
 
 // Responsive adjustments
 @media (max-width: 991.98px) {

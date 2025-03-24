@@ -9,11 +9,24 @@
         <div class="card product-box box-{{ layout }}" data-product-information="{{ {id, name}|json_encode }}">
             {% block component_product_box_content %}
                 <div class="card-body">
-
                     {% block component_product_box_badges %}
-                        {% sw_include '@Storefront/storefront/component/product/card/badges.html.twig' %}
-                    {% endblock %}
+                        <div class="product-badges">
+                            {% set price = product.calculatedPrice %}
+                            {% if product.calculatedPrices.count > 0 %}
+                                {% set price = product.calculatedPrices.last %}
+                            {% endif %}
 
+                            {% set listPrice = price.listPrice.percentage > 0 %}
+                            
+                            {% if listPrice %}
+                                <span class="badge bg-danger badge-sale">
+                                    <span aria-hidden="true">{{ 'Распродажа'|sw_sanitize }}</span>
+                                </span>
+                            {% elseif product.isNew %}
+                                <span class="badge bg-success badge-new">{{ 'Новинка'|sw_sanitize }}</span>
+                            {% endif %}
+                        </div>
+                    {% endblock %}
 
                     {% block component_product_box_image %}
                         <div class="product-image-wrapper">
@@ -25,15 +38,13 @@
                                 {% set displayMode = 'cover' %}
                             {% endif %}
 
-                            
-                            <a class='product-image-link is-standard' href="{{ seoUrl('frontend.detail.page', { productId: id }) }}">
-                            {% block component_product_box_image_inner %}
-                                {# @deprecated tag:v6.8.0 - Block will be removed. Use component_product_box_image_inner instead. #}
-                                {% block component_product_box_image_link_inner %}
-
+                            <a href="{{ seoUrl('frontend.detail.page', { productId: id }) }}"
+                               title="{{ name }}"
+                               class="product-image-link is-{{ displayMode }}">
+                                {% block component_product_box_image_inner %}
                                     {% if cover.url and cover.isSpatialObject() == false %}
                                         {% set attributes = {
-                                            class: 'product-image is-standard',
+                                            class: 'product-image is-' ~ displayMode,
                                             title: (cover.translated.title ?: name)
                                         } %}
 
@@ -45,12 +56,10 @@
                                                 }) %}
                                             {% endif %}
 
-                                            {% block component_product_box_video %}
-                                                {% sw_include '@Storefront/storefront/utilities/video.html.twig' with {
-                                                    media: cover,
-                                                    attributes: attributes
-                                                } %}
-                                            {% endblock %}
+                                            {% sw_include '@Storefront/storefront/utilities/video.html.twig' with {
+                                                media: cover,
+                                                attributes: attributes
+                                            } %}
                                         {% else %}
                                             {% set attributes = attributes|merge({
                                                 alt: (cover.translated.alt ?: name),
@@ -61,26 +70,21 @@
                                                 {% set attributes = attributes|merge({ 'data-object-fit': displayMode }) %}
                                             {% endif %}
 
-                                            {% block component_product_box_image_thumbnail %}
-                                                {% sw_thumbnails 'product-image-thumbnails' with {
-                                                    media: cover,
-                                                    sizes: sizes,
-                                                    attributes: attributes
-                                                } %}
-                                            {% endblock %}
+                                            {% sw_thumbnails 'product-image-thumbnails' with {
+                                                media: cover,
+                                                sizes: sizes,
+                                                attributes: attributes
+                                            } %}
                                         {% endif %}
                                     {% else %}
-                                        {% block component_product_box_image_placeholder %}
-                                            <div class="product-image-placeholder">
-                                                {% sw_icon 'placeholder' style {
-                                                    size: 'fluid',
-                                                    ariaHidden: true
-                                                } %}
-                                            </div>
-                                        {% endblock %}
+                                        <div class="product-image-placeholder">
+                                            {% sw_icon 'placeholder' style {
+                                                size: 'fluid',
+                                                ariaHidden: true
+                                            } %}
+                                        </div>
                                     {% endif %}
                                 {% endblock %}
-                            {% endblock %}
                             </a>
 
                             {% if config('core.cart.wishlistEnabled') %}
@@ -91,35 +95,74 @@
                                     } %}
                                 {% endblock %}
                             {% endif %}
-
-                            {% block component_product_box_rating %}
-                                <div class="product-rating">
-                                        {% sw_include '@Storefront/storefront/component/review/rating.html.twig' with {
-                                                points: product.ratingAverage,
-                                                style: 'text-primary'
-                                        } %}
-                                    </div>
-                            {% endblock %}
-
-                            {% block component_product_box_action %}
-                                {% sw_include '@Storefront/storefront/component/product/card/action.html.twig' %}
-                            {% endblock %}
                         </div>
                     {% endblock %}
+
+
+                            {% block component_product_box_price %}
+                                <div class="product-price-container">
+                                    {% set price = product.calculatedPrice %}
+                                    {% if product.calculatedPrices|length > 0 %}
+                                        {% set price = product.calculatedPrices.last %}
+                                    {% endif %}
+
+                                    {% set isListPrice = price.listPrice.percentage > 0 %}
+                                    
+                                    <span class="product-price-current">
+                                        {{ price.unitPrice|currency }}
+                                    </span>
+                                    
+                                    <span class="product-price-original">
+                                        {{ price.listPrice.price|currency }}
+                                    </span>
+                                    
+                                    <span class="product-discount-badge">
+                                        -{{ price.listPrice.percentage|round }}%
+                                    </span>
+                                </div>
+                            {% endblock %}
+
 
                     {% block component_product_box_info %}
                         <div class="product-info">
                             {% block component_product_box_name %}
+                                {% if 'Mi' in name %}
+                                    <span class="brand-mi">Mi</span>
+                                {% endif %}
                                 <a href="{{ seoUrl('frontend.detail.page', { productId: id }) }}"
-                                   class="product-name">
+                                   class="product-name"
+                                   title="{{ name }}">
                                     {{ name }}
                                 </a>
                             {% endblock %}
-
-                            {% block component_product_box_price %}
-                                {% sw_include '@Storefront/storefront/component/product/card/price-unit.html.twig' %}
+                            
+                            {% block component_product_box_description %}
+                                <div class="product-description">
+                                    {{ "Быстрая зарядное устройство 120w type-c для телефона / ноутбука" | sw_sanitize }}
+                                </div>
                             {% endblock %}
-
+                            
+                            {% block component_product_box_action %}
+                                <div class="product-action-container">
+                                    <div class="product-action">
+                                        <form action="{{ path('frontend.checkout.line-item.add') }}"
+                                            method="post"
+                                            class="buy-widget"
+                                            data-add-to-cart="true">
+                                            
+                                            <input type="hidden" name="redirectTo" value="frontend.cart.offcanvas"/>
+                                            <input type="hidden" name="lineItems[{{ id }}][id]" value="{{ id }}"/>
+                                            <input type="hidden" name="lineItems[{{ id }}][type]" value="product"/>
+                                            <input type="hidden" name="lineItems[{{ id }}][referencedId]" value="{{ id }}"/>
+                                            <input type="hidden" name="lineItems[{{ id }}][quantity]" value="{{ product.minPurchase }}"/>
+                                            
+                                            <button class="btn btn-primary btn-buy" title="{{ 'В корзину'|sw_sanitize }}">
+                                                {{ 'В корзину'|sw_sanitize }}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            {% endblock %}
                         </div>
                     {% endblock %}
                 </div>
