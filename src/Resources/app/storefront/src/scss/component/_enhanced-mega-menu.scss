@@ -1,0 +1,173 @@
+/* Modern Mega Menu Styles */
+
+/* Basic Reset for Mega Menu */
+.mega-menu {
+    display: block !important;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    z-index: 1030;
+    pointer-events: none;
+    border-top: none !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    margin-top: 0 !important;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Nav Main - Main Navigation Container */
+.nav-main {
+    position: relative;
+    z-index: 1040;
+    background-color: #fff;
+    border-bottom: 1px solid #eceaea;
+}
+
+/* Nav Item Animation */
+.nav-main-item-with-children {
+    position: relative;
+}
+
+/* Animated Underline */
+.menu-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background-color: #367d65;
+    transition: width 0.3s ease;
+    z-index: 2;
+}
+
+/* Active state for nav items */
+.nav-main-item-with-children.nav-item-active .menu-underline {
+    width: 100%;
+}
+
+/* Mega Menu styling */
+.nav-main-item-with-children.nav-item-active .mega-menu {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    border-top: 3px solid #367d65;
+    margin-top: -3px !important;
+}
+
+/* Style adjustments for the mega menu dropdown */
+.dropdown-menu.mega-menu {
+    padding: 0 !important;
+    border: 1px solid #eceaea;
+    border-top: none;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 0 !important;
+}
+
+/* Mega Menu Link Styling */
+.nav-main-link {
+    position: relative;
+    padding: 1rem 1.25rem !important;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    color: #323238 !important;
+}
+
+.nav-main-link:hover {
+    color: #367d65 !important;
+}
+
+/* Mega Menu Overlay */
+.mega-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1020;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+.mega-menu-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Body class when mega menu is open */
+body.mega-menu-open {
+    overflow: hidden;
+}
+
+/* Mega Menu Columns Styling */
+.mega-menu-column {
+    padding: 1.5rem;
+}
+
+.mega-menu-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eceaea;
+}
+
+.mega-menu-title a {
+    color: #323238;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.mega-menu-title a:hover {
+    color: #367d65;
+}
+
+.mega-menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mega-menu-list li {
+    margin-bottom: 0.5rem;
+}
+
+.mega-menu-list li a {
+    font-size: 0.875rem;
+    color: #555;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.mega-menu-list li a:hover {
+    color: #367d65;
+    transform: translateX(5px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) {
+    .mega-menu {
+        position: static !important;
+        width: 100% !important;
+        transform: none !important;
+        box-shadow: none;
+    }
+    
+    .menu-underline {
+        display: none;
+    }
+    
+    .mega-menu-overlay {
+        display: none;
+    }
+    
+    .nav-main-item-with-children.nav-item-active .mega-menu {
+        margin-top: 0 !important;
+    }
+}

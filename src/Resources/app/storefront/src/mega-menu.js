@@ -1,109 +1,104 @@
 /**
- * Standalone mega menu functionality
- * This can be used when ModernHeader plugin is not active
+ * Enhanced mega menu functionality with animated underlines and focus effect overlay
  */
 document.addEventListener('DOMContentLoaded', function() {
-    // Mega menu functionality
+    // Mega menu selectors
     const megaMenuItems = document.querySelectorAll('.nav-main-item-with-children');
-    const megaMenuOverlay = document.querySelector('.mega-menu-overlay');
+    const megaMenuOverlay = document.querySelector('.mega-menu-overlay') || createMegaMenuOverlay();
+    const navMain = document.querySelector('.nav-main');
     
-    // Function to close all mega menus
-    function closeAllMegaMenus() {
-        document.querySelectorAll('.mega-menu').forEach(menu => {
-            menu.style.visibility = 'hidden';
-            menu.style.opacity = '0';
-            menu.style.transform = 'translateY(-20px)';
-            menu.style.pointerEvents = 'none';
+    // Create the underline elements for each menu item
+    megaMenuItems.forEach(item => {
+        // Create and append the animated underline element
+        const underline = document.createElement('span');
+        underline.classList.add('menu-underline');
+        item.querySelector('.nav-main-link').appendChild(underline);
+        
+        const megaMenu = item.querySelector('.mega-menu');
+        const link = item.querySelector('.nav-main-link');
+        
+        // Mouse enter event - show mega menu and animate underline
+        item.addEventListener('mouseenter', function() {
+            closeAllMegaMenus();
+            
+            // Short delay for smoother appearance
+            setTimeout(() => {
+                if (megaMenu) {
+                    // Show mega menu
+                    megaMenu.style.visibility = 'visible';
+                    megaMenu.style.opacity = '1';
+                    megaMenu.style.transform = 'translateY(0)';
+                    megaMenu.style.pointerEvents = 'auto';
+                    
+                    // Show underline
+                    item.classList.add('nav-item-active');
+                    
+                    // Show overlay
+                    megaMenuOverlay.classList.add('show');
+                    document.body.classList.add('mega-menu-open');
+                }
+            }, 50);
         });
         
-        if (megaMenuOverlay) {
-            megaMenuOverlay.classList.remove('show');
-        }
-    }
-    
-    // Event listeners for menu items with submenus
-    megaMenuItems.forEach(item => {
-        const link = item.querySelector('.nav-main-link');
-        const megaMenu = item.querySelector('.mega-menu');
+        // Mouse leave event - hide mega menu and underline
+        item.addEventListener('mouseleave', function() {
+            closeAllMegaMenus();
+        });
         
-        // Desktop: Hover and click effects
-        if (window.innerWidth >= 992) {
-            // Show on hover
-            item.addEventListener('mouseenter', function() {
-                closeAllMegaMenus();
-                
-                // Short delay for smoother appearance
-                setTimeout(() => {
-                    if (megaMenu) {
+        // Click event for mobile/touch devices
+        if (link) {
+            link.addEventListener('click', function(e) {
+                // Only prevent default on larger screens where we're using hover effects
+                if (window.innerWidth >= 992 && link.classList.contains('has-children')) {
+                    e.preventDefault();
+                    
+                    if (megaMenu && megaMenu.style.visibility !== 'visible') {
+                        closeAllMegaMenus();
                         megaMenu.style.visibility = 'visible';
                         megaMenu.style.opacity = '1';
                         megaMenu.style.transform = 'translateY(0)';
                         megaMenu.style.pointerEvents = 'auto';
-                        
-                        if (megaMenuOverlay) {
-                            megaMenuOverlay.classList.add('show');
-                        }
+                        item.classList.add('nav-item-active');
+                        megaMenuOverlay.classList.add('show');
+                        document.body.classList.add('mega-menu-open');
+                    } else {
+                        closeAllMegaMenus();
                     }
-                }, 50);
+                }
             });
-            
-            // Intercept link click
-            if (link) {
-                link.addEventListener('click', function(e) {
-                    // On desktop, prevent default behavior for dropdown triggers
-                    if (link.classList.contains('has-children') && window.innerWidth >= 992) {
-                        e.preventDefault();
-                        if (megaMenu && megaMenu.style.visibility !== 'visible') {
-                            closeAllMegaMenus();
-                            megaMenu.style.visibility = 'visible';
-                            megaMenu.style.opacity = '1';
-                            megaMenu.style.transform = 'translateY(0)';
-                            megaMenu.style.pointerEvents = 'auto';
-                            
-                            if (megaMenuOverlay) {
-                                megaMenuOverlay.classList.add('show');
-                            }
-                        } else {
-                            closeAllMegaMenus();
-                        }
-                    }
-                });
-            }
-        } else {
-            // Mobile: Click effect
-            if (link && link.classList.contains('has-children')) {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (megaMenu) {
-                        if (megaMenu.style.visibility !== 'visible') {
-                            closeAllMegaMenus();
-                            megaMenu.style.visibility = 'visible';
-                            megaMenu.style.opacity = '1';
-                            megaMenu.style.transform = 'translateY(0)';
-                            megaMenu.style.pointerEvents = 'auto';
-                        } else {
-                            closeAllMegaMenus();
-                        }
-                    }
-                });
-            }
         }
-        
-        // Close menu when mouse leaves the menu item
-        item.addEventListener('mouseleave', function() {
-            closeAllMegaMenus();
-        });
     });
     
-    // Close when clicking outside
-    document.addEventListener('click', function(e) {
-        // Check if click is inside a mega menu or on a menu item
-        const isInMegaMenu = e.target.closest('.mega-menu') || e.target.closest('.nav-main-item-with-children');
+    // Function to close all mega menus
+    function closeAllMegaMenus() {
+        document.querySelectorAll('.mega-menu').forEach(menu => {
+            menu.style.transform = 'translateY(10px)';
+            menu.style.visibility = 'hidden';
+            menu.style.opacity = '0';
+            menu.style.pointerEvents = 'none';
+        });
         
-        if (!isInMegaMenu) {
-            closeAllMegaMenus();
-        }
-    });
+        // Remove active states from all menu items
+        document.querySelectorAll('.nav-main-item-with-children').forEach(item => {
+            item.classList.remove('nav-item-active');
+        });
+        
+        // Hide overlay
+        megaMenuOverlay.classList.remove('show');
+        document.body.classList.remove('mega-menu-open');
+    }
+    
+    // Function to create overlay if it doesn't exist
+    function createMegaMenuOverlay() {
+        const overlay = document.createElement('div');
+        overlay.className = 'mega-menu-overlay';
+        document.body.appendChild(overlay);
+        
+        // Close menus when clicking on overlay
+        overlay.addEventListener('click', closeAllMegaMenus);
+        
+        return overlay;
+    }
     
     // Close with Escape key
     document.addEventListener('keydown', function(e) {
@@ -112,10 +107,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Close by clicking on the overlay
-    if (megaMenuOverlay) {
-        megaMenuOverlay.addEventListener('click', closeAllMegaMenus);
-    }
+    // Close when clicking outside
+    document.addEventListener('click', function(e) {
+        const isInMegaMenu = e.target.closest('.mega-menu') || 
+                             e.target.closest('.nav-main-item-with-children');
+        
+        if (!isInMegaMenu) {
+            closeAllMegaMenus();
+        }
+    });
     
     // Adjust menu status on window resize
     window.addEventListener('resize', function() {
