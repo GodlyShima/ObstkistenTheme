@@ -1,31 +1,31 @@
 {% block layout_header_actions_account_widget %}
-    <div class="dropdown">
-        {% block layout_header_actions_account_widget_dropdown_button %}
-            <button class="header-action-link" type="button"
-                    id="accountWidget"
-                    data-account-menu="true"
-                    data-bs-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                    aria-label="{{ 'account.myAccount'|trans|striptags }}"
-                    title="{{ 'account.myAccount'|trans|striptags }}"
-                    style="background:transparent;border:none;padding:4px;">
-                <a class="header-action-link">
-                    <div class="header-action-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" class="" style="color: rgb(0, 26, 52);"><path fill="currentColor" d="M7.995 2C6.154 2 4.662 3.465 4.662 5.273c0 1.807 1.492 3.272 3.333 3.272 1.84 0 3.332-1.465 3.332-3.272C11.327 3.465 9.835 2 7.995 2M5.161 9.262c.424-.17.889-.043 1.319.11a4.6 4.6 0 0 0 1.515.264c.518 0 1.031-.095 1.504-.26.437-.153.909-.279 1.337-.105.73.297 1.551.899 2.02 1.616a.876.876 0 0 1-.082 1.067C11.65 13.216 9.811 14 7.994 14s-3.643-.782-4.768-2.045a.88.88 0 0 1-.083-1.068c.471-.722 1.285-1.332 2.018-1.625"></path></svg>
-                    </div>
-                    <div class="header-action-text">
-                    <span>Account</span>
-                    </div>
-                </a>
-            </button>
-        {% endblock %}
-
-        {% block layout_header_actions_account_widget_dropdown_menu %}
-            <div class="dropdown-menu dropdown-menu-end account-menu-dropdown js-account-menu-dropdown"
-                 aria-labelledby="accountWidget">
-                {% sw_include '@Storefront/storefront/layout/header/account-menu.html.twig' %}
-            </div>
-        {% endblock %}
-    </div>
+<div class="header-action-item">
+                                        <div class="account-menu">
+                                            <button class="header-action-link"
+                                                    type="button"
+                                                    id="accountWidget"
+                                                    data-account-menu="true"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-haspopup="true"
+                                                    aria-expanded="false"
+                                                    aria-label="{{ 'account.myAccount'|trans|striptags }}"
+                                                    title="{{ 'account.myAccount'|trans|striptags }}"
+                                                    style="background:transparent;border:none;">
+                                                <div class="header-action-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                        <circle cx="12" cy="7" r="4"></circle>
+                                                    </svg>
+                                                </div>
+                                                <div class="header-action-text d-none d-lg-block">
+                                                    <span>Account</span>
+                                                </div>
+                                            </button>
+                                            
+                                            <div class="dropdown-menu dropdown-menu-end account-menu-dropdown js-account-menu-dropdown"
+                                                 aria-labelledby="accountWidget">
+                                                {% sw_include '@Storefront/storefront/layout/header/account-menu.html.twig' %}
+                                            </div>
+                                        </div>
+                                    </div>
 {% endblock %}

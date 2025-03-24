@@ -8,7 +8,7 @@
                 <div class="row py-2">
                     <div class="col-md-6 d-flex align-items-center">
                         <div class="top-bar-contact me-4">
-                            <small><i class="bi bi-telephone me-1"></i> +49 123 456789</small>
+                            <small><i class="bi bi-telephone me-1"></i>04141 / 786 7698</small>
                         </div>
                         <div class="top-bar-email">
                             <small><i class="bi bi-envelope me-1"></i> info@obstkistenonline.de</small>
@@ -158,34 +158,8 @@
                                 {% endblock %}
 
                                 {% block layout_header_actions_account %}
-                                    <div class="header-action-item">
-                                        <div class="account-menu">
-                                            <button class="header-action-link"
-                                                    type="button"
-                                                    id="accountWidget"
-                                                    data-account-menu="true"
-                                                    data-bs-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false"
-                                                    aria-label="{{ 'account.myAccount'|trans|striptags }}"
-                                                    title="{{ 'account.myAccount'|trans|striptags }}"
-                                                    style="background:transparent;border:none;">
-                                                <div class="header-action-icon">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                                        <circle cx="12" cy="7" r="4"></circle>
-                                                    </svg>
-                                                </div>
-                                                <div class="header-action-text d-none d-lg-block">
-                                                    <span>Account</span>
-                                                </div>
-                                            </button>
-                                            
-                                            <div class="dropdown-menu dropdown-menu-end account-menu-dropdown js-account-menu-dropdown"
-                                                 aria-labelledby="accountWidget">
-                                                {% sw_include '@Storefront/storefront/layout/header/account-menu.html.twig' %}
-                                            </div>
-                                        </div>
+                                    <div class="account-menu">
+                                        {% sw_include '@Storefront/storefront/layout/header/actions/account-widget.html.twig' %}
                                     </div>
                                 {% endblock %}
                                 
@@ -209,7 +183,10 @@
                                 {% endif %}
 
                                 {% block layout_header_actions_cart %}
-                                    <div class="header-action-item">
+<div
+                                    class="header-cart"
+                                    data-off-canvas-cart="true"
+                                >
                                         <a class="header-action-link"
                                            style="text-decoration:none!important;"
                                            href="{{ path('frontend.checkout.cart.page') }}"

@@ -7,6 +7,101 @@ $menu-hover-bg: rgba(54, 125, 101, 0.05);
 $menu-radius: 13px;
 $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 
+.mega-menu {
+  position: absolute !important;
+  width: 98vw !important; /* Use viewport width instead of 100% */
+  max-width: none !important; /* Override any max-width constraints */
+  left: 50% !important; /* Center it */
+  right: auto !important; 
+  transform: translateX(-50%) !important; /* Center it properly */
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+
+/* On hover, adjust the transform to include the menu appearance animation */
+.nav-main-item-with-children:hover .mega-menu {
+  transform: translateX(-50%) translateY(0) !important;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Fix navbar and navigation positioning */
+.nav-main {
+  position: relative;
+}
+
+.navbar,
+.nav-main-item-with-children {
+  position: static !important; /* Allow child menu to break out */
+}
+
+/* Ensure the mega menu content is properly aligned within the full-width menu */
+.mega-menu .container {
+  max-width: 1400px; /* Or whatever your site's main container width is */
+  margin: 0 auto;
+  width: 100%;
+	padding: 2rem 4rem;
+}
+
+/* Make sure the overlay covers theader-mainhe full width as well */
+.mega-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+  display: none;
+}
+
+.mega-menu-overlay.show {
+  display: block;
+}
+
+/* Reset any Bootstrap constraints that might be interfering */
+.dropdown-menu.mega-menu,
+.navbar-expand-lg .navbar-nav .dropdown-menu.mega-menu {
+  left: 50% !important;
+  right: auto !important;
+  width: 98vw !important;
+  margin-top: 0 !important;
+  transform: translateX(-50%) !important;
+}
+
+/* Additional specific adjustments for menu animation */
+.nav-main-item-with-children .mega-menu {
+  transform: translateX(-50%) translateY(10px) !important;
+}
+
+/* Remove any potential conflicts with container-fluid */
+.dropdown-menu.mega-menu.container-fluid {
+  max-width: none !important;
+  width: 98vw !important;
+  left: 50% !important;
+  right: auto !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  transform: translateX(-50%) !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 991.98px) {
+  .mega-menu,
+  .dropdown-menu.mega-menu,
+  .navbar-expand-lg .navbar-nav .dropdown-menu.mega-menu {
+    position: static !important;
+    width: 100% !important;
+    transform: none !important;
+    left: 0 !important;
+    margin: 0 !important;
+  }
+}
+
 // Navigation styles
 .nav-main {
   background-color: $menu-bg;
@@ -73,46 +168,84 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   }
 }
 
-// Overlay for mega menu
+/* 
+ * Additional fixes for the mega menu Backwaren/Lebensmittel issue
+ */
+
+/* Fix for dropdown menu appearing in small area */
+.dropdown-menu.mega-menu.container-fluid {
+  width: 98vw !important;
+  position: absolute !important;
+  left: 0 !important; 
+  right: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 0 13px 13px !important;
+}
+
+/* Ensure mega menu is properly formatted */
+.nav-main-item-with-children > .mega-menu {
+  /* Reset any inline styles that might be interfering */
+  width: 100% !important;
+  max-width: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  transform: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Fix for Lebensmittel menu appearing under Backwaren */
+.nav-main-list > .nav-item {
+  position: static;
+}
+
+/* Add overlay and ensure proper stack order */
+.nav-main {
+  position: relative;
+  z-index: 100;
+}
+
 .mega-menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1040;
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  
-  &.show {
-    display: block;
-    opacity: 1;
+  z-index: 99;
+}
+
+/* Reset bootstrap default behavior */
+.navbar-expand-lg .navbar-nav .dropdown-menu {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+/* Fix for mobile */
+@media (max-width: 991.98px) {
+  .dropdown-menu.mega-menu,
+  .nav-main-item-with-children > .mega-menu {
+    width: 100% !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    position: static !important;
   }
 }
 
-// Mega menu container
-.mega-menu {
-  padding: 0;
-  margin: 0;
-  border: none;
-  border-radius: 0 0 $menu-radius $menu-radius;
-  box-shadow: $menu-shadow;
-  left: 0;
-  right: 0;
-  top: 100%;
-  transform: translateY(10px);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-  z-index: 1050;
-  border-top: 3px solid $menu-accent;
-  width: 100% !important;
-  
-  .container {
-    max-width: 1400px;
-  }
+/* Ensure links are styled correctly */
+.mega-menu-title a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.mega-menu-list li a {
+  color: #555;
+  text-decoration: none;
+  display: block;
+  padding: 3px 0;
+  transition: all 0.2s ease;
+}
+
+.mega-menu-list li a:hover {
+  color: #367d65;
+  transform: translateX(5px);
 }
 
 // Parent item hover behavior

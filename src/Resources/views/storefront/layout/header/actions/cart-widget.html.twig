@@ -1,12 +1,19 @@
 {% block layout_header_actions_cart_widget %}
-                                <div class="header-action-item text-center">
-                                    <a class="header-action-link">
-                                        <div class="header-action-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="" style="color: rgb(0, 26, 52);"><path fill="currentColor" d="M9.925 5.371a1 1 0 1 0-1.858-.742L6.317 9h-1.2c-1.076 0-1.614 0-1.913.346-.3.346-.222.878-.067 1.942l.271 1.864c.475 3.265.902 4.898 2.03 5.873s2.778.975 6.08.975h.96c3.302 0 4.953 0 6.08-.975 1.128-.975 1.559-2.608 2.034-5.873l.271-1.864c.155-1.064.233-1.596-.067-1.942S19.96 9 18.883 9h-1.205l-1.75-4.371a1 1 0 0 0-1.857.742L15.523 9h-7.05zM10.997 14v2a1 1 0 0 1-2 0v-2a1 1 0 0 1 2 0M14 13a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0v-2a1 1 0 0 1 1-1"></path></svg>
-                                        </div>
-                                        <div class="header-action-text">
-                                            <span>Warenkorb</span>
-                                        </div>
-                                    </a>
-                                </div>
+<div class="header-action-item">
+                                        <a class="header-action-link"
+                                           style="text-decoration:none!important;"
+                                           title="{{ 'checkout.cartTitle'|trans|striptags }}"
+                                           aria-label="{{ 'checkout.cartTitle'|trans|striptags }}">
+                                            <div class="header-action-icon position-relative">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="header-action-text d-none d-lg-block">
+                                                <span>Warenkorb</span>
+                                            </div>
+                                        </a>
+                                    </div>
 {% endblock %}
