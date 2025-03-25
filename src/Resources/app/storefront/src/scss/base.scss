@@ -1,4 +1,4 @@
-// Font imports
+// Import fonts
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
 
 // GT Eesti Pro font definitions
@@ -55,103 +55,60 @@
 // Page-specific imports
 @import 'page/product-detail/product-detail';
 
-/* Mega Menu Content Visibility Fix */
+/* Z-index Hierarchy */
+:root {
+    --z-index-sticky-header: 1040;
+    --z-index-navigation: 1040;
+    --z-index-mega-menu: 1035;
+    --z-index-mega-menu-overlay: 1030;
+    --z-index-dropdown: 1500;
+    --z-index-account-menu: 2000;
+    --bs-offcanvas-zindex: 2000;
+}
 
-/* Make sure the mega menu content is visible */
+/* Body class for mega menu open to prevent scrolling */
+body.mega-menu-open {
+    overflow: hidden;
+}
+
+/* Header style - basic */
+.header-main {
+    z-index: var(--z-index-sticky-header);
+    background-color: #fff;
+    transition: all 0.3s ease;
+    position: relative;
+    
+    &.header-sticky {
+        position: fixed !important;
+        top: 0;
+        width: 100%;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        animation: slideInDown 0.5s ease-in-out;
+    }
+    
+    &.header-hidden {
+        transform: translateY(-100%);
+        animation: slideOutUp 0.5s ease-in-out;
+    }
+}
+
+/* Nav main */
+.nav-main {
+    position: relative;
+    z-index: var(--z-index-navigation);
+    background-color: #fff;
+}
+
+/* Mega menu */
 .mega-menu {
-    background-color: #fff !important;
+    position: absolute;
+    z-index: var(--z-index-mega-menu);
     visibility: hidden;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-    z-index: 1035 !important;
     pointer-events: none;
 }
-
-/* When menu is active, show content */
-.nav-main-item-with-children.nav-item-active .mega-menu {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-}
-
-/* Fix positioning of mega menu */
-.mega-menu {
-    position: absolute;
-    left: 0;
-    right: 0;
-    width: 100%;
-    padding: 2rem;
-    border-top: 3px solid #367d65;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-/* Fix mega menu columns */
-.mega-menu-column {
-    opacity: 1 !important;
-    transform: none !important;
-    visibility: visible !important;
-}
-
-/* Ensure all mega menu content is visible */
-.mega-menu .container,
-.mega-menu .row,
-.mega-menu .col-md-3,
-.mega-menu-title,
-.mega-menu-list {
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-/* Fix padding and spacing */
-.mega-menu .container {
-    padding: 2rem;
-}
-
-/* Fix for navigation items */
-.nav-main-item-with-children {
-    position: static;
-}
-
-/* Force show mega menu content when active */
-.nav-main-item-with-children.nav-item-active .mega-menu-column {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-    visibility: visible !important;
-}
-
-/* Remove any transforms that might be causing issues */
-.mega-menu-column,
-.mega-menu-title,
-.mega-menu-list,
-.mega-menu-list li {
-    transform: none !important;
-}
-
-/* Make sure links are visible */
-.mega-menu-title a,
-.mega-menu-list li a {
-    color: #333 !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-/* Fix hover effects */
-.mega-menu-list li a:hover {
-    color: #367d65 !important;
-}
-
-/* Z-index hierarchy fix for Obstkisten-Online Theme */
-
-/* Base z-index organization:
- * - Dropdown menus: 2000
- * - Account menu: 2100
- * - Header: 1050
- * - Navigation: 1040
- * - Mega menu overlay: 1030
- * - Mega menu content: 1035
- */
 
 /* Mega menu overlay */
 .mega-menu-overlay {
@@ -163,7 +120,7 @@
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
     visibility: hidden;
-    z-index: 1030; /* Lower than mega menu content and navigation */
+    z-index: var(--z-index-mega-menu-overlay);
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
     pointer-events: none;
 }
@@ -174,47 +131,20 @@
     pointer-events: auto;
 }
 
-/* Header elements */
-.header-main {
-    z-index: 1050 !important;
-    position: relative;
-}
-
-.nav-main {
-    z-index: 1040 !important;
-    position: relative;
-}
-
-/* Mega menu */
-.mega-menu {
-    position: absolute !important;
-    z-index: 1035 !important; /* Higher than overlay but lower than navigation */
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                visibility 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-    pointer-events: none;
-    border-top: none !important;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-/* Account menu - highest z-index */
+/* Account dropdown menu */
 .account-menu {
     position: relative;
-    z-index: 2100 !important; /* Highest z-index to stay above everything */
+    z-index: var(--z-index-account-menu);
 }
 
 .account-menu-dropdown {
-    position: absolute !important;
-    z-index: 2100 !important;
-    top: 100% !important;
-    right: 0 !important;
-    left: auto !important;
-    min-width: 320px !important;
-    padding: 1rem !important;
-    margin-top: 0.5rem !important;
+    position: absolute;
+    z-index: var(--z-index-dropdown);
+    top: 100%;
+    right: 0;
+    left: auto;
+    min-width: 320px;
+    padding: 1rem;
     background-color: #fff;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     border-radius: 13px;
@@ -222,407 +152,23 @@
     display: none;
 }
 
-/* Fix for dropdowns */
-.account-menu.show .account-menu-dropdown {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-/* Body class for mega menu open to prevent scrolling */
-body.mega-menu-open {
-    overflow: hidden;
-}
-
-/* Make sure the header stays above mega menu */
-.header-main.header-sticky {
-    z-index: 2000 !important;
-}
-
-/* Remove any overflow issues that might cut off dropdowns */
-.header-action-item,
-.header-actions,
-.header-actions-col {
-    overflow: visible !important;
-}
-
-/* Make sure cart dropdown also has proper z-index */
-.header-cart-dropdown {
-    z-index: 2000 !important;
-}
-
-/* ------------------------------------------------------------------------------------ */
-
-// Mega-menu style fixes
-.mega-menu {
-  display: block !important;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-  
-  &.show {
-    visibility: visible !important;
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-    pointer-events: auto !important;
-  }
-}
-
-// Fix for dropdown menus
-.dropdown-menu {
-  display: block;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-  
-  &.show {
-    pointer-events: auto;
-    opacity: 1;
-    visibility: visible;
-  }
-}
-
-// Remove Bootstrap's default dropdown arrow
-.dropdown-toggle::after {
-  display: none !important;
-}
-
-// Header styling
-.header-main {
-  overflow: hidden;
-  background-color: #fff;
-  transition: all 0.3s ease;
-  
-  &.header-sticky {
-    position: fixed !important;
-    top: 0;
-    z-index: 1050;
-    background: #fff;
-    width: 100%;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    animation: slideInDown 0.5s ease-in-out;
-  }
-  
-  &.header-hidden {
-    transform: translateY(-100%);
-    animation: slideOutUp 0.5s ease-in-out;
-  }
-}
-
-// Animation definitions
+/* Animation definitions */
 @keyframes slideInDown {
-  from {
-    transform: translateY(-100%);
-    visibility: visible;
-  }
-  to {
-    transform: translateY(0);
-  }
+    from {
+        transform: translateY(-100%);
+        visibility: visible;
+    }
+    to {
+        transform: translateY(0);
+    }
 }
 
 @keyframes slideOutUp {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-100%);
-    visibility: hidden;
-  }
-}
-
-
-// Responsive adjustments
-@media (max-width: 991.98px) {
-  .mega-menu {
-    position: static;
-    background-color: #f8f9fa;
-    box-shadow: none;
-    border-top: none;
-    
-    .container {
-      padding: 0;
+    from {
+        transform: translateY(0);
     }
-    
-    .row {
-      margin: 0;
+    to {
+        transform: translateY(-100%);
+        visibility: hidden;
     }
-    
-    .col-md-8, .col-md-4 {
-      padding: 0;
-      flex-basis: 100%;
-      max-width: 100%;
-    }
-  }
-}
-
-/* Account dropdown menu fixes */
-.account-menu-dropdown {
-    position: absolute !important;
-    z-index: 1500 !important;
-    min-width: 320px !important;
-    padding: 1rem !important;
-    margin-top: 0.5rem !important;
-    background-color: #fff;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    border-radius: 13px;
-    border: 1px solid #eceaea;
-}
-
-/* Fix dropdown positioning */
-.dropdown-menu-end.account-menu-dropdown {
-    right: 0 !important;
-    left: auto !important;
-}
-
-/* Ensure dropdown is visible */
-.account-menu.show .account-menu-dropdown {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: translateY(0) !important;
-}
-
-/* Fix for account menu hover state */
-.header-action-item:hover .header-action-link {
-    color: #367d65 !important;
-    background-color: rgba(54, 125, 101, 0.05) !important;
-}
-
-/* Ensure the dropdown opens on click */
-.account-menu {
-    position: relative;
-}
-
-/* Cart badge positioning */
-.header-action-icon .cart-badge {
-    position: absolute;
-    top: -7px;
-    right: -7px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 0.35rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Account dropdown menu fixes for z-index */
-.account-menu {
-    position: relative;
-    z-index: 1500 !important; /* Higher value to make it appear above all other elements */
-}
-
-.account-menu .dropdown-menu {
-    position: absolute !important;
-    top: 100% !important;
-    right: 0 !important;
-    left: auto !important;
-    z-index: 1500 !important;
-    min-width: 320px !important;
-    padding: 1.5rem !important;
-    margin-top: 1rem !important;
-    background-color: #fff !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
-    border-radius: 13px !important;
-    border: 1px solid #eceaea !important;
-    transform: none !important;
-    display: none !important;
-}
-
-.account-menu.show .dropdown-menu {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-}
-
-/* Fix for Bootstrap's dropdown-toggle */
-.account-menu .dropdown-toggle.show + .dropdown-menu {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-/* Ensure pointer events work properly */
-.account-menu .dropdown-menu {
-    pointer-events: auto !important;
-}
-
-/* Remove any potential transform that might be interfering */
-.account-menu,
-.account-menu .dropdown-menu,
-.account-menu.show .dropdown-menu {
-    transform: none !important;
-}
-
-/* Ensure the header has proper z-index */
-.header-main {
-    z-index: 1040;
-    position: relative;
-}
-
-/* Ensure button in account menu correctly toggles dropdown */
-.account-menu .header-action-link[aria-expanded="true"] + .dropdown-menu {
-    display: block !important;
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Force visibility during active state */
-.account-menu.active .dropdown-menu,
-.account-menu:focus-within .dropdown-menu {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-/* Direct dropdown override styles */
-body .account-menu {
-    position: relative !important;
-}
-
-body .account-menu-dropdown {
-    position: absolute !important;
-    top: calc(100% + 10px) !important;
-    right: 0 !important;
-    left: auto !important;
-    z-index: 9999 !important; /* Extremely high z-index to override everything */
-    min-width: 300px !important;
-    display: none !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-    transition: none !important;
-    border: 1px solid #ddd !important;
-    border-radius: 13px !important;
-    background-color: #fff !important;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
-    padding: 1rem !important;
-    margin: 0 !important;
-    pointer-events: auto !important;
-}
-
-body .account-menu.show .account-menu-dropdown,
-body .account-menu .dropdown-menu.show {
-    display: block !important;
-}
-
-body .dropdown-toggle.show + .dropdown-menu {
-    display: block !important;
-}
-
-/* Reset any transform properties that might be interfering */
-body .account-menu, 
-body .account-menu.show, 
-body .account-menu-dropdown, 
-body .account-menu-dropdown.show,
-body .dropdown-menu, 
-body .dropdown-menu.show {
-    transform: none !important;
-}
-
-/* Override Bootstrap dropdown display property */
-body .dropdown-menu.show {
-    display: block !important;
-}
-
-/* Make sure the header and navbar have appropriate z-index values */
-body .header-main {
-    z-index: 1040 !important;
-}
-
-body .nav-main {
-    z-index: 1030 !important;
-}
-
-/* Give the account menu a higher z-index than both header and nav */
-body .header-action-item .account-menu {
-    z-index: 9990 !important;
-}
-
-/* Ensure the dropdown menu has an even higher z-index */
-body .header-action-item .account-menu .account-menu-dropdown {
-    z-index: 9999 !important;
-}
-
-/* Remove any overflow:hidden that might be cutting off the dropdown */
-body .header-main,
-body .nav-main,
-body .header-action-item,
-body .header-actions,
-body .header-actions-col {
-    overflow: visible !important;
-}
-
-/* Z-index hierarchy fixes */
-.mega-menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    visibility: hidden;
-    z-index: 1040; /* Lower than mega-menu */
-    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-    pointer-events: none;
-}
-
-.mega-menu-overlay.show {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-}
-
-.mega-menu {
-    position: absolute !important;
-    z-index: 1045 !important; /* Higher than overlay */
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                visibility 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-    pointer-events: none;
-    border-top: none !important;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-.nav-main-item-with-children.nav-item-active .mega-menu {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-}
-
-/* Header and navigation z-index */
-.header-main {
-    z-index: 1050 !important; /* Higher than both overlay and mega-menu */
-    position: relative;
-}
-
-.nav-main {
-    z-index: 1050 !important; /* Same as header */
-    position: relative;
-}
-
-/* Account menu */
-.account-menu {
-    position: relative;
-    z-index: 1060 !important; /* Higher than all other elements */
-}
-
-.account-menu-dropdown {
-    z-index: 1060 !important; /* Same as account menu */
-}
-
-/* Fix any overflow issues */
-.header-main, 
-.nav-main,
-.header-action-item,
-.header-actions-col {
-    overflow: visible !important;
 }

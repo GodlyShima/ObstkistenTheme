@@ -1,7 +1,11 @@
 {% block layout_header_actions_cart_widget %}
 <div class="header-action-item">
+<div
+                                            class="header-cart"
+                                            data-off-canvas-cart="true"
+                                        >
                                         <a class="header-action-link"
-                                           style="text-decoration:none!important;"
+                                           style="text-decoration:none!important;cursor:pointer;"
                                            title="{{ 'checkout.cartTitle'|trans|striptags }}"
                                            aria-label="{{ 'checkout.cartTitle'|trans|striptags }}">
                                             <div class="header-action-icon position-relative">
@@ -15,5 +19,6 @@
                                                 <span>Warenkorb</span>
                                             </div>
                                         </a>
+                                        </div>
                                     </div>
 {% endblock %}

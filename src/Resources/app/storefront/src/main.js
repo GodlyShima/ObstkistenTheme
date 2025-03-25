@@ -1,9 +1,6 @@
 // Import dependencies
 import ModernHeader from './sticky-menu-plugin/sticky-menu-plugin.plugin';
-import './mega-menu'; // Import our enhanced mega menu script
-import './dropdown-fix'; // Import bootstrap dropdown fix
-import './dropdown-mega-menu-integration';
-
+import './mega-menu'; // Consolidated mega menu script
 
 /**
  * Main entry point for theme JavaScript
@@ -25,18 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
             popoverTriggerList.map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
             
-            // Initialize dropdowns
+            // Initialize dropdowns with proper configuration
             const dropdownTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'));
             dropdownTriggerList.forEach(dropdownTriggerEl => {
                 new bootstrap.Dropdown(dropdownTriggerEl, {
-                    offset: [0, 10], // Add some vertical offset
+                    offset: [0, 10],
                     popperConfig: {
-                        strategy: 'fixed', // This helps ensure proper positioning
+                        strategy: 'fixed',
                         modifiers: [
                             {
                                 name: 'preventOverflow',
                                 options: {
-                                    mainAxis: false // Allow overflow on the main axis
+                                    mainAxis: false
                                 }
                             }
                         ]
@@ -45,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
-        // Fix cart badge display
+        // Initialize cart badge display
         const updateCartBadge = () => {
             const cartWidgets = document.querySelectorAll('[data-cart-widget="true"]');
             if (cartWidgets.length > 0) {
@@ -66,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         
-        // Initialize cart badge
+        // Initial cart badge update
         updateCartBadge();
         
         // Update cart badge when cart changes

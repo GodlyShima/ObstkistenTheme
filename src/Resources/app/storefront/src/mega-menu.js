@@ -1,5 +1,5 @@
 /**
- * Fixed mega menu functionality
+ * Mega menu functionality preserving the original behavior
  */
 document.addEventListener('DOMContentLoaded', function() {
     // Create overlay for darken effect if it doesn't exist
@@ -7,28 +7,19 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.className = 'mega-menu-overlay';
-        overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            visibility: hidden;
-            z-index: 1030;
-            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-            pointer-events: none;
-        `;
         document.body.appendChild(overlay);
     }
     
-    // Cache DOM elements
-    const megaMenuItems = document.querySelectorAll('.nav-main-item-with-children');
+    // Make sure all mega menus have the correct z-index
+    document.querySelectorAll('.mega-menu').forEach(megaMenu => {
+        megaMenu.style.zIndex = "1035";
+    });
     
-    // Delay constants
-    const HOVER_DELAY = 100;
-    const CLOSE_DELAY = 300;
+    // Cache DOM elements
+    const megaMenuItems = document.querySelectorAll('.nav-main-item-with-children.has-mega-menu');
+    const accountBtn = document.getElementById('accountWidget');
+    const accountDropdown = document.querySelector('.account-menu-dropdown');
+    const accountMenu = accountBtn ? accountBtn.closest('.account-menu') : null;
     
     // Timeout variables
     let openTimeout = null;
@@ -37,72 +28,59 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to open a mega menu
     function openMegaMenu(item) {
-        // Clear any pending close timer
+        // Close account menu if open
+        if (accountMenu && accountMenu.classList.contains('show')) {
+            accountMenu.classList.remove('show');
+            accountDropdown && accountDropdown.classList.remove('show');
+            accountBtn && accountBtn.setAttribute('aria-expanded', 'false');
+        }
+        
+        // Clear any pending timers
         if (closeTimeout) {
             clearTimeout(closeTimeout);
             closeTimeout = null;
         }
-        
-        // If there's a pending open timer, clear it
         if (openTimeout) {
             clearTimeout(openTimeout);
         }
         
-        // Set a new open timer
-        openTimeout = setTimeout(() => {
-            // If there's an active item that isn't this one, close it first
-            if (activeItem && activeItem !== item) {
-                closeMegaMenu(activeItem, true);
-            }
+        // Close other open menus first
+        if (activeItem && activeItem !== item) {
+            closeMegaMenu(activeItem, true);
+        }
+        
+        const megaMenu = item.querySelector('.mega-menu');
+        if (megaMenu) {
+            // Add active class
+            item.classList.add('nav-item-active');
             
-            const megaMenu = item.querySelector('.mega-menu');
-            if (megaMenu) {
-                // Add active class to item
-                item.classList.add('nav-item-active');
-                
-                // Show overlay
-                overlay.style.opacity = '1';
-                overlay.style.visibility = 'visible';
-                overlay.style.pointerEvents = 'auto';
-                overlay.classList.add('show');
-                
-                // Show the menu with proper styles
-                megaMenu.style.visibility = 'visible';
-                megaMenu.style.opacity = '1';
-                megaMenu.style.transform = 'translateY(0)';
-                
-                // Set this as the active item
-                activeItem = item;
-                
-                // Add body class to prevent scrolling
-                document.body.classList.add('mega-menu-open');
-                
-                // Ensure content is visible
-                const columns = megaMenu.querySelectorAll('.mega-menu-column');
-                columns.forEach(column => {
-                    column.style.opacity = '1';
-                    column.style.visibility = 'visible';
-                    column.style.transform = 'translateY(0)';
-                });
-                
-                // Dispatch custom event
-                const event = new CustomEvent('megaMenuOpened', { 
-                    detail: { menuItem: item } 
-                });
-                document.dispatchEvent(event);
-            }
-        }, HOVER_DELAY);
+            // Show overlay
+            overlay.style.opacity = '1';
+            overlay.style.visibility = 'visible';
+            overlay.style.pointerEvents = 'auto';
+            overlay.classList.add('show');
+            
+            // Show the mega menu
+            megaMenu.style.visibility = 'visible';
+            megaMenu.style.opacity = '1';
+            // Important: Use the original transform with translateX(-50%)
+            megaMenu.style.transform = 'translateX(-50%) translateY(0)';
+            
+            // Set active item reference
+            activeItem = item;
+            
+            // Add body class to prevent scrolling
+            document.body.classList.add('mega-menu-open');
+        }
     }
     
     // Function to close a mega menu
     function closeMegaMenu(item, immediate = false) {
-        // Clear any pending open timer
+        // Clear pending timers
         if (openTimeout) {
             clearTimeout(openTimeout);
             openTimeout = null;
         }
-        
-        // If there's a pending close timer, clear it
         if (closeTimeout) {
             clearTimeout(closeTimeout);
         }
@@ -113,12 +91,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (megaMenu) {
                 megaMenu.style.opacity = '0';
                 megaMenu.style.visibility = 'hidden';
-                megaMenu.style.transform = 'translateY(10px)';
+                // Important: Maintain the original transform with translateX(-50%)
+                megaMenu.style.transform = 'translateX(-50%) translateY(10px)';
             }
             
             item.classList.remove('nav-item-active');
             
-            // If this was the active item, clear the reference
             if (activeItem === item) {
                 activeItem = null;
                 
@@ -137,11 +115,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
         
-        // If immediate, close now; otherwise set a timer
         if (immediate) {
             close();
         } else {
-            closeTimeout = setTimeout(close, CLOSE_DELAY);
+            closeTimeout = setTimeout(close, 300);
         }
     }
     
@@ -156,19 +133,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add event listeners to mega menu items
     megaMenuItems.forEach(item => {
-        // Only handle items with actual mega menus
-        const megaMenu = item.querySelector('.mega-menu');
-        if (!megaMenu) return;
+        // Add menu underline element if not present
+        if (!item.querySelector('.menu-underline')) {
+            const underline = document.createElement('span');
+            underline.className = 'menu-underline';
+            item.querySelector('.nav-main-link').appendChild(underline);
+        }
         
-        // Set initial styles
-        megaMenu.style.zIndex = '1035';
-        
-        // Mouse enter - open the menu with a slight delay
+        // Mouse enter - open menu
         item.addEventListener('mouseenter', () => {
             openMegaMenu(item);
         });
         
-        // Mouse leave - start the close timer
+        // Mouse leave - close menu
         item.addEventListener('mouseleave', () => {
             closeMegaMenu(item);
         });
@@ -190,11 +167,48 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Handle clicks outside the menu
+    // Handle account dropdown menu
+    if (accountBtn && accountDropdown) {
+        // Fix for account dropdown styles
+        accountDropdown.style.position = 'absolute';
+        accountDropdown.style.zIndex = '2000';
+        accountDropdown.style.top = '100%';
+        accountDropdown.style.right = '0';
+        accountDropdown.style.left = 'auto';
+        
+        // Handle click event
+        accountBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Close mega menus if open
+            closeAllMegaMenus(true);
+            
+            // Toggle aria-expanded
+            const isExpanded = accountBtn.getAttribute('aria-expanded') === 'true';
+            accountBtn.setAttribute('aria-expanded', !isExpanded);
+            
+            // Toggle show class
+            accountDropdown.classList.toggle('show');
+            accountMenu.classList.toggle('show');
+        });
+    }
+    
+    // Handle clicks outside
     document.addEventListener('click', (e) => {
+        // Close mega menus when clicking outside
         if (!e.target.closest('.nav-main-item-with-children') && 
             !e.target.closest('.mega-menu')) {
             closeAllMegaMenus(true);
+        }
+        
+        // Close account dropdown when clicking outside
+        if (accountBtn && accountDropdown && 
+            !accountBtn.contains(e.target) && 
+            !accountDropdown.contains(e.target)) {
+            accountDropdown.classList.remove('show');
+            accountBtn.setAttribute('aria-expanded', 'false');
+            accountMenu && accountMenu.classList.remove('show');
         }
     });
     
@@ -207,6 +221,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeAllMegaMenus(true);
+            
+            // Also close account dropdown
+            if (accountDropdown && accountDropdown.classList.contains('show')) {
+                accountDropdown.classList.remove('show');
+                accountBtn && accountBtn.setAttribute('aria-expanded', 'false');
+                accountMenu && accountMenu.classList.remove('show');
+            }
         }
     });
     
@@ -215,32 +236,5 @@ document.addEventListener('DOMContentLoaded', function() {
         if (window.innerWidth < 992) {
             closeAllMegaMenus(true);
         }
-    });
-    
-    // Close mega menu when account dropdown opens
-    const accountBtn = document.getElementById('accountWidget');
-    if (accountBtn) {
-        accountBtn.addEventListener('click', () => {
-            closeAllMegaMenus(true);
-        });
-    }
-    
-    // Handle dropdown menu integration
-    function closeAccountDropdown() {
-        const accountBtn = document.getElementById('accountWidget');
-        const accountDropdown = document.querySelector('.account-menu-dropdown');
-        const accountMenu = accountBtn ? accountBtn.closest('.account-menu') : null;
-        
-        if (accountBtn && accountDropdown && accountMenu) {
-            accountDropdown.style.display = 'none';
-            accountBtn.setAttribute('aria-expanded', 'false');
-            accountMenu.classList.remove('show');
-            accountDropdown.classList.remove('show');
-        }
-    }
-    
-    // Close account dropdown when mega menu opens
-    document.addEventListener('megaMenuOpened', function() {
-        closeAccountDropdown();
     });
 });

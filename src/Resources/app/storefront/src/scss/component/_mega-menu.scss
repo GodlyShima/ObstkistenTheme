@@ -7,6 +7,7 @@ $menu-hover-bg: rgba(54, 125, 101, 0.05);
 $menu-radius: 13px;
 $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 
+// Main mega menu container - preserving original styling
 .mega-menu {
   position: absolute !important;
   width: 98vw !important; /* Use viewport width instead of 100% */
@@ -18,8 +19,20 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   margin-right: 0 !important;
   padding: 0 !important;
   box-sizing: border-box !important;
+  background-color: $menu-bg;
+  border-radius: 0 0 $menu-radius $menu-radius;
+  box-shadow: none;
+  display: block !important;
+  visibility: hidden;
+  opacity: 0;
+  z-index: var(--z-index-mega-menu);
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
 }
 
+.navbar {
+  --bs-navbar-padding-x: 0 !important;
+  --bs-navbar-padding-y: 0 !important;
+}
 
 /* On hover, adjust the transform to include the menu appearance animation */
 .nav-main-item-with-children:hover .mega-menu {
@@ -29,9 +42,21 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   pointer-events: auto;
 }
 
+/* Active state for mega menu */
+.nav-main-item-with-children.nav-item-active .mega-menu {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) !important;
+  pointer-events: auto;
+  border-top: 3px solid $menu-accent;
+}
+
 /* Fix navbar and navigation positioning */
 .nav-main {
   position: relative;
+  z-index: var(--z-index-navigation);
+  background-color: $menu-bg;
+  border-bottom: 1px solid $menu-border;
 }
 
 .navbar,
@@ -44,10 +69,10 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   max-width: 1400px; /* Or whatever your site's main container width is */
   margin: 0 auto;
   width: 100%;
-	padding: 2rem 4rem;
+  padding: 2rem 4rem;
 }
 
-/* Make sure the overlay covers theader-mainhe full width as well */
+/* Make sure the overlay covers the full width as well */
 .mega-menu-overlay {
   position: fixed;
   top: 0;
@@ -55,12 +80,17 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 99;
-  display: none;
+  z-index: var(--z-index-mega-menu-overlay);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  pointer-events: none;
 }
 
 .mega-menu-overlay.show {
-  display: block;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 /* Reset any Bootstrap constraints that might be interfering */
@@ -69,7 +99,7 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   left: 50% !important;
   right: auto !important;
   width: 98vw !important;
-  margin-top: 0 !important;
+  margin-top: 0px !important;
   transform: translateX(-50%) !important;
 }
 
@@ -102,39 +132,13 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   }
 }
 
-// Navigation styles
-.nav-main {
-  background-color: $menu-bg;
-  border-bottom: 1px solid $menu-border;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-  position: relative;
-  z-index: 1030;
-}
-
-.navbar {
-  padding: 0 !important;
-}
-
-.navbar-nav {
-  gap: 0.75rem;
-  
-  @media (max-width: 991.98px) {
-    gap: 0;
-  }
-}
-
-// Navigation items
-.nav-item {
-  position: relative;
-}
-
 // Menu links
 .nav-link, .nav-main-link {
   font-weight: 500;
   font-size: 0.95rem;
   padding: 0.75rem 1rem !important;
   color: $menu-text !important;
-  border-radius: $menu-radius;
+  border-radius: 0;
   transition: all 0.3s ease;
   
   &:hover {
@@ -145,7 +149,7 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   // Dropdown indicator for child items
   &.has-children {
     position: relative;
-    padding-right: 1.5rem !important;
+    //padding-right: 1.5rem !important;
   }
   
   // Active state
@@ -155,9 +159,25 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   }
 }
 
-/* 
- * Additional fixes for the mega menu Backwaren/Lebensmittel issue
- */
+/* Ensure links are styled correctly */
+.mega-menu-title a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.mega-menu-list li a {
+  color: #555;
+  text-decoration: none;
+  display: block;
+  padding: 3px 0;
+  transition: all 0.2s ease;
+}
+
+.mega-menu-list li a:hover {
+  color: #367d65;
+  transform: translateX(5px);
+}
 
 /* Fix for dropdown menu appearing in small area */
 .dropdown-menu.mega-menu.container-fluid {
@@ -187,16 +207,6 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   position: static;
 }
 
-/* Add overlay and ensure proper stack order */
-.nav-main {
-  position: relative;
-  z-index: 100;
-}
-
-.mega-menu-overlay {
-  z-index: 99;
-}
-
 /* Reset bootstrap default behavior */
 .navbar-expand-lg .navbar-nav .dropdown-menu {
   position: absolute !important;
@@ -212,41 +222,6 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     border-radius: 0 !important;
     margin: 0 !important;
     position: static !important;
-  }
-}
-
-/* Ensure links are styled correctly */
-.mega-menu-title a {
-  color: #333;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.mega-menu-list li a {
-  color: #555;
-  text-decoration: none;
-  display: block;
-  padding: 3px 0;
-  transition: all 0.2s ease;
-}
-
-.mega-menu-list li a:hover {
-  color: #367d65;
-  transform: translateX(5px);
-}
-
-// Parent item hover behavior
-.nav-main-item-with-children {
-  &:hover {
-    .mega-menu {
-      transform: translateY(0);
-      opacity: 1;
-      visibility: visible;
-    }
-    
-    .nav-main-link.has-children::after {
-      transform: translateY(-50%) rotate(-135deg);
-    }
   }
 }
 
@@ -326,147 +301,39 @@ $menu-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   }
 }
 
-// Promo area in mega menu
-.mega-menu-promo {
-  height: 100%;
-  border-radius: $menu-radius;
-  overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease;
+/* Fix für die Sichtbarkeit von Mega-Menu-Inhalten */
+.mega-menu {
+  background-color: #fff !important;
   
-  &:hover {
-    transform: translateY(-5px);
+  .container,
+  .row,
+  .col-md-3,
+  .mega-menu-column,
+  .mega-menu-title,
+  .mega-menu-list,
+  .mega-menu-list li {
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: $menu-radius;
-  }
-}
-
-.mega-menu-promo-content {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 1.5rem;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
-  color: white;
-  
-  h3 {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  }
-}
-
-.mega-menu-promo-button {
-  display: inline-block;
-  padding: 0.5rem 1.25rem;
-  background: $menu-accent;
-  color: white;
-  border-radius: $menu-radius;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: darken($menu-accent, 5%);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  }
-}
-
-// Featured items in mega menu
-.mega-menu-featured {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.mega-menu-featured-item {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  border-radius: $menu-radius;
-  border: 1px solid $menu-border;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: #f9f9f9;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  .mega-menu-title {
+    color: #333 !important;
     
-    .mega-menu-featured-icon {
-      transform: scale(1.1);
-      background-color: $menu-accent;
-      color: white;
-    }
-  }
-}
-
-.mega-menu-featured-icon {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba($menu-accent, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 1rem;
-  color: $menu-accent;
-  transition: all 0.3s ease;
-}
-
-.mega-menu-featured-content {
-  h4 {
-    font-size: 0.95rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
-  
-  p {
-    font-size: 0.8rem;
-    color: #777;
-    margin: 0;
-  }
-}
-
-// Mobile specific styles
-@media (max-width: 991.98px) {
-  .mega-menu {
-    position: static;
-    background-color: #f8f9fa;
-    box-shadow: none;
-    border-top: none;
-    
-    .container, .row, .col {
-      padding: 0;
-      margin: 0;
-    }
-    
-    .mega-menu-column {
-      padding: 0.5rem 1rem;
-      border-bottom: 1px solid $menu-border;
-      
-      &::after {
-        display: none;
-      }
-    }
-    
-    .mega-menu-promo {
-      display: none;
+    a {
+      color: #333 !important;
     }
   }
   
-  .nav-main-link.has-children::after {
-    right: 1rem;
+  .mega-menu-list li a {
+    color: #555 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
+}
+
+/* Wenn das Mega-Menü aktiv ist, zusätzlich sicherstellen, dass alle Elemente sichtbar sind */
+.nav-main-item-with-children.nav-item-active .mega-menu {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
 }

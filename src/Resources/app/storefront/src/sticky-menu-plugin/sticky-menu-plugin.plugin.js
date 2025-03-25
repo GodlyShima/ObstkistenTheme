@@ -4,19 +4,15 @@ import Plugin from 'src/plugin-system/plugin.class';
 
 /**
  * ModernHeader Plugin
- * Enhanced functionality for the modern header
+ * Enhanced functionality for the modern header including sticky behavior and search
  */
 export default class ModernHeader extends Plugin {
     static options = {
         stickyHeaderEnabled: true,
-        megaMenuEnabled: true,
         searchResultsSelector: '.search-results',
         searchInputSelector: '[data-search-input]',
         headerSelector: '.header-main',
         navMainSelector: '.nav-main',
-        megaMenuSelector: '.mega-menu',
-        megaMenuTriggerSelector: '[data-bs-toggle="dropdown"]',
-        megaMenuOverlaySelector: '.mega-menu-overlay',
         mobileBreakpoint: 'lg'
     };
 
@@ -26,8 +22,6 @@ export default class ModernHeader extends Plugin {
         this.navMain = DomAccess.querySelector(document, this.options.navMainSelector, false);
         this.searchInput = DomAccess.querySelector(document, this.options.searchInputSelector, false);
         this.searchResults = DomAccess.querySelector(document, this.options.searchResultsSelector, false);
-        this.megaMenuItems = document.querySelectorAll('.nav-main-item-with-children');
-        this.megaMenuOverlay = DomAccess.querySelector(document, this.options.megaMenuOverlaySelector, false);
 
         // Register event listeners
         this._registerEvents();
@@ -35,11 +29,6 @@ export default class ModernHeader extends Plugin {
         // Initialize sticky header if enabled
         if (this.options.stickyHeaderEnabled) {
             this._initStickyHeader();
-        }
-
-        // Initialize mega menu if enabled
-        if (this.options.megaMenuEnabled) {
-            this._initMegaMenu();
         }
     }
 
@@ -69,10 +58,7 @@ export default class ModernHeader extends Plugin {
      * @private
      */
     _onResize() {
-        if (ViewportDetection.isXS() || ViewportDetection.isSM() || ViewportDetection.isMD()) {
-            // Close mega menus on mobile view
-            this._closeMegaMenus();
-        }
+        // Handle responsive adjustments if needed
     }
 
     /**
@@ -116,123 +102,6 @@ export default class ModernHeader extends Plugin {
         } else {
             // At the top of the page - show normal
             this.header.classList.remove('header-sticky', 'header-hidden');
-        }
-    }
-
-    /**
-     * Initialize mega menu functionality
-     * @private
-     */
-    _initMegaMenu() {
-        if (ViewportDetection.isXS() || ViewportDetection.isSM() || ViewportDetection.isMD()) {
-            return;
-        }
-        
-        // Mega menu events
-        this.megaMenuItems.forEach(item => {
-            const trigger = item.querySelector(this.options.megaMenuTriggerSelector);
-            const megaMenu = item.querySelector(this.options.megaMenuSelector);
-            
-            if (trigger && megaMenu) {
-                // Hover events for desktop
-                item.addEventListener('mouseenter', () => {
-                    this._showMegaMenu(item);
-                });
-                
-                item.addEventListener('mouseleave', () => {
-                    this._closeMegaMenus();
-                });
-                
-                // Click events for touch devices
-                trigger.addEventListener('click', (event) => {
-                    if (ViewportDetection.isLG() || ViewportDetection.isXL() || ViewportDetection.isXXL()) {
-                        event.preventDefault();
-                        this._toggleMegaMenu(item);
-                    }
-                });
-            }
-        });
-        
-        // Close when clicking outside
-        document.addEventListener('click', (event) => {
-            const isInMegaMenu = event.target.closest(this.options.megaMenuSelector) || 
-                                 event.target.closest('.nav-main-item-with-children');
-            
-            if (!isInMegaMenu) {
-                this._closeMegaMenus();
-            }
-        });
-        
-        // Close with Escape key
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                this._closeMegaMenus();
-            }
-        });
-        
-        // Close with overlay click
-        if (this.megaMenuOverlay) {
-            this.megaMenuOverlay.addEventListener('click', () => {
-                this._closeMegaMenus();
-            });
-        }
-    }
-
-    /**
-     * Show mega menu
-     * @param {HTMLElement} menuItem - The menu item element
-     * @private
-     */
-    _showMegaMenu(menuItem) {
-        // First close all menus
-        this._closeMegaMenus();
-        
-        // Open the selected menu
-        const megaMenu = menuItem.querySelector(this.options.megaMenuSelector);
-        
-        if (megaMenu) {
-            // Timeout for smoother animation
-            setTimeout(() => {
-                megaMenu.style.transform = 'translateY(0)';
-                megaMenu.style.visibility = 'visible';
-                megaMenu.style.opacity = '1';
-                
-                if (this.megaMenuOverlay) {
-                    this.megaMenuOverlay.classList.add('show');
-                }
-            }, 50);
-        }
-    }
-
-    /**
-     * Toggle mega menu (for touch devices)
-     * @param {HTMLElement} menuItem - The menu item element
-     * @private
-     */
-    _toggleMegaMenu(menuItem) {
-        const megaMenu = menuItem.querySelector(this.options.megaMenuSelector);
-        const isVisible = megaMenu && megaMenu.style.visibility === 'visible';
-        
-        this._closeMegaMenus();
-        
-        if (!isVisible && megaMenu) {
-            this._showMegaMenu(menuItem);
-        }
-    }
-
-    /**
-     * Close all mega menus
-     * @private
-     */
-    _closeMegaMenus() {
-        document.querySelectorAll(this.options.megaMenuSelector).forEach(menu => {
-            menu.style.transform = 'translateY(10px)';
-            menu.style.visibility = 'hidden';
-            menu.style.opacity = '0';
-        });
-        
-        if (this.megaMenuOverlay) {
-            this.megaMenuOverlay.classList.remove('show');
         }
     }
 

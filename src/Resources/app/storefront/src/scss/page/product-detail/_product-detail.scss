@@ -79,9 +79,9 @@ $font-family-heading: "Rubik", sans-serif;
     .product-detail-quantity {
       &-group {
         .btn-icon-only {
-          font-size: 0.999999875rem;
-          line-height: calc(1.5em + 1.375rem + calc(var(--bs-border-width) * 2));
-          height: calc(1.5em + 1.375rem + calc(var(--bs-border-width) * 2));
+          font-size: 1rem;
+          line-height: calc(1.5em + 1.375rem + 2px);
+          height: calc(1.5em + 1.375rem + 2px);
         }
 
         @media (min-width: 576px) {
@@ -92,17 +92,7 @@ $font-family-heading: "Rubik", sans-serif;
       
       &-select.form-select {
         padding: 0.6875rem 0 0.6875rem 1rem;
-        font-size: 0.999999875rem;
-      }
-    }
-    
-    // Column layouts
-    .col-8[class*="buy-button-container"],
-    .col-4:has(> .product-detail-quantity-group) {
-      width: 100%;
-      
-      @media (min-width: 576px) {
-        width: auto;
+        font-size: 1rem;
       }
     }
     
@@ -111,18 +101,6 @@ $font-family-heading: "Rubik", sans-serif;
       @media (min-width: 576px) {
         min-width: 260px;
         max-width: 360px;
-      }
-    }
-    
-    // PayPal elements
-    [data-swag-paypal-express-button]:has(.paypal-buttons) {
-      width: 100%;
-      
-      @media (min-width: 576px) {
-        display: flex;
-        padding: 1rem;
-        border: 1px solid $border-color;
-        border-radius: $border-radius;
       }
     }
   }
@@ -141,11 +119,11 @@ $font-family-heading: "Rubik", sans-serif;
 }
 
 .product-detail-ordernumber-container {
-    margin-bottom: 0.5rem;
-    
-    &:first-child {
-      border-top: 1px solid #eceaea;
-      padding-top: 1rem;
-      margin-top: 1rem;
-    }
+  margin-bottom: 0.5rem;
+  
+  &:first-child {
+    border-top: 1px solid $border-color;
+    padding-top: 1rem;
+    margin-top: 1rem;
   }
+}

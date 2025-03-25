@@ -1,28 +1,27 @@
-// Ozone-style product box styling (exact match to reference image)
-
-// Variables based on the exact image
+// Product box variables
 $card-radius: 13px;
-$card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-$card-bg: #fff;
+$card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+$card-bg: transparent;
+$card-text-color: #323238;
 $discount-color: #ff4081;
 $price-color: #ff4081;
 $original-price-color: #999;
 $rating-star-color: #FFA726;
-$stock-color: #3984ff;
 $badge-sale: #ff4081;
 $badge-text: #fff;
-$primary-button: #3984ff;
+$primary-button: #367d65;
 
 // Main product box container
 .product-box {
   margin-bottom: 20px;
   height: 100%;
-  background-color: transparent !important;
+  background-color: $card-bg !important;
   border: none !important;
   transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
   
   &:hover {
     z-index: 1;
+    transform: translateY(-5px);
     
     .product-image-wrapper img {
       transform: scale(1.05);
@@ -44,56 +43,41 @@ $primary-button: #3984ff;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    margin-bottom: 0;
+    margin-bottom: 10px;
     position: relative;
-    border-radius: 13px;
+    border-radius: $card-radius;
     flex-basis: auto;
     flex-grow: 0;
     height: auto;
     aspect-ratio: 1/1; /* Maintain square aspect ratio */
     background-color: #fff;
-    padding: 0; /* Remove padding to allow image to fill entire container */
+    padding: 0; 
     border: 1px solid #ededed;
-    margin-bottom: 10px;
-
-    .is-standard {
-        .product-image {
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-        }
-    }
-      
     
     .product-image {
-        width: 100%;
-        height: 100%;
-        object-fit: contain; /* Or use 'cover' if you want images to fill and crop */
-        max-width: 100%;
-        max-height: 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      max-width: 100%;
+      max-height: 100%;
+      transition: transform 0.3s ease;
     }
 
     .product-image-link {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      
-      img {
-        transition: transform 0.3s ease;
-
-      }
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
   
   // Product info container
   .product-info {
-    padding: 0px;
-    padding-top: 0px;
+    padding: 0;
     display: flex;
     flex-direction: column;
     border-radius: $card-radius;
@@ -105,66 +89,29 @@ $primary-button: #3984ff;
     font-size: 0.9rem;
     line-height: 1.3;
     margin-bottom: 8px;
-    color: #333;
+    color: $card-text-color;
     text-decoration: none;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    height: 20px;
     
     &:hover {
-      color: #000;
+      color: darken($card-text-color, 20%);
     }
   }
   
   // Rating and reviews styling
-  .product-rating-container {
-    display: flex;
-    align-items: center;
+  .product-rating {
     margin-bottom: 8px;
     font-size: 0.8rem;
     
-    .product-rating {
-      margin-right: 8px;
-      position: static;
-      
-      .point-rating.point-full svg {
-        color: $rating-star-color !important;
-      }
-    }
-    
-    .rating-count {
-      color: #777;
+    .point-rating.point-full svg {
+      color: $rating-star-color !important;
     }
   }
   
-  // Stock information
-  .product-stock-info {
-    font-size: 0.8rem;
-    color: $stock-color;
-    margin-bottom: 8px;
-  }
-  
-  // Sale badge (exact match to reference)
-  .sale-badge-container {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    z-index: 10;
-    
-    .sale-badge {
-      display: inline-block;
-      background-color: $badge-sale;
-      color: white;
-      font-size: 0.7rem;
-      font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 10px;
-    }
-  }
-  
-  // Price container - exact match to reference image
+  // Price container
   .product-price-container {
     display: flex;
     flex-wrap: wrap;
@@ -173,7 +120,7 @@ $primary-button: #3984ff;
     margin-bottom: 10px;
   }
   
-  // Current price styling (large pink price)
+  // Current price styling
   .product-price-current {
     color: $price-color;
     font-size: 1.5rem;
@@ -181,7 +128,7 @@ $primary-button: #3984ff;
     margin-right: 10px;
   }
   
-  // Original price (gray with strikethrough)
+  // Original price
   .product-price-original {
     color: $original-price-color;
     text-decoration: line-through;
@@ -203,12 +150,13 @@ $primary-button: #3984ff;
     margin-left: auto;
   }
   
-  // Product badges (top left)
+  // Product badges
   .product-badges {
     position: absolute;
     top: 10px;
     left: 10px;
     z-index: 5;
+    pointer-events: none;
     
     .badge {
       display: inline-block;
@@ -231,7 +179,7 @@ $primary-button: #3984ff;
     
     .btn-buy, .btn-detail {
       width: 100%;
-      border-radius: 13px !important;
+      border-radius: $card-radius !important;
       background-color: $primary-button !important;
       border-color: $primary-button !important;
       font-size: 0.9rem;
@@ -246,98 +194,11 @@ $primary-button: #3984ff;
   }
 }
 
-// Override product price info for listing view
-.product-price-info {
-  padding: 0;
-  
-  .product-price-wrapper {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    margin-bottom: 5px;
-    
-    .product-price {
-      font-size: 1.5rem !important;
-      font-weight: 700 !important;
-      color: $price-color !important;
-      margin-right: 10px;
-      
-      &.with-list-price {
-        color: $price-color !important;
-      }
-    }
-    
-    .list-price {
-      font-size: 0.9rem;
-      color: $original-price-color;
-      text-decoration: line-through;
-      font-weight: normal;
-    }
-    
-    .discount-badge {
-      margin-left: auto;
-      background-color: $discount-color;
-      color: white;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-  }
-}
-
-// Card styling to exactly match the image
-.card.product-box {
-  background-color: transparent !important;
-  border: none !important;
-  
-  .card-body {
-    background-color: transparent !important;
-  }
-}
-
-// Pink sale badge in top left corner
-.product-badges .badge-sale, 
-.product-badges .badge-discount {
+// Badge colors
+.bg-danger {
   background-color: $badge-sale !important;
-  color: white;
-  font-size: 0.7rem !important;
-  font-weight: 500;
-  padding: 3px 8px !important;
-  border-radius: 10px !important;
 }
 
-// Stock remaining count styling
-.stock-remaining {
-  color: #3984ff;
-  font-size: 0.8rem;
-  margin-bottom: 5px;
-}
-
-// Delivery date styling
-.delivery-info {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-  font-size: 0.75rem;
-  color: #777;
-  
-  .icon {
-    margin-right: 4px;
-    color: $primary-button;
-  }
-}
-
-// Mi branding in orange (as in image)
-.brand-mi {
-  display: inline-block;
-  color: #ff6700;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-right: 5px;
-}
-
-// Rating stars color
-.product-rating .point-full svg {
-  color: #FFA726 !important;
+.bg-success {
+  background-color: $primary-button !important;
 }
