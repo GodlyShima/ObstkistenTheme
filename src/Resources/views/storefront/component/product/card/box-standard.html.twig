@@ -138,7 +138,7 @@
                             
                             {% block component_product_box_description %}
                                 <div class="product-description">
-                                    {{ "Быстрая зарядное устройство 120w type-c для телефона / ноутбука" | sw_sanitize }}
+                                    {{ product.translated.description|striptags|raw }}
                                 </div>
                             {% endblock %}
                             
