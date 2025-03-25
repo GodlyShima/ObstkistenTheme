@@ -1,54 +1,71 @@
 /**
- * Close account dropdown when mega menu opens
+ * Fixed dropdown functionality for account menu
  */
 document.addEventListener('DOMContentLoaded', function() {
     // Select elements
     const accountBtn = document.getElementById('accountWidget');
     const accountDropdown = document.querySelector('.account-menu-dropdown');
     const accountMenu = accountBtn ? accountBtn.closest('.account-menu') : null;
-    const megaMenuItems = document.querySelectorAll('.nav-main-item-with-children.has-mega-menu');
     
-    if (!accountBtn || !accountDropdown || !accountMenu || !megaMenuItems.length) return;
-    
-    // Function to close account dropdown
-    function closeAccountDropdown() {
-        accountDropdown.style.display = 'none';
-        accountBtn.setAttribute('aria-expanded', 'false');
-        accountMenu.classList.remove('show');
-        accountDropdown.classList.remove('show');
-    }
-    
-    // Add event listeners to mega menu items
-    megaMenuItems.forEach(menuItem => {
-        // When mouse enters a mega menu item, close the account dropdown
-        menuItem.addEventListener('mouseenter', function() {
-            // Check if account dropdown is open
-            if (accountDropdown.style.display === 'block' || 
-                accountDropdown.classList.contains('show') || 
-                accountMenu.classList.contains('show')) {
-                closeAccountDropdown();
+    if (accountBtn && accountDropdown) {
+        // Manually handle dropdown functionality
+        accountBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Toggle aria-expanded attribute
+            const isExpanded = accountBtn.getAttribute('aria-expanded') === 'true';
+            accountBtn.setAttribute('aria-expanded', !isExpanded);
+            
+            // Toggle show classes
+            accountDropdown.classList.toggle('show');
+            accountMenu.classList.toggle('show');
+            
+            // Close mega menu if open when account menu is toggled
+            closeMegaMenusIfOpen();
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!accountBtn.contains(e.target) && !accountDropdown.contains(e.target)) {
+                accountDropdown.classList.remove('show');
+                accountBtn.setAttribute('aria-expanded', 'false');
+                accountMenu.classList.remove('show');
             }
         });
         
-        // Also handle click events for mobile devices
-        const menuLink = menuItem.querySelector('.nav-main-link');
-        if (menuLink) {
-            menuLink.addEventListener('click', function() {
-                closeAccountDropdown();
-            });
-        }
-    });
-    
-    // Close account dropdown when mega menu overlay is clicked
-    const megaMenuOverlay = document.querySelector('.mega-menu-overlay');
-    if (megaMenuOverlay) {
-        megaMenuOverlay.addEventListener('click', function() {
-            closeAccountDropdown();
-        });
+        // Force correct positioning styles
+        accountDropdown.style.position = 'absolute';
+        accountDropdown.style.zIndex = '2100';
+        accountDropdown.style.top = '100%';
+        accountDropdown.style.right = '0';
+        accountDropdown.style.left = 'auto';
     }
     
-    // Also listen for custom mega menu open events
-    document.addEventListener('megaMenuOpened', function() {
-        closeAccountDropdown();
-    });
+    // Function to close mega menus when account menu is opened
+    function closeMegaMenusIfOpen() {
+        const activeMegaMenus = document.querySelectorAll('.nav-main-item-with-children.nav-item-active');
+        if (activeMegaMenus.length > 0) {
+            activeMegaMenus.forEach(item => {
+                item.classList.remove('nav-item-active');
+                const megaMenu = item.querySelector('.mega-menu');
+                if (megaMenu) {
+                    megaMenu.style.opacity = '0';
+                    megaMenu.style.visibility = 'hidden';
+                    megaMenu.style.transform = 'translateY(10px)';
+                }
+            });
+            
+            // Hide overlay
+            const overlay = document.querySelector('.mega-menu-overlay');
+            if (overlay) {
+                overlay.classList.remove('show');
+                overlay.style.opacity = '0';
+                overlay.style.visibility = 'hidden';
+            }
+            
+            // Remove body class
+            document.body.classList.remove('mega-menu-open');
+        }
+    }
 });

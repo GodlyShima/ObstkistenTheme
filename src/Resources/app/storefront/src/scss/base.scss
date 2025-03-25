@@ -55,6 +55,204 @@
 // Page-specific imports
 @import 'page/product-detail/product-detail';
 
+/* Mega Menu Content Visibility Fix */
+
+/* Make sure the mega menu content is visible */
+.mega-menu {
+    background-color: #fff !important;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    z-index: 1035 !important;
+    pointer-events: none;
+}
+
+/* When menu is active, show content */
+.nav-main-item-with-children.nav-item-active .mega-menu {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Fix positioning of mega menu */
+.mega-menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 2rem;
+    border-top: 3px solid #367d65;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Fix mega menu columns */
+.mega-menu-column {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+}
+
+/* Ensure all mega menu content is visible */
+.mega-menu .container,
+.mega-menu .row,
+.mega-menu .col-md-3,
+.mega-menu-title,
+.mega-menu-list {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Fix padding and spacing */
+.mega-menu .container {
+    padding: 2rem;
+}
+
+/* Fix for navigation items */
+.nav-main-item-with-children {
+    position: static;
+}
+
+/* Force show mega menu content when active */
+.nav-main-item-with-children.nav-item-active .mega-menu-column {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    visibility: visible !important;
+}
+
+/* Remove any transforms that might be causing issues */
+.mega-menu-column,
+.mega-menu-title,
+.mega-menu-list,
+.mega-menu-list li {
+    transform: none !important;
+}
+
+/* Make sure links are visible */
+.mega-menu-title a,
+.mega-menu-list li a {
+    color: #333 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Fix hover effects */
+.mega-menu-list li a:hover {
+    color: #367d65 !important;
+}
+
+/* Z-index hierarchy fix for Obstkisten-Online Theme */
+
+/* Base z-index organization:
+ * - Dropdown menus: 2000
+ * - Account menu: 2100
+ * - Header: 1050
+ * - Navigation: 1040
+ * - Mega menu overlay: 1030
+ * - Mega menu content: 1035
+ */
+
+/* Mega menu overlay */
+.mega-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1030; /* Lower than mega menu content and navigation */
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    pointer-events: none;
+}
+
+.mega-menu-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Header elements */
+.header-main {
+    z-index: 1050 !important;
+    position: relative;
+}
+
+.nav-main {
+    z-index: 1040 !important;
+    position: relative;
+}
+
+/* Mega menu */
+.mega-menu {
+    position: absolute !important;
+    z-index: 1035 !important; /* Higher than overlay but lower than navigation */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+                visibility 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+                transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    pointer-events: none;
+    border-top: none !important;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Account menu - highest z-index */
+.account-menu {
+    position: relative;
+    z-index: 2100 !important; /* Highest z-index to stay above everything */
+}
+
+.account-menu-dropdown {
+    position: absolute !important;
+    z-index: 2100 !important;
+    top: 100% !important;
+    right: 0 !important;
+    left: auto !important;
+    min-width: 320px !important;
+    padding: 1rem !important;
+    margin-top: 0.5rem !important;
+    background-color: #fff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 13px;
+    border: 1px solid #eceaea;
+    display: none;
+}
+
+/* Fix for dropdowns */
+.account-menu.show .account-menu-dropdown {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Body class for mega menu open to prevent scrolling */
+body.mega-menu-open {
+    overflow: hidden;
+}
+
+/* Make sure the header stays above mega menu */
+.header-main.header-sticky {
+    z-index: 2000 !important;
+}
+
+/* Remove any overflow issues that might cut off dropdowns */
+.header-action-item,
+.header-actions,
+.header-actions-col {
+    overflow: visible !important;
+}
+
+/* Make sure cart dropdown also has proper z-index */
+.header-cart-dropdown {
+    z-index: 2000 !important;
+}
+
+/* ------------------------------------------------------------------------------------ */
+
 // Mega-menu style fixes
 .mega-menu {
   display: block !important;
