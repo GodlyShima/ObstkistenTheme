@@ -156,3 +156,56 @@
     }
   }
 }
+
+/* Account dropdown menu fixes */
+.account-menu-dropdown {
+    position: absolute !important;
+    z-index: 1500 !important;
+    min-width: 320px !important;
+    padding: 1rem !important;
+    margin-top: 0.5rem !important;
+    background-color: #fff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 13px;
+    border: 1px solid #eceaea;
+}
+
+/* Fix dropdown positioning */
+.dropdown-menu-end.account-menu-dropdown {
+    right: 0 !important;
+    left: auto !important;
+}
+
+/* Ensure dropdown is visible */
+.account-menu.show .account-menu-dropdown {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+}
+
+/* Fix for account menu hover state */
+.header-action-item:hover .header-action-link {
+    color: #367d65 !important;
+    background-color: rgba(54, 125, 101, 0.05) !important;
+}
+
+/* Ensure the dropdown opens on click */
+.account-menu {
+    position: relative;
+}
+
+/* Cart badge positioning */
+.header-action-icon .cart-badge {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 0.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
