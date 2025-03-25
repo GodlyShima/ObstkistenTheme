@@ -209,3 +209,222 @@
     align-items: center;
     justify-content: center;
 }
+
+/* Account dropdown menu fixes for z-index */
+.account-menu {
+    position: relative;
+    z-index: 1500 !important; /* Higher value to make it appear above all other elements */
+}
+
+.account-menu .dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    left: auto !important;
+    z-index: 1500 !important;
+    min-width: 320px !important;
+    padding: 1.5rem !important;
+    margin-top: 1rem !important;
+    background-color: #fff !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+    border-radius: 13px !important;
+    border: 1px solid #eceaea !important;
+    transform: none !important;
+    display: none !important;
+}
+
+.account-menu.show .dropdown-menu {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+}
+
+/* Fix for Bootstrap's dropdown-toggle */
+.account-menu .dropdown-toggle.show + .dropdown-menu {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Ensure pointer events work properly */
+.account-menu .dropdown-menu {
+    pointer-events: auto !important;
+}
+
+/* Remove any potential transform that might be interfering */
+.account-menu,
+.account-menu .dropdown-menu,
+.account-menu.show .dropdown-menu {
+    transform: none !important;
+}
+
+/* Ensure the header has proper z-index */
+.header-main {
+    z-index: 1040;
+    position: relative;
+}
+
+/* Ensure button in account menu correctly toggles dropdown */
+.account-menu .header-action-link[aria-expanded="true"] + .dropdown-menu {
+    display: block !important;
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Force visibility during active state */
+.account-menu.active .dropdown-menu,
+.account-menu:focus-within .dropdown-menu {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Direct dropdown override styles */
+body .account-menu {
+    position: relative !important;
+}
+
+body .account-menu-dropdown {
+    position: absolute !important;
+    top: calc(100% + 10px) !important;
+    right: 0 !important;
+    left: auto !important;
+    z-index: 9999 !important; /* Extremely high z-index to override everything */
+    min-width: 300px !important;
+    display: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    transition: none !important;
+    border: 1px solid #ddd !important;
+    border-radius: 13px !important;
+    background-color: #fff !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+    padding: 1rem !important;
+    margin: 0 !important;
+    pointer-events: auto !important;
+}
+
+body .account-menu.show .account-menu-dropdown,
+body .account-menu .dropdown-menu.show {
+    display: block !important;
+}
+
+body .dropdown-toggle.show + .dropdown-menu {
+    display: block !important;
+}
+
+/* Reset any transform properties that might be interfering */
+body .account-menu, 
+body .account-menu.show, 
+body .account-menu-dropdown, 
+body .account-menu-dropdown.show,
+body .dropdown-menu, 
+body .dropdown-menu.show {
+    transform: none !important;
+}
+
+/* Override Bootstrap dropdown display property */
+body .dropdown-menu.show {
+    display: block !important;
+}
+
+/* Make sure the header and navbar have appropriate z-index values */
+body .header-main {
+    z-index: 1040 !important;
+}
+
+body .nav-main {
+    z-index: 1030 !important;
+}
+
+/* Give the account menu a higher z-index than both header and nav */
+body .header-action-item .account-menu {
+    z-index: 9990 !important;
+}
+
+/* Ensure the dropdown menu has an even higher z-index */
+body .header-action-item .account-menu .account-menu-dropdown {
+    z-index: 9999 !important;
+}
+
+/* Remove any overflow:hidden that might be cutting off the dropdown */
+body .header-main,
+body .nav-main,
+body .header-action-item,
+body .header-actions,
+body .header-actions-col {
+    overflow: visible !important;
+}
+
+/* Z-index hierarchy fixes */
+.mega-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1040; /* Lower than mega-menu */
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    pointer-events: none;
+}
+
+.mega-menu-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.mega-menu {
+    position: absolute !important;
+    z-index: 1045 !important; /* Higher than overlay */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+                visibility 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+                transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    pointer-events: none;
+    border-top: none !important;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.nav-main-item-with-children.nav-item-active .mega-menu {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Header and navigation z-index */
+.header-main {
+    z-index: 1050 !important; /* Higher than both overlay and mega-menu */
+    position: relative;
+}
+
+.nav-main {
+    z-index: 1050 !important; /* Same as header */
+    position: relative;
+}
+
+/* Account menu */
+.account-menu {
+    position: relative;
+    z-index: 1060 !important; /* Higher than all other elements */
+}
+
+.account-menu-dropdown {
+    z-index: 1060 !important; /* Same as account menu */
+}
+
+/* Fix any overflow issues */
+.header-main, 
+.nav-main,
+.header-action-item,
+.header-actions-col {
+    overflow: visible !important;
+}

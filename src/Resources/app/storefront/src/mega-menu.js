@@ -1,5 +1,5 @@
 /**
- * Enhanced mega menu functionality with smooth transitions and animations
+ * Enhanced mega menu functionality with proper z-index handling
  */
 document.addEventListener('DOMContentLoaded', function() {
     // Calculate and store header and navbar heights for overlay positioning
@@ -22,8 +22,26 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.className = 'mega-menu-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1040;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            pointer-events: none;
+        `;
         body.appendChild(overlay);
     }
+    
+    // Fix z-index of mega menus
+    document.querySelectorAll('.mega-menu').forEach(menu => {
+        menu.style.zIndex = '1045';
+    });
     
     // Add underlines to each menu item with children
     megaMenuItems.forEach(item => {
@@ -93,6 +111,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const megaMenu = item.querySelector('.mega-menu');
             if (megaMenu) {
+                // Make sure mega menu has proper z-index
+                megaMenu.style.zIndex = '1045';
+                
                 // First, reset all animations
                 const columns = megaMenu.querySelectorAll('.mega-menu-column');
                 columns.forEach(column => {
@@ -122,13 +143,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 item.classList.add('nav-item-active');
                 
                 // Show the overlay with fade-in
-                overlay.style.transition = 'opacity 0.3s ease';
+                overlay.style.opacity = '1';
+                overlay.style.visibility = 'visible';
+                overlay.style.pointerEvents = 'auto';
                 overlay.classList.add('show');
                 
                 // Set this as the active item
                 activeItem = item;
+                
+                // Close account dropdown when mega menu opens
+                closeAccountDropdown();
+                
+                // Dispatch custom event that mega menu was opened
+                const megaMenuOpenedEvent = new CustomEvent('megaMenuOpened', {
+                    detail: { menuItem: item }
+                });
+                document.dispatchEvent(megaMenuOpenedEvent);
             }
         }, HOVER_DELAY);
+    }
+    
+    // Helper function to close account dropdown
+    function closeAccountDropdown() {
+        const accountBtn = document.getElementById('accountWidget');
+        const accountDropdown = document.querySelector('.account-menu-dropdown');
+        const accountMenu = accountBtn ? accountBtn.closest('.account-menu') : null;
+        
+        if (accountBtn && accountDropdown && accountMenu) {
+            accountDropdown.style.display = 'none';
+            accountBtn.setAttribute('aria-expanded', 'false');
+            accountMenu.classList.remove('show');
+            accountDropdown.classList.remove('show');
+        }
     }
     
     // Function to close a mega menu
@@ -165,6 +211,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 activeItem = null;
                 
                 // Only remove overlay and body class if we're closing the active item
+                overlay.style.opacity = '0';
+                overlay.style.visibility = 'hidden';
+                overlay.style.pointerEvents = 'none';
                 overlay.classList.remove('show');
                 
                 setTimeout(() => {
