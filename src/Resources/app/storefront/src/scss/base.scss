@@ -45,6 +45,8 @@
 @import 'component/form';
 @import 'component/gallery';
 
+@import 'component/buybox';
+
 // Component imports - navigation
 @import 'component/nav';
 @import 'component/mega-menu';
@@ -68,7 +70,7 @@
     padding: 0 8px;
     display: flex;
     gap: 8px;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .container-gallery {
@@ -82,11 +84,11 @@
     position: sticky;
     top: 8px;
     padding: 0;
-    max-width: 800px;
+    max-width: 650px;
 }
 
 .container-buy {
-    max-width: 370px;
+    max-width: 420px;
     gap: 16px;
     align-self: flex-start;
     position: sticky;
@@ -94,7 +96,7 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    min-width: 0;
+    min-width: 420px;
     gap: 8px;
     padding: 0px;
 }

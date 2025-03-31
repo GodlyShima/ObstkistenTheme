@@ -1,0 +1,222 @@
+// Buybox Styling
+.product-detail-buy {
+    background-color: transparent;
+    
+    // Allgemeine Karten-Styling
+    .card {
+      border-radius: 13px;
+      border: 1px solid #ecedf0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, .04);
+      transition: box-shadow 0.2s ease-in-out;
+      padding: 15px;
+      background: #fff;
+      
+      &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, .08);
+      }
+    }
+    
+    // Preis-Container
+    .product-detail-price-container {
+      .product-price {
+        color: #0c193a;
+        font-family: 'Inter', sans-serif;
+        line-height: 1.2;
+      }
+      
+      .list-price-container {
+        .badge {
+          border-radius: 4px;
+          font-weight: 600;
+          padding: 0.35rem 0.5rem;
+        }
+        
+        .product-detail-list-price-wrapper {
+          font-size: 0.875rem;
+        }
+      }
+      
+      .product-reference-price {
+        color: #666;
+        font-size: 0.875rem;
+      }
+    }
+    
+    // Verfügbarkeits-Badge
+    .product-availability-container {
+      .product-availability-badge {
+        &.bg-success {
+          background-color: #367d65 !important;
+        }
+        
+        &.bg-warning {
+          background-color: #ffa500 !important;
+        }
+        
+        &.bg-danger {
+          background-color: #dc3545 !important;
+        }
+      }
+      
+      .product-availability-text {
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+    }
+    
+    // Produktnummer
+    .product-detail-ordernumber-container {
+      font-size: 0.875rem;
+      color: #666;
+    }
+    
+    // Mengenauswahl
+    .quantity-selector-group {
+      
+      .btn-minus, .btn-plus {
+        border: 1px solid #ededed;
+        background-color: #fff;
+        
+        &:hover {
+          background-color: #f5f5f5;
+        }
+        
+        .icon {
+          color: #0c193a;
+        }
+      }
+      
+      .quantity-selector-group-input {
+        border-color: #ededed;
+        text-align: center;
+        font-weight: 600;
+        color: #0c193a;
+        background-color: #fff !important;
+      }
+    }
+    
+    // In den Warenkorb Button
+    .btn-buy {
+      background-color: #0ac183 !important;
+      border-color: #23b181 !important;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.75rem 1.5rem;
+      transition: all 0.2s ease-in-out;
+      border-radius: 13px !important;
+      
+      &:hover {
+        background-color: darken(#0ac183, 5%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(10, 193, 131, 0.3);
+      }
+      
+      &:active {
+        transform: translateY(0);
+      }
+    }
+    
+    // Lieferinformationen
+    .product-delivery-information {
+      .delivery-title {
+        font-weight: 600;
+        color: #0c193a;
+      }
+      
+      .delivery-status-item {
+        .delivery-icon {
+          flex-shrink: 0;
+        }
+        
+        .delivery-text {
+          font-size: 0.9375rem;
+        }
+      }
+      
+      .delivery-info-item {
+        .delivery-info-icon {
+          flex-shrink: 0;
+        }
+        
+        .delivery-info-text {
+          color: #4a4a4a;
+        }
+      }
+    }
+    
+    // Wishlist Button
+    .product-wishlist {
+      .btn-wishlist {
+        border-radius: 13px;
+        padding: 0.5rem 1rem;
+        border-color: #ededed;
+        background-color: #f8f9fa;
+        color: #666;
+        transition: all 0.2s ease-in-out;
+        
+        &:hover {
+          background-color: #f1f1f1;
+          color: #367d65;
+        }
+        
+        .icon {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+    
+    // Versand-Container
+    .shipping-info-container {
+      .shipping-header {
+        font-weight: 600;
+        color: #0c193a;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+      
+      .shipping-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+        
+        .shipping-icon {
+          margin-right: 0.75rem;
+          flex-shrink: 0;
+          color: #367d65;
+        }
+        
+        .shipping-text {
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+  
+  // Produkte mit Staffelpreisen
+  .product-block-prices-grid {
+    border-radius: 8px;
+    overflow: hidden;
+    
+    thead {
+      background-color: #f8f9fa;
+      
+      th {
+        font-weight: 600;
+        color: #0c193a;
+      }
+    }
+    
+    tbody {
+      tr {
+        transition: background-color 0.2s ease-in-out;
+        
+        &:hover {
+          background-color: rgba(54, 125, 101, 0.05);
+        }
+      }
+    }
+  }
