@@ -80,7 +80,7 @@ $badge-success: rgb(54, 125, 101);
     flex-basis: auto;
     flex-grow: 0;
     height: auto;
-    aspect-ratio: 1/1;
+    aspect-ratio: 1/0.8;
     background-color: $box-image-bg;
 
     // Border overlay
@@ -178,6 +178,8 @@ $badge-success: rgb(54, 125, 101);
   width: 100%;
 
   .product-action {
+    margin-top: 0px !important;
+
     .buy-widget {
       flex-grow: 2;
       width: 100%;
@@ -235,8 +237,6 @@ $badge-success: rgb(54, 125, 101);
     pointer-events: initial;
     float: left;
     clear: both;
-    line-height: 1.375rem !important;
-    height: 1.375rem !important;
     font-size: 0.75rem !important;
     padding: 0px 10px !important;
     margin-left: 0px !important;
@@ -252,13 +252,4 @@ $badge-success: rgb(54, 125, 101);
       top: 0;
     }
   }
-}
-
-// Badge colors
-.bg-danger {
-  background-color: $badge-danger;
-}
-
-.bg-success {
-  background-color: $badge-success;
 }

@@ -1,5 +1,6 @@
 // Import fonts
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 // GT Eesti Pro font definitions
 @font-face {
@@ -35,6 +36,7 @@
 @import 'component/product-card/product-box';
 @import 'component/product-card/buy-button';
 @import 'component/quantity-selector';
+@import "component/pagination";
 
 // Component imports - general UI elements
 @import 'component/sorting';
@@ -51,14 +53,74 @@
 
 // Layout imports
 @import 'layout/header';
+@import 'layout/mobile-header';
 
 // Page-specific imports
 @import 'page/product-detail/product-detail';
 
+.container-buybox {
+    padding: 0px !important;
+    flex-direction: row;
+    gap: 16px !important; 
+    width: 100%;
+    max-width: 1400px;
+    margin: auto;
+    padding: 0 8px;
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.container-gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: 1 1;
+    min-width: 0;
+    gap: 8px;
+    align-self: flex-start;
+    position: sticky;
+    top: 8px;
+    padding: 0;
+    max-width: 800px;
+}
+
+.container-buy {
+    max-width: 370px;
+    gap: 16px;
+    align-self: flex-start;
+    position: sticky;
+    top: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-width: 0;
+    gap: 8px;
+    padding: 0px;
+}
+
+.point-rating.point-blank .icon {
+  color: #d1d1d1 !important;
+}
+
+// sticky header
+.cms-section-sidebar-sticky {
+  .cms-section-sidebar-sidebar-content {
+    position: sticky;
+    top: 2rem; // Abstand nach oben
+  }
+}
+// END
+
+.cms-element-product-listing {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
 /* Z-index Hierarchy */
 :root {
     --z-index-sticky-header: 1040;
-    --z-index-navigation: 1040;
+    --z-index-navigation: 100;
     --z-index-mega-menu: 1035;
     --z-index-mega-menu-overlay: 1030;
     --z-index-dropdown: 1500;
@@ -66,29 +128,99 @@
     --bs-offcanvas-zindex: 2000;
 }
 
+.round-image {
+    .cms-block-container {
+      .cms-block-container-row {
+        .cms-element-image {
+          .cms-image-container {
+            img.cms-image {
+                border-radius: 13px;
+                border: 1px solid #0000001a;
+            }
+          }
+        }
+      }
+    }
+  }
+
+.container-main {
+    padding: 0px !important;
+}
+
 /* Body class for mega menu open to prevent scrolling */
 body.mega-menu-open {
     overflow: hidden;
 }
 
-/* Header style - basic */
 .header-main {
-    z-index: var(--z-index-sticky-header);
     background-color: #fff;
-    transition: all 0.3s ease;
     position: relative;
+    z-index: 1040;
+    will-change: transform; // Optimize for animations
+    transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1) !important; // Smoother easing function
     
     &.header-sticky {
         position: fixed !important;
         top: 0;
         width: 100%;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        animation: slideInDown 0.5s ease-in-out;
+        animation: smoothSlideInDown 0.4s cubic-bezier(0.215, 0.61, 0.355, 1) !important; // Smoother animation
     }
     
     &.header-hidden {
         transform: translateY(-100%);
-        animation: slideOutUp 0.5s ease-in-out;
+        animation: smoothSlideOutUp 0.4s cubic-bezier(0.215, 0.61, 0.355, 1) !important; // Smoother animation
+    }
+}
+
+// Smoother animation keyframes
+@keyframes smoothSlideInDown {
+    from {
+        transform: translateY(-100%);
+        visibility: visible;
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes smoothSlideOutUp {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-100%);
+        visibility: hidden;
+    }
+}
+
+// Adding extra optimization for mobile
+@media (max-width: 991.98px) {
+    // Ensure the body accounts for the fixed bottom navigation
+    body {
+        padding-bottom: 60px !important; // Force padding to accommodate the fixed nav
+    }
+    
+    // Better handling of fixed header on mobile
+    .header-main {
+        z-index: 1040;
+        
+        &.header-sticky {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); // Softer shadow for mobile
+        }
+    }
+    
+    // Ensure the main content is below the header
+    .content-main {
+        margin-top: 0;
+        position: relative;
+        z-index: 10;
+    }
+    
+    // Make sure the header is always on top
+    .main-navigation, .nav-main {
+        position: relative;
+        z-index: 1030;
     }
 }
 
@@ -131,27 +263,6 @@ body.mega-menu-open {
     pointer-events: auto;
 }
 
-/* Account dropdown menu */
-.account-menu {
-    position: relative;
-    z-index: var(--z-index-account-menu);
-}
-
-.account-menu-dropdown {
-    position: absolute;
-    z-index: var(--z-index-dropdown);
-    top: 100%;
-    right: 0;
-    left: auto;
-    min-width: 320px;
-    padding: 1rem;
-    background-color: #fff;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    border-radius: 13px;
-    border: 1px solid #eceaea;
-    display: none;
-}
-
 /* Animation definitions */
 @keyframes slideInDown {
     from {
@@ -171,4 +282,230 @@ body.mega-menu-open {
         transform: translateY(-100%);
         visibility: hidden;
     }
+}
+
+.card-tabs {
+    max-width: 1400px;
+    margin: auto;
+}
+
+// Header & Navigation scroll behavior
+.header-main {
+    top: 0;
+    z-index: 1040;
+    background-color: #fff;
+    border-bottom: 1px solid #eceaea;
+    transition: box-shadow 0.3s ease;
+}
+
+// Navigation behavior
+.nav-main {
+    background-color: #f8f8fa;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                opacity 0.3s ease;
+    will-change: transform;
+    
+    &.nav-hidden {
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        position: fixed;
+        top: var(--header-height, 100px);
+        left: 0;
+        right: 0;
+        border-bottom: 1px solid #eceaea;
+    }
+    
+    &.nav-visible {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+        position: fixed;
+        top: var(--header-height, 100px);
+        left: 0;
+        right: 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid #eceaea;
+    }
+}
+
+// Mobile bottom navigation
+.mobile-quick-nav {
+    background-color: #fff;
+    border-top: 1px solid #eceaea;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(0) !important;
+    transition: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    .mobile-quick-nav-inner {
+        padding: 8px 0 5px;
+    }
+
+    .mobile-nav-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #323238;
+        font-size: 0.7rem;
+        padding: 5px 0;
+        transition: all 0.2s ease;
+
+        &:hover, &:active, &:focus {
+            color: #367d65;
+        }
+    }
+
+    .mobile-nav-icon {
+        margin-bottom: 3px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mobile-nav-text {
+        font-size: 0.7rem;
+        font-weight: 500;
+    }
+}
+
+// Mobile specific styles
+@media (max-width: 991.98px) {
+    // Ensure the body accounts for the fixed bottom navigation
+    body {
+        padding-bottom: 60px !important;
+    }
+    
+    // Mobile header adjustments
+    .header-main {
+        position: relative; // On mobile, we don't want the header to be sticky
+    }
+}
+
+.product-detail-ordernumber-container {
+    margin-bottom: .5rem;
+    font-size: .875rem;
+    opacity: .35;
+}
+
+.quantity-selector-group-input {
+    font-size: 18px !important;
+    background: #fff !important;
+}
+
+.btn-plus {
+    border-right: 1px solid #ededed !important;
+    border-top: 1px solid #ededed !important;
+    border-bottom: 1px solid #ededed !important;
+}
+
+.btn-minus {
+    border-left: 1px solid #ededed !important;
+    border-top: 1px solid #ededed !important;
+    border-bottom: 1px solid #ededed !important;
+}
+
+.product-detail-delivery-information {
+    margin-top: 2rem !important;
+    margin-bottom: 0px !important;
+}
+
+.product-detail-name {
+    font-family: "Inter", sans-serif !important;
+    color: #393939 !important;
+    font-size: 20px !important;
+    line-height: 28px !important;
+    margin: 0 !important;
+    overflow-wrap: break-word !important;
+    font-weight: 700 !important;
+}
+
+.filter-boolean {
+    border-radius: 13px !important;
+    border: 1px solid #edededed;
+    background: #fff;
+    opacity: 1;
+    transition: opacity, border 1s ease 0s;
+
+    &:hover {
+        border: 1px solid #0ac183;
+        opacity: 0.9;
+    }
+}
+
+.is--sidebar {
+    .filter-panel-item-dropdown {
+        background: white;
+        border-radius: 0px 0px 13px 13px;
+        border: 1px solid #ededed;
+        overflow: hidden;
+    }
+
+    .form-check-input {
+
+        &:checked {
+            background-color: #0ac183 !important;
+            border-color: #23b181 !important;
+        }
+    }
+
+    .filter-panel-item-toggle {
+        background: #0ac183;
+        border: 1px solid #23b181 !important;
+        color: #fff;
+
+        &:active {
+            border: 1px solid #23b181 !important;
+            background: #0ac183;
+            color: #fff;
+            opacity: 75% !important;
+        }
+
+        span {
+            svg {
+              color: #fff !important;
+            }
+        }
+    }
+
+    .filter-panel-item-toggle[aria-expanded="true"] {
+        font-weight: 600;
+        color: #fff;
+        background: #0ac183;
+        border-radius: 13px 13px 0px 0px;
+        border: none;
+        border: 1px solid #23b181 !important;
+    }
+}
+
+.product-detail-media .gallery-slider-col .gallery-slider-item .gallery-slider-image {
+    border-radius: 13px !important;
+    border: 1px solid #ededed !important;
+}
+
+.product-detail-tabs {
+    margin-top: 0px !important;
+    border-radius: 13px !important;
+    background-color: #fff;
+    border: 1px solid #ecedf0;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .04);
+    padding: 16px;
+}
+
+.product-slider-container {
+    display: flex;
+}
+
+.product-slider-item {
+    padding-right: 30px;
 }

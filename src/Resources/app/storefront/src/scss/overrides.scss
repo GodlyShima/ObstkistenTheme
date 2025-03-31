@@ -55,3 +55,24 @@ body {
 .product-price.with-list-price {
     color: #d62828;
 }
+
+.cms-element-product-listing .cms-listing-col {
+    margin-bottom: 0px !important;
+}
+
+.cms-section-sidebar-main-content {
+    padding: 0px !important;
+}
+
+.footer-main {
+    border-top: 1px solid #ededed;
+    background: #fff;
+}
+
+.cms-section .cms-section-sidebar {
+    display: block !important;
+}
+
+.product-detail-form-container .product-detail-quantity-group {
+    min-width: auto !important;
+}

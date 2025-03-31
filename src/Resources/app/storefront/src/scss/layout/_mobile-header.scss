@@ -1,0 +1,158 @@
+// Mobile Header Styles
+.mobile-quick-nav {
+    background-color: #fff;
+    border-top: 1px solid #eceaea;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(0) !important; // Force the bar to stay visible
+    transition: none !important; // Prevent any animations on this element
+    visibility: visible !important; // Always keep visible
+    opacity: 1 !important; // Always fully opaque
+
+    .mobile-quick-nav-inner {
+        padding: 8px 0 5px;
+    }
+
+    .mobile-nav-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #323238;
+        font-size: 0.7rem;
+        padding: 5px 0;
+        transition: all 0.2s ease;
+
+        &:hover, &:active, &:focus {
+            color: #367d65;
+        }
+    }
+
+    .mobile-nav-icon {
+        margin-bottom: 3px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mobile-nav-text {
+        font-size: 0.7rem;
+        font-weight: 500;
+    }
+}
+
+// Optimized search bar for mobile
+#searchCollapse {
+    background-color: #fff;
+    border-bottom: 1px solid #eceaea;
+    z-index: 1045;
+
+    .search-form {
+        width: 100%;
+    }
+
+    .search-input {
+        height: 42px;
+        border-radius: 13px 0 0 13px !important;
+    }
+
+    .search-submit {
+        border-radius: 0 13px 13px 0 !important;
+    }
+}
+
+// Header adjustments for mobile
+@media (max-width: 991.98px) {
+    .header-main {
+        border-bottom: 1px solid #eceaea;
+    }
+
+    .main-header {
+        padding: 10px 0;
+    }
+
+    // Add bottom padding to body to accommodate the fixed bottom nav
+    body {
+        padding-bottom: 60px;
+    }
+
+    // Improved mobile menu toggle button
+    .nav-main-toggle-btn {
+        padding: 8px;
+        border-radius: 8px;
+        background-color: transparent;
+        transition: all 0.2s ease;
+
+        &:hover, &:focus {
+            background-color: rgba(0,0,0,0.05);
+        }
+    }
+
+    // Improved mobile cart icon
+    .header-action-btn {
+        padding: 8px;
+        border-radius: 8px;
+        background-color: transparent;
+        transition: all 0.2s ease;
+
+        &:hover, &:focus {
+            background-color: rgba(0,0,0,0.05);
+        }
+    }
+
+    // Better badge positioning
+    .cart-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        font-size: 0.7rem;
+        min-width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    // Logo adjustments
+    .header-logo-main {
+        max-width: 150px;
+        margin: 0 auto;
+
+        img {
+            max-height: 40px;
+            width: auto;
+        }
+    }
+}
+
+// Mobile navigation enhancements
+.nav-offcanvas {
+    .nav-item-link {
+        padding: 12px 20px;
+        font-weight: 500;
+    }
+
+    .nav-item-children {
+        border-left: 3px solid #367d65;
+    }
+}
+
+// Additional enhancements for small screens
+@media (max-width: 575.98px) {
+    .header-logo-main img {
+        max-height: 35px;
+    }
+
+    .mobile-nav-link {
+        padding: 3px 0;
+    }
+
+    .mobile-nav-text {
+        font-size: 0.65rem;
+    }
+}

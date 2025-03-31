@@ -12,13 +12,4 @@
         </div>
     {% endblock %}
 
-    {% block block_product_heading_product_manufacturer_logo_element %}
-        <div class="col-md-auto product-heading-manufacturer-logo-container" data-cms-element-id="{{ manufacturerLogoElement.id }}">
-            {% block block_product_heading_product_manufacturer_logo_inner %}
-                {% sw_include '@Storefront/storefront/element/cms-element-' ~ manufacturerLogoElement.type ~ '.html.twig' ignore missing with {
-                    element: manufacturerLogoElement
-                } %}
-            {% endblock %}
-        </div>
-    {% endblock %}
 {% endblock %}

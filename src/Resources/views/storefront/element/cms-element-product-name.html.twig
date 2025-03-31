@@ -22,4 +22,16 @@
             {% endif %}
         {% endblock %}
     </div>
+
+    <div style="display: flex;align-items: stretch;flex-wrap: wrap;row-gap: 4px;">
+        {% block buy_widget_reviews %}
+            <div class="product-detail-reviews" style="padding-bottom: 10px; padding-top: 10px;">
+
+                {% sw_include '@Storefront/storefront/component/review/rating.html.twig' with {
+                    points: product.ratingAverage,
+                    style: 'text-primary'
+                } %}
+            </div>
+        {% endblock %}
+    </div>
 {% endblock %}

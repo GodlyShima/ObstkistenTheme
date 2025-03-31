@@ -3,7 +3,6 @@
 /* Navigation container with proper z-index to stay above overlay */
 .nav-main {
     position: relative;
-    z-index: 1040;
     background-color: #fff;
     border-bottom: 1px solid #eceaea;
 }
@@ -126,6 +125,7 @@ body.mega-menu-open .nav-main {
 
 /* Add hover effect for nav links */
 .nav-main-link:hover {
+    border-radius: 13px 13px 0px 0px;
     color: #367d65 !important;
 }
 

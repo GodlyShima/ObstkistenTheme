@@ -23,12 +23,26 @@ export default class ModernHeader extends Plugin {
         this.searchInput = DomAccess.querySelector(document, this.options.searchInputSelector, false);
         this.searchResults = DomAccess.querySelector(document, this.options.searchResultsSelector, false);
 
+        // Store header height for proper positioning
+        this._setHeaderHeight();
+
         // Register event listeners
         this._registerEvents();
 
         // Initialize sticky header if enabled
         if (this.options.stickyHeaderEnabled) {
-            this._initStickyHeader();
+            this._initScrollBehavior();
+        }
+    }
+
+    /**
+     * Set header height as a CSS variable for proper positioning
+     * @private
+     */
+    _setHeaderHeight() {
+        if (this.header) {
+            const headerHeight = this.header.offsetHeight;
+            document.documentElement.style.setProperty('--header-height', `132px`);
         }
     }
 
@@ -50,7 +64,10 @@ export default class ModernHeader extends Plugin {
         });
 
         // Resize event for responsive adjustments
-        window.addEventListener('resize', this._debounce(this._onResize.bind(this), 200));
+        window.addEventListener('resize', this._debounce(() => {
+            this._onResize();
+            this._setHeaderHeight();
+        }, 200));
     }
 
     /**
@@ -58,50 +75,75 @@ export default class ModernHeader extends Plugin {
      * @private
      */
     _onResize() {
-        // Handle responsive adjustments if needed
+        // Reset nav classes on resize
+        if (this.navMain) {
+            this.navMain.classList.remove('nav-hidden', 'nav-visible');
+            this.navMain.style.transform = '';
+        }
     }
 
     /**
-     * Initialize sticky header functionality
+     * Initialize scroll behavior for header and navigation
      * @private
      */
-    _initStickyHeader() {
+    _initScrollBehavior() {
         let lastScrollTop = 0;
+        let ticking = false;
         
-        // Initial call to set header status
-        this._handleHeaderSticky();
+        // Don't apply scroll behavior on mobile
+        if (ViewportDetection.isXS() || ViewportDetection.isSM() || ViewportDetection.isMD()) {
+            return;
+        }
 
-        window.addEventListener('scroll', this._debounce(() => {
-            this._handleHeaderSticky(lastScrollTop);
-            lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        }, 10));
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                // Use requestAnimationFrame for smoother performance
+                window.requestAnimationFrame(() => {
+                    this._handleScrollBehavior(lastScrollTop);
+                    lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
     }
 
     /**
-     * Handle sticky header logic
+     * Handle scroll behavior for header and navigation
      * @param {number} lastScrollTop - Last scroll position
      * @private
      */
-    _handleHeaderSticky(lastScrollTop = 0) {
+    _handleScrollBehavior(lastScrollTop = 0) {
+        // Skip on mobile devices
+        if (ViewportDetection.isXS() || ViewportDetection.isSM() || ViewportDetection.isMD()) {
+            return;
+        }
+
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const headerHeight = this.header.offsetHeight;
-        const headerOffset = this._getHeaderOffset();
         
-        // Header behavior on scroll
-        if (scrollTop > headerOffset) {
-            // Scrolling down - hide header
-            if (scrollTop > lastScrollTop && scrollTop > headerHeight) {
-                this.header.classList.remove('header-sticky');
-                this.header.classList.add('header-hidden');
-            } 
-            // Scrolling up - show header
-            else if (scrollTop < lastScrollTop) {
-                this.header.classList.remove('header-hidden');
-                this.header.classList.add('header-sticky');
-            }
+        // Add shadow to header when scrolled
+        if (scrollTop > 10) {
+            this.header.classList.add('scrolled');
         } else {
-            // At the top of the page - show normal
-            this.header.classList.remove('header-sticky', 'header-hidden');
+            this.header.classList.remove('scrolled');
+        }
+        
+        // Handle navigation visibility
+        if (this.navMain) {
+            // Scrolling down - hide navigation
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                this.navMain.classList.remove('nav-visible');
+                this.navMain.classList.add('nav-hidden');
+            } 
+            // Scrolling up - show navigation
+            else if (scrollTop < lastScrollTop && scrollTop > 100) {
+                this.navMain.classList.remove('nav-hidden');
+                this.navMain.classList.add('nav-visible');
+            }
+            // At the top - reset navigation
+            else if (scrollTop <= 100) {
+                this.navMain.classList.remove('nav-hidden', 'nav-visible');
+            }
         }
     }
 
@@ -205,27 +247,6 @@ export default class ModernHeader extends Plugin {
                 counter.style.display = count > 0 ? 'flex' : 'none';
             });
         }
-    }
-
-    /**
-     * Calculate header offset
-     * @returns {number}
-     * @private
-     */
-    _getHeaderOffset() {
-        // Consider top bar and notifications
-        let offset = 0;
-        const topBar = DomAccess.querySelector(document, '.top-bar', false);
-        if (topBar) {
-            offset += topBar.offsetHeight;
-        }
-        
-        const notificationBar = DomAccess.querySelector(document, '.notification-bar', false);
-        if (notificationBar) {
-            offset += notificationBar.offsetHeight;
-        }
-        
-        return offset;
     }
 
     /**

@@ -53,23 +53,6 @@
             {% endblock %}
         {% endblock %}
 
-        <div class="row product-detail-headline">
-            <div class="col-12 product-heading-name-container">
-            {% block buy_widget_reviews %}
-                            <div class="product-detail-reviews">
-
-                                {% sw_include '@Storefront/storefront/component/review/rating.html.twig' with {
-                                    points: product.ratingAverage,
-                                    style: 'text-primary'
-                                } %}
-                            </div>
-                    {% endblock %}
-                <div class="cms-element-product-name">
-                    <h1 class="product-detail-name">{{ product.translated.name }}</h1>
-                </div>
-            </div>
-        </div>
-
         {% block buy_widget_buy_container %}
             <div itemprop="offers"
                  itemscope
@@ -122,21 +105,14 @@
                             <p class="product-detail-tax">
                                 {% block buy_widget_tax_link %}
                                     {% set cmsPath = path('frontend.cms.page', { id: config('core.basicInformation.shippingPaymentInfoPage') }) %}
-                                    <span>inkl. MwSt. |</span>
                                     <button class="btn btn-link-inline product-detail-tax-link"
                                             type="button"
                                             data-ajax-modal="true"
                                             data-url="{{ cmsPath }}">
-                                        {{ 'Versandinformationen' }}
+                                        {{ 'Preise inkl. MwSt. zzgl. Versandkosten' }}
                                     </button>
                                 {% endblock %}
                             </p>
-                        </div>
-                    {% endblock %}
-
-                    {% block buy_widget_delivery_informations %}
-                        <div class="product-detail-delivery-information">
-                            {% sw_include '@Storefront/storefront/component/delivery-information.html.twig' %}
                         </div>
                     {% endblock %}
                 {% endblock %}
@@ -150,6 +126,13 @@
                 {% endblock %}
 
                 {% block buy_widget_buy_form %}
+
+                    {% block buy_widget_delivery_informations %}
+                        <div class="product-detail-delivery-information">
+                            {% sw_include '@Storefront/storefront/component/delivery-information.html.twig' %}
+                        </div>
+                    {% endblock %}
+
                     {% if product.active %}
                         <div class="product-detail-form-container">
                             {% sw_include '@Storefront/storefront/component/buy-widget/buy-widget-form.html.twig' %}
@@ -168,19 +151,6 @@
                 } %}
             {% endblock %}
         {% endif %}
-
-        <div class="product-detail-container product-detail-stock-container">
-            <span class="product-detail-ordernumber-label">
-                Lagerbestand:
-            </span>
-            <meta itemprop="productID"
-                  content="{{ product.id }}">
-            <span class="product-detail-ordernumber"
-                  itemprop="sku">
-                {{ product.availableStock }}
-            </span>
-        </div>
-        
 
         {% block buy_widget_ordernumber_container %}
             {% if product.productNumber %}
@@ -202,6 +172,46 @@
                 </div>
             {% endif %}
         {% endblock %}
+
+        {% set days = ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'] %}
+        {% set monthNames = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'] %}
+        {% set futureDateMin = date('now')|date_modify('+' ~ product.deliveryTime.min ~ ' days') %}
+        {% set futureDateMax = date('now')|date_modify('+' ~ product.deliveryTime.max ~ ' days') %}
+
+        <div style="overflow: auto;background-color: #fff;border: 1px solid #ecedf0;box-sizing: border-box;box-shadow: 0 2px 4px rgba(0, 0, 0, .04);border-radius: 8px;padding: 16px;">
+            <div style="justify-content:space-between;display:flex;line-height:22px;">
+                <p style="font-size:16px;font-weight:700;">Versand</p>
+            </div>
+            <ul style="margin: 0;padding: 0;color: #0c193a;">
+                <div>
+                    <div style="padding-bottom: 16px;margin-bottom: 16px;border-bottom: 1px solid #ecedf0;">
+                        <div style="align-items: center;color: var(--mm-color-foundation-textIcon-primary, #0c193a);display: flex;font-size: var(--mm-font-size-body2, 14px);font-weight: 600;justify-content: space-between;">
+                            <div style="font-size: 14px;line-height: 20px;font-weight: 600;color: #0c193a;">Lieferung nach Hause</div>
+                            <div style="font-size: 14px;line-height: 20px;font-weight: 600;color: #0c193a;">8,95 €</div>
+                        </div>
+                        <div style="padding: 8px 8px 0;font-weight: 400;font-size: 14px;line-height: 20px;">
+                            <div style="padding: 0 8px 8px 0;">
+                                {{ 'Zwischen ' }}
+                                <span style="font-weight:800;">
+                                    {{ days[date(futureDateMin)|date('w')] ~ ' ' ~ futureDateMin|date('d') ~ '. ' ~ monthNames[date(futureDateMin)|date('n')-1] }}
+                                </span>
+                                {{ ' und ' }}
+                                <span style="font-weight:800;">
+                                    {{ days[date(futureDateMax)|date('w')] ~ ' ' ~ futureDateMax|date('d') ~ '. ' ~ monthNames[date(futureDateMax)|date('n')-1] }}
+                                </span>
+                            </div>
+                            <div style="padding: 0 8px 8px 0;">Bestellen Sie bis 09:00 Uhr</div>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+            <ul style="display: flex;flex-direction: column;gap: var(--mm-spacing-s, 8px);list-style: none;padding: 0;margin-block-start: 1em;margin:0;">
+                <li style="align-items: center;display: flex;gap: var(--mm-spacing-s, 8px);">
+                    <svg style="fill: currentColor;display: inline-block;flex-shrink: 0;font-size: 1.5rem;height: auto;position: relative;transition: fill .2s cubic-bezier(.4,0,.2,1) 0ms;-webkit-user-select: none;-moz-user-select: none;user-select: none;width: auto;" aria-hidden="true" focusable="false" height="1em" role="presentation" width="1em" viewBox="0 0 16 22" class="svg_tamagoshi"><g id="iconsSystemSwap"><path d="M8 3V0L4 4L8 8V5C11.31 5 14 7.69 14 11C14 12.01 13.75 12.97 13.3 13.8L14.76 15.26C15.54 14.03 16 12.57 16 11C16 6.58 12.42 3 8 3ZM8 17C4.69 17 2 14.31 2 11C2 9.99 2.25 9.03 2.7 8.2L1.24 6.74C0.46 7.97 0 9.43 0 11C0 15.42 3.58 19 8 19V22L12 18L8 14V17Z" fill="currentColor"></path></g></svg>
+                    Retoure innerhalb von 14 Tagen
+                </li>
+            </ul>
+        </div>
         
     </div>
 {% endblock %}

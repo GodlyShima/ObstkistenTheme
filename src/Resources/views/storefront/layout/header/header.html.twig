@@ -1,9 +1,7 @@
 {% block layout_header %}
-    {# Overlay für das Mega-Menü #}
-
     <header class="header-main" data-modern-header>
-        {# Top-Bar Hinzugefügt #}
-        <div class="top-bar bg-light">
+        {# Top-Bar - versteckt auf kleinen Bildschirmen, sichtbar ab MD #}
+        <div class="top-bar bg-light d-none d-md-block">
             <div class="container">
                 <div class="row py-2">
                     <div class="col-md-6 d-flex align-items-center">
@@ -26,77 +24,22 @@
         </div>
 
         {# Hauptheader mit Logo, Suche, Account und Warenkorb #}
-        <div class="main-header" style="">
+        <div class="main-header">
             <div class="container">
-                <div class="row align-items-center">
-                    {# Logo - auf Mobile zentriert #}
+                <div class="row align-items-center py-2">
+
+                    {# Logo - verbesserte Zentrierung auf Mobile #}
                     {% block layout_header_logo %}
-                        <div class="col-6 col-lg-2 order-1">
+                        <div class="col-6 col-lg-2 order-1 text-center">
                             <div class="header-logo-main">
                                 {% sw_include '@Storefront/storefront/layout/header/logo.html.twig' %}
                             </div>
                         </div>
                     {% endblock %}
 
-                    {# Mobile Navigation Toggle #}
-                    {% block layout_header_navigation_toggle %}
-                        <div class="col-3 d-lg-none header-nav-toggle order-0">
-                            <button class="btn nav-main-toggle-btn header-action-btn"
-                                    type="button"
-                                    data-off-canvas-menu="true"
-                                    aria-label="{{ 'general.menuLink'|trans|striptags }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                                </svg>
-                            </button>
-                        </div>
-                    {% endblock %}
-
-                    {# Mobile Actions #}
-                    <div class="col-3 d-lg-none header-actions-mobile order-2">
-                        <div class="d-flex justify-content-end">
-                            {% block layout_header_search_toggle %}
-                                <div class="search-toggle me-2">
-                                    <button class="btn header-action-btn"
-                                            type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#searchCollapse"
-                                            aria-expanded="false"
-                                            aria-controls="searchCollapse"
-                                            aria-label="{{ 'header.searchButton'|trans|striptags }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <circle cx="11" cy="11" r="8"></circle>
-                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                        </svg>
-                                    </button>
-                                </div>
-                            {% endblock %}
-                            
-                            {% block layout_header_actions_cart_mobile %}
-                                <div class="header-cart"
-                                     data-off-canvas-cart="true">
-                                    <a class="header-action-btn"
-                                       href="{{ path('frontend.checkout.cart.page') }}"
-                                       data-cart-widget="true"
-                                       title="{{ 'checkout.cartTitle'|trans|striptags }}"
-                                       aria-label="{{ 'checkout.cartTitle'|trans|striptags }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                            <line x1="3" y1="6" x2="21" y2="6"></line>
-                                            <path d="M16 10a4 4 0 0 1-8 0"></path>
-                                        </svg>
-                                        <span class="badge bg-primary rounded-circle cart-badge">{% if page.cart.lineItems|length > 0 %}{{ page.cart.lineItems|length }}{% endif %}</span>
-                                    </a>
-                                </div>
-                            {% endblock %}
-                        </div>
-                    </div>
-
-                    {# Suchfeld #}
+                    {# Suchfeld - Desktop Version #}
                     {% block layout_header_search %}
-                        <div class="col-12 col-lg-5 mt-3 mt-lg-0 order-4 order-lg-2">
+                        <div class="col-12 col-lg-5 mt-0 mt-lg-0 order-4 order-lg-2 d-none d-lg-block">
                             <div class="header-search">
                                 <form action="{{ path('frontend.search.page') }}" 
                                       method="get"
@@ -136,10 +79,10 @@
 
                     {# Header Actions Desktop #}
                     {% block layout_header_actions %}
-                        <div class="col-12 col-lg-5 header-actions-col order-3 order-lg-3" style="flex:auto;">
+                        <div class="col-12 col-lg-5 header-actions-col order-3 order-lg-3 d-none d-lg-block">
                             <div class="header-actions d-flex justify-content-end align-items-center">
                                 {% block layout_header_shipping %}
-                                    <div class="header-action-item d-none d-lg-block me-3">
+                                    <div class="header-action-item me-3">
                                         <div class="d-flex align-items-center">
                                             <div class="shipping-icon me-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -158,10 +101,12 @@
                                 {% endblock %}
 
                                 {% block layout_header_actions_account %}
-                                    <div class="header-action-item">
+                                <div class="col-auto">
+                                    <div class="account-menu">
                                         {% sw_include '@Storefront/storefront/layout/header/actions/account-widget.html.twig' %}
                                     </div>
-                                {% endblock %}
+                                </div>
+                            {% endblock %}
                                 
                                 {% if config('core.cart.wishlistEnabled') %}
                                     <div class="header-action-item">
@@ -175,7 +120,7 @@
                                                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                                                 </svg>
                                             </div>
-                                            <div class="header-action-text d-none d-lg-block">
+                                            <div class="header-action-text">
                                                 <span>Favoriten</span>
                                             </div>
                                         </a>
@@ -191,10 +136,10 @@
             </div>
         </div>
 
-        {# Mobile Search - nur für mobile Ansicht #}
+        {# Mobile Suchfeld - optimiertes Design #}
         {% block layout_header_search_mobile %}
-            <div class="collapse d-lg-none" id="searchCollapse">
-                <div class="container py-2">
+            <div class="collapse" id="searchCollapse">
+                <div class="container py-3">
                     <form action="{{ path('frontend.search.page') }}" 
                           method="get"
                           data-search-form="true"
@@ -219,9 +164,79 @@
                             </button>
                         </div>
                     </form>
-                    <div class="search-results-mobile mt-2" data-search-results="true"></div>
+                    <div class="search-results mt-2" data-search-results="true"></div>
                 </div>
             </div>
         {% endblock %}
     </header>
+
+    {# Mobile Quick-Action-Navigation - Now placed at the bottom of the DOM #}
+    {% block layout_mobile_bottom_navigation %}
+        <div class="mobile-quick-nav d-lg-none">
+            <div class="">
+                <div class="mobile-quick-nav-inner">
+                    <div class="row text-center g-0">
+                        <div class="col">
+                            <a href="{{ path('frontend.home.page') }}" class="mobile-nav-link">
+                                <div class="mobile-nav-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="mobile-nav-text">Home</div>
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="#" class="mobile-nav-link" data-off-canvas-menu="true">
+                                <div class="mobile-nav-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                                    </svg>
+                                </div>
+                                <div class="mobile-nav-text">Kategorien</div>
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="#searchCollapse" class="mobile-nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="searchCollapse">
+                                <div class="mobile-nav-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                </div>
+                                <div class="mobile-nav-text">Suche</div>
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="{{ path('frontend.account.home.page') }}" class="mobile-nav-link">
+                                <div class="mobile-nav-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="mobile-nav-text">Account</div>
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="{{ path('frontend.checkout.cart.page') }}" class="mobile-nav-link" data-cart-widget="true">
+                                <div class="mobile-nav-icon position-relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                    </svg>
+                                    <span class="badge bg-primary rounded-circle cart-badge position-absolute" style="top: -7px; right: -7px;">{% if page.cart.lineItems|length > 0 %}{{ page.cart.lineItems|length }}{% endif %}</span>
+                                </div>
+                                <div class="mobile-nav-text">Warenkorb</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
 {% endblock %}

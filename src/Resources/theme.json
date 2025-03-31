@@ -18,5 +18,15 @@
   "asset": [
     "@Storefront",
     "app/storefront/src/assets"
-  ]
+  ],
+  "config": {
+    "stickySidebar": {
+      "label": {
+        "en-GB": "Enable sticky sidebar",
+        "de-DE": "Sticky Sidebar aktivieren"
+      },
+      "type": "bool",
+      "default": true
+    }
+  }
 }
