@@ -14,7 +14,7 @@
 
         {% block buy_widget_buy_container %}
             {% if buyable %}
-                <div class="buy-widget-container">
+                <div class="row g-2 buy-widget-container">
 
                     {% block buy_widget_buy_redirect_input %}
                         {# fallback redirect back to detail page is deactivated via js #}
@@ -53,6 +53,22 @@
                         <input type="hidden"
                                name="brand-name"
                                value="{{ product.manufacturer.getName() }}">
+                    {% endblock %}
+
+                    {% block buy_widget_buy_button_container %}
+                        <div class="col-12">
+                            {% block buy_widget_buy_button %}
+                                <div class="d-grid">
+                                    <button class="btn btn-primary btn-buy "
+																						style="width:100%!important;max-width:none;"
+                                            type="submit"
+                                            title="{{ 'detail.addProduct'|trans|striptags }}"
+                                            aria-label="{{ 'detail.addProduct'|trans|striptags }}">
+                                        {{ 'detail.addProduct'|trans|sw_sanitize }}
+                                    </button>
+                                </div>
+                            {% endblock %}
+                        </div>
                     {% endblock %}
                 </div>
             {% endif %}

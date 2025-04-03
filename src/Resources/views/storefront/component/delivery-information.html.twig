@@ -7,159 +7,19 @@
     {% endif %}
 
     <div class="product-delivery-information">
-        <h5 class="delivery-title mb-3">Lieferinformationen</h5>
-        
-        <div class="delivery-status-container">
-            {% if product.shippingFree %}
-                {% block component_delivery_information_shipping_free %}
-                    <div class="delivery-status-item mb-3 d-flex align-items-center">
-                        <div class="delivery-icon me-2">
-                            <span class="text-success">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="delivery-text">
-                            <span class="fw-semibold">{{ 'Versandkostenfrei'|sw_sanitize }}</span>
-                        </div>
-                    </div>
-                {% endblock %}
-            {% endif %}
-
-            {% if not product.active %}
-                {% block component_delivery_information_not_available %}
-                    <link itemprop="availability" href="https://schema.org/LimitedAvailability">
-                    <div class="delivery-status-item mb-3 d-flex align-items-center">
-                        <div class="delivery-icon me-2">
-                            <span class="text-danger">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="15" y1="9" x2="9" y2="15"></line>
-                                    <line x1="9" y1="9" x2="15" y2="15"></line>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="delivery-text">
-                            <span class="fw-semibold">{{ 'Artikel nicht verfügbar'|sw_sanitize }}</span>
-                        </div>
-                    </div>
-                {% endblock %}
-            {% elseif product.releaseDate and product.releaseDate|date('U') > 'now'|date('U') %}
-                {% block component_delivery_information_pre_order %}
-                    <link itemprop="availability" href="https://schema.org/PreOrder">
-                    <div class="delivery-status-item mb-3 d-flex align-items-center">
-                        <div class="delivery-icon me-2">
-                            <span class="text-warning">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="delivery-text">
-                            <span class="fw-semibold">{{ 'Vorbestellung möglich'|sw_sanitize }}</span>
-                            <span class="d-block small">{{ 'Erscheint am'|sw_sanitize }} {{ product.releaseDate|format_date('long', locale=app.request.locale) }}</span>
-                        </div>
-                    </div>
-                {% endblock %}
-            {% elseif (product.stock >= product.minPurchase or (downloadFlag in product.states and not product.isCloseout)) and product.deliveryTime %}
-                {% block component_delivery_information_available %}
-                    <link itemprop="availability" href="https://schema.org/InStock">
-                    <div class="delivery-status-item mb-3 d-flex align-items-center">
-                        <div class="delivery-icon me-2">
-                            <span class="text-success">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="delivery-text">
-                            <span class="fw-semibold">{{ 'Lieferbar'|sw_sanitize }}</span>
-                            <span class="d-block">
-                                {% set days = ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'] %}
-                                {% set monthNames = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'] %}
-                                {% set futureDateMin = date('now')|date_modify('+' ~ product.deliveryTime.min ~ ' days') %}
-                                {% set futureDateMax = date('now')|date_modify('+' ~ product.deliveryTime.max ~ ' days') %}
-                                {{ 'Zwischen ' }}
-                                <span class="fw-semibold">
-                                    {{ days[date(futureDateMin)|date('w')] ~ ' ' ~ futureDateMin|date('d') ~ '. ' ~ monthNames[date(futureDateMin)|date('n')-1] }}
-                                </span>
-                                {{ ' und ' }}
-                                <span class="fw-semibold">
-                                    {{ days[date(futureDateMax)|date('w')] ~ ' ' ~ futureDateMax|date('d') ~ '. ' ~ monthNames[date(futureDateMax)|date('n')-1] }}
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                {% endblock %}
-            {% elseif product.isCloseout and product.stock < product.minPurchase %}
-                {% block component_delivery_information_soldout %}
-                    <link itemprop="availability" href="https://schema.org/OutOfStock">
-                    <div class="delivery-status-item mb-3 d-flex align-items-center">
-                        <div class="delivery-icon me-2">
-                            <span class="text-danger">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="delivery-text">
-                            <span class="fw-semibold">{{ 'Ausverkauft'|sw_sanitize }}</span>
-                        </div>
-                    </div>
-                {% endblock %}
-            {% elseif product.stock < product.minPurchase and product.deliveryTime and product.restockTime %}
-                {% block component_delivery_information_restock %}
-                    <link itemprop="availability" href="https://schema.org/LimitedAvailability">
-                    <div class="delivery-status-item mb-3 d-flex align-items-center">
-                        <div class="delivery-icon me-2">
-                            <span class="text-warning">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="delivery-text">
-                            <span class="fw-semibold">{{ 'Nachbestellung möglich'|sw_sanitize }}</span>
-                            <span class="d-block small">{{ 'Lieferbar in'|sw_sanitize }} {{ product.restockTime }} {{ product.restockTime == 1 ? 'Tag' : 'Tagen' }}</span>
-                        </div>
-                    </div>
-                {% endblock %}
-            {% else %}
-                {% block component_delivery_information_default %}{% endblock %}
-            {% endif %}
-        </div>
-        
-        <div class="delivery-additional-info">
-            <div class="delivery-info-item mb-2 d-flex align-items-center">
-                <div class="delivery-info-icon me-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#367d65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="1" y="3" width="15" height="13"></rect>
-                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                        <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                        <circle cx="18.5" cy="18.5" r="2.5"></circle>
-                    </svg>
-                </div>
-                <div class="delivery-info-text small">
-                    Bestellungen vor 9:00 Uhr werden am selben Tag versendet
-                </div>
-            </div>
-            <div class="delivery-info-item d-flex align-items-center">
-                <div class="delivery-info-icon me-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#367d65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                    </svg>
-                </div>
-                <div class="delivery-info-text small">
-                    14 Tage Rückgaberecht
-                </div>
-            </div>
-        </div>
+    <span class="d-block">
+    {% set days = ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'] %}
+    {% set monthNames = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'] %}
+    {% set futureDateMin = date('now')|date_modify('+' ~ product.deliveryTime.min ~ ' days') %}
+    {% set futureDateMax = date('now')|date_modify('+' ~ product.deliveryTime.max ~ ' days') %}
+    {{ 'Zwischen ' }}
+    <span class="fw-semibold">
+        {{ days[date(futureDateMin)|date('w')] ~ ' ' ~ futureDateMin|date('d') ~ '. ' ~ monthNames[date(futureDateMin)|date('n')-1] }}
+    </span>
+    {{ ' und ' }}
+    <span class="fw-semibold">
+        {{ days[date(futureDateMax)|date('w')] ~ ' ' ~ futureDateMax|date('d') ~ '. ' ~ monthNames[date(futureDateMax)|date('n')-1] }}
+    </span>
+</span>
     </div>
 {% endblock %}

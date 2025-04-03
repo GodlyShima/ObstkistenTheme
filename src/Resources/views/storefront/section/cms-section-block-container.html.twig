@@ -84,7 +84,7 @@
             <div class="cms-block-container"
                  style="{% if padding %}padding: {{ padding }};{% endif %}">
                 {% block section_content_block_row %}
-                    <div class="{% if block.type !== "gallery-buybox" %} cms-block-container-row row cms-row {% else %} container-buybox {% endif %} {{ sidebarClasses }}">
+                    <div class="cms-block-container-row row cms-row {{ sidebarClasses }}">
                         {% sw_include '@Storefront/storefront/block/cms-block-' ~ block.type ~ '.html.twig' ignore missing %}
                     </div>
                 {% endblock %}

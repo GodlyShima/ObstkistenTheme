@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "shopware/core": "6.*.*"
+    "shopware/core": "*"
   },
   "autoload": {
     "psr-4": {
