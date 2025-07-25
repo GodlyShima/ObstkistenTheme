@@ -1,93 +1,95 @@
-{% block layout_navbar %}
-    {# Note: We DON'T add the overlay here anymore, it will be added by JavaScript AFTER the navbar #}
-    <div class="container">
-        <nav class="navbar navbar-expand-lg main-navigation-menu"
-             id="main-navigation-menu"
-             itemscope="itemscope"
-             itemtype="https://schema.org/SiteNavigationElement"
-             data-navbar="true"
-             aria-label="{{ 'header.navigationAriaLabel'|trans|striptags }}">
-            
-            <div class="collapse navbar-collapse" id="main_nav">
-                <ul class="navbar-nav main-navigation-menu-list flex-wrap">
-                    {% block layout_navbar_menu_items %}
-                        {% for treeItem in header.navigation.tree %}
-                            {% set category = treeItem.category %}
-                            {% set id = category.id %}
-                            {% set name = category.translated.name %}
-                            {% set hasChildren = treeItem.children|length > 0 %}
+{% sw_extends '@Storefront/storefront/layout/navbar/navbar.html.twig' %}
 
-                            {% block layout_navbar_menu_item %}
-                                <li class="nav-item nav-main-item-with-children{% if hasChildren %} dropdown position-static{% endif %}">
-                                    <a class="nav-link nav-main-link{% if hasChildren %} has-children{% endif %}"
-                                       href="{{ category_url(category) }}"
-                                       {% if category_linknewtab(category) %}target="_blank"{% endif %}
+{% block layout_navbar %}
+    <div class="container">
+        {% set navbarOptions = {
+            pathIdList: shopware.navigation.pathIdList
+        } %}
+
+        {% block layout_navbar_nav_element %}
+            <nav class="navbar navbar-expand-lg main-navigation-menu"
+                 id="main-navigation-menu"
+                 itemscope="itemscope"
+                 itemtype="https://schema.org/SiteNavigationElement"
+                 data-navbar="true"
+                 data-navbar-options="{{ navbarOptions|json_encode }}"
+                 aria-label="{{ 'header.navigationAriaLabel'|trans|striptags }}">
+                <div class="collapse navbar-collapse" id="main_nav">
+                    <ul class="navbar-nav main-navigation-menu-list flex-wrap">
+                        {% set homeLabel = context.salesChannel.translated.homeName|default('general.homeLink'|trans) %}
+
+                        {% block layout_navbar_menu_home %}
+                            {% if context.salesChannel.translated.homeEnabled %}
+                                <li class="nav-item nav-item-{{ context.salesChannel.navigationCategoryId }}">
+                                    <a class="nav-link main-navigation-link home-link root nav-item-{{ context.salesChannel.navigationCategoryId }}-link"
+                                       href="{{ path('frontend.home.page') }}"
                                        itemprop="url"
-                                       title="{{ name }}">
-                                        <span itemprop="name" class="main-navigation-link-text">{{ name }}</span>
-                                        {# The underline will be added by JavaScript #}
+                                       title="{{ homeLabel|striptags }}">
+                                        <span itemprop="name" class="main-navigation-link-text">{{ homeLabel|sw_sanitize }}</span>
                                     </a>
-                                    
-                                    {% if hasChildren %}
-                                        <div class="dropdown-menu mega-menu container-fluid p-0">
-                                            <div class="container py-4">
-                                                <div class="row">
-                                                    <div class="">
-                                                        <div class="row">
-                                                            {% for childItem in treeItem.children %}
-                                                                {% if loop.index <= 8 %}
-                                                                    {% set childCategory = childItem.category %}
-                                                                    {% if childCategory.type != 'folder' %}
-                                                                        <div class="col-md-3 mb-4">
-                                                                            <div class="mega-menu-column">
-                                                                                <h6 class="mega-menu-title">
-                                                                                    <a href="{{ category_url(childCategory) }}">
-                                                                                        {{ childCategory.translated.name }}
-                                                                                    </a>
-                                                                                </h6>
-                                                                                
-                                                                                {% if childItem.children|length > 0 %}
-                                                                                    <ul class="mega-menu-list">
-                                                                                        {% for grandChildItem in childItem.children %}
-                                                                                            {% if loop.index <= 6 %}
-                                                                                                {% set grandChildCategory = grandChildItem.category %}
-                                                                                                <li>
-                                                                                                    <a href="{{ category_url(grandChildCategory) }}">
-                                                                                                        {{ grandChildCategory.translated.name }}
-                                                                                                    </a>
-                                                                                                </li>
-                                                                                            {% endif %}
-                                                                                        {% endfor %}
-                                                                                        
-                                                                                        {% if childItem.children|length > 6 %}
-                                                                                            <li class="more-link">
-                                                                                                <a href="{{ category_url(childCategory) }}">
-                                                                                                    {{ "Alle anzeigen" }}
-                                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                                                                        <polyline points="9 18 15 12 9 6"></polyline>
-                                                                                                    </svg>
-                                                                                                </a>
-                                                                                            </li>
-                                                                                        {% endif %}
-                                                                                    </ul>
-                                                                                {% endif %}
-                                                                            </div>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
                                 </li>
-                            {% endblock %}
-                        {% endfor %}
-                    {% endblock %}
-                </ul>
-            </div>
-        </nav>
+                            {% endif %}
+                        {% endblock %}
+
+                        {% block layout_navbar_menu_items %}
+
+                            {% for treeItem in header.navigation.tree %}
+                                {% set category = treeItem.category %}
+                                {% set id = category.id %}
+                                {% set name = category.translated.name %}
+                                {% set hasChildren = treeItem.children|length > 0 %}
+
+                                {% block layout_navbar_menu_item %}
+                                    {% if category.type == 'folder' %}
+                                        <li class="nav-item nav-item-{{ id }}">
+                                            <a class="nav-link nav-item-{{ id }}-link root main-navigation-link p-2{% if hasChildren %} dropdown-toggle{% endif %}"
+                                               href="#"
+                                               {% if hasChildren %}data-bs-toggle="dropdown"{% endif %}
+                                               data-flyout-menu-trigger="{{ id }}"
+                                               itemprop="url"
+                                               title="{{ name }}">
+                                                <span itemprop="name" class="main-navigation-link-text">{{ name }}</span>
+                                            </a>
+
+                                            {% if hasChildren %}
+                                                <div class="dropdown-menu w-100 p-4">
+                                                    {% sw_include '@Storefront/storefront/layout/navbar/content.html.twig' with {
+                                                        themeIconConfig: themeIconConfig,
+                                                        navigationTree: treeItem,
+                                                        level: level+1,
+                                                        page: page
+                                                    } only %}
+                                                </div>
+                                            {% endif %}
+                                        </li>
+                                    {% else %}
+                                        <li class="nav-item nav-item-{{ id }} {% if hasChildren %}dropdown position-static{% endif %}">
+                                            <a class="nav-link nav-item-{{ id }}-link root main-navigation-link p-2{% if hasChildren %} dropdown-toggle{% endif %}"
+                                               href="{{ category.seoUrl }}"
+                                               {% if hasChildren %}data-bs-toggle="dropdown"{% endif %}
+                                               {% if category.shouldOpenInNewTab %}target="_blank"{% endif %}
+                                               itemprop="url"
+                                               title="{{ name }}">
+                                                <span itemprop="name" class="main-navigation-link-text">{{ name }}</span>
+                                            </a>
+                                            {% if hasChildren %}
+                                                <div class="dropdown-menu w-100 p-4">
+                                                    {% sw_include '@Storefront/storefront/layout/navbar/content.html.twig' with {
+                                                        themeIconConfig: themeIconConfig,
+                                                        navigationTree: treeItem,
+                                                        level: level+1,
+                                                        page: page
+                                                    } only %}
+                                                </div>
+                                            {% endif %}
+                                        </li>
+                                    {% endif %}
+                                {% endblock %}
+                            {% endfor %}
+                        {% endblock %}
+                    </ul>
+                </div>
+            </nav>
+        {% endblock %}
     </div>
 {% endblock %}
